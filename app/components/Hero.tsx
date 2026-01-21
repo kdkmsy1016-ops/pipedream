@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { MessageCircle, Ticket } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Hero() {
     return (
@@ -111,6 +112,20 @@ export default function Hero() {
 
                 </div>
             </div>
+
+            {/* Scroll Indicator */}
+            <motion.div
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 pointer-events-none lg:bottom-8"
+                initial={{ opacity: 0, y: 0 }}
+                animate={{ opacity: 1, y: [0, 6, 0] }}
+                transition={{
+                    opacity: { delay: 2.5, duration: 1.0 },
+                    y: { duration: 2.0, repeat: Infinity, ease: "easeInOut" }
+                }}
+            >
+                <span className="text-[10px] tracking-[0.2em] text-white/50 uppercase font-serif">Scroll</span>
+                <div className="w-[1px] h-8 bg-white/40" />
+            </motion.div>
         </section>
     );
 }
