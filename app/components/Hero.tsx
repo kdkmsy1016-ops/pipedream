@@ -85,18 +85,18 @@ export default function Hero() {
                     <div className="flex flex-col items-center lg:items-end text-center lg:text-right space-y-2 lg:space-y-6 w-full lg:w-1/2 justify-center lg:justify-end flex-1 lg:flex-auto">
                         <div className="space-y-2 lg:space-y-4 flex flex-col items-center lg:items-end">
                             <div className="pt-1 lg:pt-2 flex flex-col items-center lg:items-end">
-                                <span className="inline-block px-2 py-0.5 lg:px-3 lg:py-1 text-[10px] lg:text-xs font-serif border border-white/30 rounded-full text-white/80 tracking-widest mb-2 lg:mb-4">
+                                <span className="inline-block px-2 py-0.5 lg:px-3 lg:py-1 text-[10px] lg:text-xs font-serif border border-white/30 rounded-full text-white/80 tracking-widest mb-1 lg:mb-2">
                                     二人芝居
                                 </span>
-                                <p className="text-accent tracking-widest text-[10px] lg:text-sm mb-1 lg:mb-2 font-serif">
-                                    2026.4.3(Fri) - 4.5(Sun) at 下北沢 楽園
-                                </p>
                                 <h2
-                                    className="font-bold font-serif text-white leading-tight tracking-tighter"
+                                    className="font-bold font-serif text-white leading-tight tracking-tighter mb-1 lg:mb-2"
                                     style={{ fontSize: "clamp(1.75rem, 5vw, 4rem)" }}
                                 >
                                     場末の<br className="lg:hidden" />パイプドリーム
                                 </h2>
+                                <p className="text-accent font-bold tracking-tighter text-xs lg:text-base whitespace-nowrap font-serif">
+                                    2026.4.3(Fri) - 4.5(Sun) at 下北沢 楽園
+                                </p>
                             </div>
                         </div>
 

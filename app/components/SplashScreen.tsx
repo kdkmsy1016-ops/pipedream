@@ -95,10 +95,10 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
                                 duration: ZOOM_SPEED,
                                 ease: "circOut"
                             }}
-                            className="text-xl lg:text-3xl tracking-widest text-white/90 flex items-center gap-4"
+                            className="text-3xl lg:text-5xl tracking-widest text-white/90 flex items-center gap-4"
                         >
                             <span>映画</span>
-                            <span className="text-sm lg:text-lg opacity-50">×</span>
+                            <span className="text-xl lg:text-3xl opacity-50">×</span>
                             <span>演劇</span>
                         </motion.div>
 
