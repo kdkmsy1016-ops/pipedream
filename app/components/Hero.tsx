@@ -21,7 +21,7 @@ export default function Hero() {
             </div>
 
             {/* Content Container */}
-            <div className="absolute inset-0 z-10 flex items-center justify-center p-4 lg:p-6">
+            <div className="absolute inset-0 z-10 flex items-center justify-center px-6 py-4 lg:p-6">
                 <div className="max-w-7xl w-full h-full lg:h-auto flex flex-col lg:flex-row justify-between lg:justify-between items-center lg:items-end py-6 lg:py-0 gap-4 lg:gap-8">
 
                     {/* Left: Film Section */}
@@ -33,7 +33,7 @@ export default function Hero() {
                             </span>
 
                             {/* Credits: Compact on mobile */}
-                            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 lg:gap-x-6 gap-y-1 text-white/90 font-serif text-[10px] lg:text-base tracking-widest">
+                            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 lg:gap-x-6 gap-y-1 text-white/90 font-serif text-sm lg:text-base tracking-widest">
                                 <div className="flex items-baseline gap-2">
                                     <span className="text-[10px] lg:text-xs text-white/50">脚本</span>
                                     <span>福井 将真</span>
@@ -57,9 +57,9 @@ export default function Hero() {
                                 <p className="text-accent font-bold tracking-widest text-sm lg:text-xl">
                                     映画プロジェクト始動
                                 </p>
-                                <p className="text-white/90 text-[10px] lg:text-base tracking-wide leading-relaxed">
+                                <p className="text-white/90 text-base lg:text-base tracking-wider leading-relaxed">
                                     2026年4月、クラウドファンディング開始。<br />
-                                    <span className="text-white/70 text-[10px] lg:text-sm block lg:inline">
+                                    <span className="text-white/70 text-sm lg:text-sm block lg:inline mt-1 lg:mt-0">
                                         制作の裏側や限定情報をLINEでお届けします。
                                     </span>
                                 </p>
