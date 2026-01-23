@@ -50,7 +50,7 @@ export default function Hero() {
                                 className="font-bold font-serif text-white leading-tight tracking-tighter pt-1 lg:pt-2"
                                 style={{ fontSize: "clamp(1.75rem, 5vw, 4rem)" }}
                             >
-                                <ruby>盈虚<rt className="text-[0.4em] text-white/80 font-normal">えいきょ</rt></ruby>と<br className="lg:hidden" />パイプドリーム
+                                <ruby>盈虚<rt className="text-[0.3em] text-white/80 font-normal">えいきょ</rt></ruby>と<br className="lg:hidden" />パイプドリーム
                             </h1>
 
                             {/* Project Announcement */}
