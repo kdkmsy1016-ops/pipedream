@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Serif_JP } from "next/font/google";
+import Navigation from "./components/Navigation";
 import "./globals.css";
 
 const notoSerifJP = Noto_Serif_JP({
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body
         className={`${notoSerifJP.variable} font-serif antialiased bg-background text-foreground overflow-x-hidden`}
       >
+        <Navigation />
         {children}
       </body>
     </html>
