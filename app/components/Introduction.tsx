@@ -69,41 +69,6 @@ export default function Introduction() {
                     </p>
                 </motion.div>
 
-                {/* Signature Credits */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1.5, delay: 0.6 }}
-                    className="pt-12 flex flex-col items-center justify-center gap-2 text-foreground/60 font-serif text-sm tracking-widest"
-                >
-                    <div className="space-y-4 text-center">
-                        {/* Tier 1: Original Concept */}
-                        <div className="text-foreground/60 tracking-widest text-xs lg:text-sm font-serif">
-                            <p>原案：ユージン・オニール</p>
-                            <p className="text-[10px] lg:text-xs">（『氷人來たる』に着想を得て）</p>
-                        </div>
-
-                        {/* Tier 2: Main Staff */}
-                        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-foreground/90 font-serif text-sm lg:text-base tracking-widest">
-                            <div className="flex items-baseline gap-2">
-                                <span className="text-xs text-foreground/50">脚本</span>
-                                <span>久高 将也</span>
-                            </div>
-                            <div className="hidden sm:block w-[1px] h-3 bg-foreground/20" />
-                            <div className="flex items-baseline gap-2">
-                                <span className="text-xs text-foreground/50">演出</span>
-                                <span>福井 将真</span>
-                            </div>
-                            <div className="hidden sm:block w-[1px] h-3 bg-foreground/20" />
-                            <div className="flex items-baseline gap-2">
-                                <span className="text-xs text-foreground/50">プロデューサー</span>
-                                <span>町田 直樹</span>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
-
                 {/* Navigation Buttons */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
