@@ -48,24 +48,24 @@ export default function Introduction() {
                 >
                     <p>
                         <span className="inline-block">今秋撮影予定の映画</span>
-                        <span className="inline-block">『盈虚とパイプドリーム』。</span><br className="hidden md:inline" />
+                        <span className="inline-block">『盈虚とパイプドリーム』</span><br className="hidden md:inline" />
                         <span className="inline-block">そして、その世界から派生する舞台</span>
-                        <span className="inline-block">『場末のパイプドリーム』。</span><br />
+                        <span className="inline-block">『場末のパイプドリーム』</span><br />
                         <span className="inline-block">映画の中で描かれる「劇中劇」を、</span>
-                        <span className="inline-block ml-[0.1em] md:ml-0">現実の劇場で上演する——。</span><br className="hidden md:inline" />
-                        <span className="inline-block">スクリーンと舞台、</span><span className="inline-block ml-[0.1em] md:ml-0">二つの空間が交錯する実験的プロジェクト。</span>
+                        <span className="inline-block ml-[0.1em] md:ml-0">現実の劇場で上演する——</span><br className="hidden md:inline" />
+                        <span className="inline-block">スクリーンと舞台、</span><span className="inline-block ml-[0.1em] md:ml-0">二つの空間が交錯する実験的プロジェクト</span>
                     </p>
                     <p>
                         <span className="inline-block">原案は、ユージン・オニールの名作</span>
-                        <span className="inline-block">『氷人來たる』。</span>
+                        <span className="inline-block">『氷人來たる』</span>
                     </p>
                     <p>
-                        <span className="inline-block">行き場のない魂たちが紡ぐ、</span><span className="inline-block ml-[0.1em] md:ml-0">淡く儚い夢の在り処。</span><br className="hidden md:inline" />
-                        <span className="inline-block">煙のくゆる酒場で、</span><span className="inline-block ml-[0.1em] md:ml-0">人々は何を待ち続けているのか。</span>
+                        <span className="inline-block">行き場のない魂たちが紡ぐ、</span><span className="inline-block ml-[0.1em] md:ml-0">淡く儚い夢の在り処</span><br className="hidden md:inline" />
+                        <span className="inline-block">煙のくゆる酒場で、</span><span className="inline-block ml-[0.1em] md:ml-0">人々は何を待ち続けているのか</span>
                     </p>
                     <p>
                         <span className="inline-block">その「パイプドリーム（幻想）」の</span><span className="inline-block">果てにあるものは、</span><br className="hidden md:inline" />
-                        <span className="inline-block">絶望か、それとも——。</span>
+                        <span className="inline-block">絶望か、それとも——</span>
                     </p>
                 </motion.div>
 
