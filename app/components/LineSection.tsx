@@ -34,9 +34,6 @@ export default function LineSection() {
                         <div className="absolute inset-0 border border-white/20 group-hover:scale-105 transition-transform duration-300 pointer-events-none" />
                     </a>
 
-                    <p className="text-xs text-foreground/40 mt-4">
-                        ※ リンクはダミーです
-                    </p>
                 </div>
             </motion.div>
         </section>
