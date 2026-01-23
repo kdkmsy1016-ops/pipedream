@@ -53,7 +53,7 @@ export default function Introduction() {
                         <span className="inline-block">『場末のパイプドリーム』</span><br />
                         <span className="inline-block">映画の中で描かれる「劇中劇」を、</span>
                         <span className="inline-block ml-[0.1em] md:ml-0">現実の劇場で上演する——</span><br className="hidden md:inline" />
-                        <span className="inline-block">スクリーンと舞台、</span><span className="inline-block ml-[0.1em] md:ml-0">二つの空間が交錯する実験的プロジェクト</span>
+                        <span className="inline-block">スクリーンと舞台、</span><span className="inline-block ml-[0.1em] md:ml-0">二つの世界が交錯する</span><span className="inline-block">実験的プロジェクト</span>
                     </p>
                     <p>
                         <span className="inline-block">原案は、ユージン・オニールの名作</span>
