@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { MessageCircle, Ticket } from "lucide-react";
 import { motion } from "framer-motion";
+import HeroButton from "./HeroButton";
 
 export default function Hero() {
     return (
@@ -67,15 +68,17 @@ export default function Hero() {
                             </div>
                         </div>
 
-                        <a
+                        import HeroButton from "./HeroButton";
+
+                        // ... (inside component)
+
+                        <HeroButton
                             href="https://lin.ee/LChtOnm"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 lg:px-10 lg:py-5 bg-[#06c755] text-white rounded-sm transition-all hover:bg-[#05b34c] mt-4 lg:mt-2 w-full max-w-sm lg:w-auto"
-                        >
-                            <MessageCircle size={20} className="lg:w-6 lg:h-6" />
-                            <span className="font-bold tracking-widest text-sm lg:text-base">LINEで応援する</span>
-                        </a>
+                            icon={MessageCircle}
+                            label="LINEで応援する"
+                            variant="line"
+                            external
+                        />
                     </div>
 
                     {/* Divider for Mobile (Minimal or removed to save space) */}
@@ -101,13 +104,12 @@ export default function Hero() {
                             </div>
                         </div>
 
-                        <a
+                        <HeroButton
                             href="#"
-                            className="group relative inline-flex items-center justify-center gap-2 px-6 py-2.5 lg:px-8 lg:py-4 bg-white text-black rounded-sm transition-all hover:bg-accent mt-2 lg:mt-0 w-full max-w-xs lg:w-auto"
-                        >
-                            <Ticket size={16} className="lg:w-5 lg:h-5" />
-                            <span className="font-bold tracking-wider text-xs lg:text-sm">チケット予約</span>
-                        </a>
+                            icon={Ticket}
+                            label="チケット予約"
+                            variant="ticket"
+                        />
                     </div>
 
                 </div>
