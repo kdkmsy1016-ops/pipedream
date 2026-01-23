@@ -68,7 +68,7 @@ export default function Hero() {
                         </div>
 
                         <a
-                            href="https://line.me"
+                            href="https://lin.ee/LChtOnm"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="group relative inline-flex items-center justify-center gap-2 px-6 py-2.5 lg:px-8 lg:py-4 bg-[#06c755] text-white rounded-sm transition-all hover:bg-[#05b34c] mt-2 lg:mt-0 w-full max-w-xs lg:w-auto"

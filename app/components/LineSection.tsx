@@ -24,7 +24,7 @@ export default function LineSection() {
                     </p>
 
                     <a
-                        href="https://line.me"
+                        href="https://lin.ee/LChtOnm"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 w-full bg-[#06c755] hover:bg-[#05b34c] text-white rounded-sm transition-all duration-300"
