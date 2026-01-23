@@ -71,10 +71,10 @@ export default function Hero() {
                             href="https://lin.ee/LChtOnm"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group relative inline-flex items-center justify-center gap-2 px-6 py-2.5 lg:px-8 lg:py-4 bg-[#06c755] text-white rounded-sm transition-all hover:bg-[#05b34c] mt-2 lg:mt-0 w-full max-w-xs lg:w-auto"
+                            className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 lg:px-10 lg:py-5 bg-[#06c755] text-white rounded-sm transition-all hover:bg-[#05b34c] mt-4 lg:mt-2 w-full max-w-sm lg:w-auto"
                         >
-                            <MessageCircle size={16} className="lg:w-5 lg:h-5" />
-                            <span className="font-bold tracking-wider text-xs lg:text-sm">LINEで応援する</span>
+                            <MessageCircle size={20} className="lg:w-6 lg:h-6" />
+                            <span className="font-bold tracking-widest text-sm lg:text-base">LINEで応援する</span>
                         </a>
                     </div>
 
