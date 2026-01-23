@@ -68,9 +68,7 @@ export default function Hero() {
                             </div>
                         </div>
 
-                        import HeroButton from "./HeroButton";
 
-                        // ... (inside component)
 
                         <HeroButton
                             href="https://lin.ee/LChtOnm"
