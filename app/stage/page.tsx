@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Stage: 場末のパイプドリーム",
+    description: "舞台『場末のパイプドリーム』の詳細情報。",
+};
+
 export default function StagePage() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen text-white font-serif relative z-10">
