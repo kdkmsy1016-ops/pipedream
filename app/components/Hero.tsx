@@ -98,7 +98,7 @@ export default function Hero() {
                                     場末の<br className="lg:hidden" />パイプドリーム
                                 </h2>
                                 <p className="text-accent font-bold tracking-tighter text-xs lg:text-base whitespace-nowrap font-serif">
-                                    2026.4.3(Fri) - 4.5(Sun) at 下北沢 楽園
+                                    2026.4.3(Fri) - 4.5(Sun) at 下北沢 小劇場 楽園
                                 </p>
                             </div>
                         </div>
