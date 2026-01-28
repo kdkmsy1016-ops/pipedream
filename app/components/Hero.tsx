@@ -4,6 +4,7 @@ import Image from "next/image";
 import { MessageCircle, Ticket } from "lucide-react";
 import { motion } from "framer-motion";
 import HeroButton from "./HeroButton";
+import DynamicTicketButton from "./DynamicTicketButton";
 
 export default function Hero() {
     return (
@@ -102,12 +103,7 @@ export default function Hero() {
                             </div>
                         </div>
 
-                        <HeroButton
-                            href="#"
-                            icon={Ticket}
-                            label="チケット予約"
-                            variant="ticket"
-                        />
+                        <DynamicTicketButton />
                     </div>
 
                 </div>
