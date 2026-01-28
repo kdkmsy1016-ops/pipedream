@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Ticket } from "lucide-react";
+import DynamicTicketButton from "./DynamicTicketButton";
 
 export default function StageSection() {
     return (
@@ -26,13 +26,9 @@ export default function StageSection() {
                         <p className="text-sm md:text-base text-foreground/70">at 下北沢 小劇場 楽園</p>
                     </div>
 
-                    <a
-                        href="#"
-                        className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 w-full bg-foreground text-background hover:bg-accent hover:text-black transition-colors duration-300 rounded-sm"
-                    >
-                        <Ticket size={24} />
-                        <span className="font-bold tracking-wider">チケットを予約する</span>
-                    </a>
+                    <div className="w-full">
+                        <DynamicTicketButton className="w-full max-w-none" />
+                    </div>
                 </div>
             </motion.div>
         </section>
