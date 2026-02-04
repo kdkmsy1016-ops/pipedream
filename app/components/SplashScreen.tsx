@@ -10,7 +10,7 @@ const WAIT_BEFORE_ZOOM = 6.0;    // Phase 1 (1行目) の表示時間
 // Phase 2
 const ZOOM_SPEED = 1.2;          // ズームアニメーションの速度
 const DISPLAY_HOLD = 2.0;        // 全表示後の静止時間
-const EXIT_FADE = 1.0;           // 最終的な画面の消え方
+const EXIT_FADE = 0.5;           // 最終的な画面の消え方 (0.5s for snappy transition)
 
 export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
     const [step, setStep] = useState(1); // 1: Vertical Text, 2: Horizontal Zoom
@@ -116,6 +116,17 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
                         </motion.div>
                     </motion.div>
                 )}
+
+                {/* SKIP Button */}
+                <motion.button
+                    className="absolute bottom-8 right-8 z-50 border border-white/30 px-6 py-2 text-[10px] md:text-xs tracking-widest text-white/50 font-serif hover:text-[#ffbf00] hover:border-[#ffbf00]/50 transition-colors duration-300 backdrop-blur-sm"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.5, duration: 1.0 }}
+                    onClick={onFinish}
+                >
+                    SKIP
+                </motion.button>
 
             </div>
         </motion.div>
