@@ -6,8 +6,9 @@ import DynamicTicketButton from "../components/DynamicTicketButton";
 import LineSection from "../components/LineSection";
 import FloatingTicketButton from "../components/FloatingTicketButton";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { X, ChevronLeft, ChevronRight, Circle } from "lucide-react";
+import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
 
 // Gallery Images
 const GALLERY_IMAGES = [
@@ -17,7 +18,7 @@ const GALLERY_IMAGES = [
 
 const slideVariants = {
     enter: (direction: number) => ({
-        x: direction > 0 ? 500 : -500, // Reduced distance for faster feel or screen width based
+        x: direction > 0 ? 500 : -500, // Reduced distance for faster feel
         opacity: 0,
         scale: 0.95
     }),
@@ -65,9 +66,12 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 export default function StagePage() {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [direction, setDirection] = useState(0);
+    const [isZoomed, setIsZoomed] = useState(false);
+    const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
 
     const paginate = useCallback((newDirection: number) => {
         setDirection(newDirection);
+        setIsZoomed(false); // Reset zoom UI state
         setSelectedIndex((prev) => {
             if (prev === null) return null;
             let next = prev + newDirection;
@@ -80,14 +84,16 @@ export default function StagePage() {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") setSelectedIndex(null);
-            if (e.key === "ArrowRight") paginate(1);
-            if (e.key === "ArrowLeft") paginate(-1);
+            if (!isZoomed) { // Only allow keyboard nav when not zoomed (optional, but safer)
+                if (e.key === "ArrowRight") paginate(1);
+                if (e.key === "ArrowLeft") paginate(-1);
+            }
         };
         if (selectedIndex !== null) {
             window.addEventListener("keydown", handleKeyDown);
         }
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [selectedIndex, paginate]);
+    }, [selectedIndex, paginate, isZoomed]);
 
     // Swipe handlers
     const swipeConfidenceThreshold = 10000;
@@ -101,35 +107,41 @@ export default function StagePage() {
             {/* Header: Key Visual */}
             <header className="relative w-full cursor-zoom-in">
                 {/* PC Image (≥768px) */}
-                <motion.div
-                    layoutId="flyer-front-pc" // Keep distinct layoutId for open animation
-                    className="hidden md:block w-full"
+                <div
+                    className="hidden md:block w-full group cursor-pointer"
                     onClick={() => { setDirection(0); setSelectedIndex(0); }}
                 >
-                    <Image
-                        src="/images/flyer-front-pc.jpg"
-                        alt="Stage Play Key Visual"
-                        width={1920}
-                        height={1080}
-                        className="w-full h-auto object-cover opacity-80 hover:opacity-100 transition-opacity duration-500"
-                        priority
-                    />
-                </motion.div>
+                    <motion.div layoutId="flyer-front-pc">
+                        <Image
+                            src="/images/flyer-front-pc.jpg"
+                            alt="Stage Play Key Visual"
+                            width={1920}
+                            height={1080}
+                            className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                            priority
+                        />
+                    </motion.div>
+                </div>
+
                 {/* Mobile Image (<768px) */}
-                <motion.div
-                    layoutId="flyer-front-mobile"
-                    className="block md:hidden w-full bg-black"
+                <div
+                    className="block md:hidden w-full bg-black group cursor-pointer"
                     onClick={() => { setDirection(0); setSelectedIndex(0); }}
                 >
-                    <Image
-                        src="/images/flyer-front-mobile.jpg"
-                        alt="Stage Play Key Visual"
-                        width={800}
-                        height={1200}
-                        className="w-full h-auto object-cover opacity-80 hover:opacity-100 transition-opacity duration-500"
-                        priority
-                    />
-                </motion.div>
+                    <motion.div layoutId="flyer-front-mobile">
+                        <Image
+                            src="/images/flyer-front-mobile.jpg"
+                            alt="Stage Play Key Visual"
+                            width={800}
+                            height={1200}
+                            className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                            priority
+                        />
+                    </motion.div>
+                    <p className="mt-2 text-center text-[10px] font-light tracking-widest text-[#ffbf00] transition-all duration-300 opacity-80 group-hover:opacity-100">
+                        [ Click to view details ]
+                    </p>
+                </div>
 
                 <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black/25 to-transparent pointer-events-none" />
 
@@ -334,32 +346,35 @@ export default function StagePage() {
             <AnimatePresence>
                 {selectedIndex !== null && (
                     <motion.div
-                        className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-md cursor-zoom-out p-4"
+                        className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-md cursor-zoom-out p-0 md:p-4"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setSelectedIndex(null)}
                     >
                         {/* Controls */}
-                        <button
-                            className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-[80]"
-                        >
-                            <X className="w-8 h-8" />
-                        </button>
+                        <div className={`transition-opacity duration-300 ${isZoomed ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+                            <button
+                                className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-[80]"
+                                onClick={() => setSelectedIndex(null)}
+                            >
+                                <X className="w-8 h-8" />
+                            </button>
 
-                        <button
-                            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors z-[80] hidden md:block"
-                            onClick={(e) => { e.stopPropagation(); paginate(-1); }}
-                        >
-                            <ChevronLeft className="w-12 h-12" />
-                        </button>
+                            <button
+                                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors z-[80] hidden md:block"
+                                onClick={(e) => { e.stopPropagation(); paginate(-1); }}
+                            >
+                                <ChevronLeft className="w-12 h-12" />
+                            </button>
 
-                        <button
-                            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors z-[80] hidden md:block"
-                            onClick={(e) => { e.stopPropagation(); paginate(1); }}
-                        >
-                            <ChevronRight className="w-12 h-12" />
-                        </button>
+                            <button
+                                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors z-[80] hidden md:block"
+                                onClick={(e) => { e.stopPropagation(); paginate(1); }}
+                            >
+                                <ChevronRight className="w-12 h-12" />
+                            </button>
+                        </div>
 
                         {/* Image Container */}
                         <div className="relative w-full h-full max-w-7xl max-h-screen flex items-center justify-center pointer-events-none">
@@ -375,10 +390,11 @@ export default function StagePage() {
                                         x: { type: "spring", stiffness: 300, damping: 30 },
                                         opacity: { duration: 0.2 }
                                     }}
-                                    drag="x"
+                                    drag={isZoomed ? false : "x"} // Disable swiping when zoomed
                                     dragConstraints={{ left: 0, right: 0 }}
                                     dragElastic={1}
                                     onDragEnd={(e, { offset, velocity }) => {
+                                        if (isZoomed) return;
                                         const swipe = swipePower(offset.x, velocity.x);
                                         if (swipe < -swipeConfidenceThreshold) {
                                             paginate(1);
@@ -389,19 +405,39 @@ export default function StagePage() {
                                     className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
                                     onClick={(e) => e.stopPropagation()} // Keep Open
                                 >
-                                    <Image
-                                        src={GALLERY_IMAGES[selectedIndex].src}
-                                        alt={GALLERY_IMAGES[selectedIndex].alt}
-                                        fill
-                                        className="object-contain"
-                                        priority
-                                    />
+                                    {/* Pinch Zoom Wrapper */}
+                                    <TransformWrapper
+                                        ref={transformComponentRef}
+                                        initialScale={1}
+                                        minScale={1}
+                                        maxScale={5}
+                                        doubleClick={{ disabled: false, mode: "zoomIn", step: 3 }}
+                                        alignmentAnimation={{ sizeX: 0, sizeY: 0 }}
+                                        onZoom={({ state }) => setIsZoomed(state.scale > 1.01)}
+                                        onTransformed={({ state }) => setIsZoomed(state.scale > 1.01)}
+                                    >
+                                        <TransformComponent
+                                            wrapperStyle={{ width: "100%", height: "100%" }}
+                                            contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+                                        >
+                                            <div className="relative w-full h-full flex items-center justify-center relative">
+                                                <Image
+                                                    src={GALLERY_IMAGES[selectedIndex].src}
+                                                    alt={GALLERY_IMAGES[selectedIndex].alt}
+                                                    fill
+                                                    className="object-contain"
+                                                    priority
+                                                    draggable={false} // Prevent native drag
+                                                />
+                                            </div>
+                                        </TransformComponent>
+                                    </TransformWrapper>
                                 </motion.div>
                             </AnimatePresence>
                         </div>
 
                         {/* Indicators */}
-                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-[80]">
+                        <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-[80] transition-opacity duration-300 ${isZoomed ? "opacity-0" : "opacity-100"}`}>
                             {GALLERY_IMAGES.map((_, i) => (
                                 <button
                                     key={i}
