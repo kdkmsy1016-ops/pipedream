@@ -26,7 +26,6 @@ export default function Home() {
         <Introduction />
         <LineSection />
         <StageSection />
-        <StageSection />
         <FloatingStageLink />
       </NoSSR>
 
