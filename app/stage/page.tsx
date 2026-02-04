@@ -138,9 +138,6 @@ export default function StagePage() {
                             priority
                         />
                     </motion.div>
-                    <p className="mt-2 text-center text-[10px] font-light tracking-widest text-[#ffbf00] transition-all duration-300 opacity-80 group-hover:opacity-100">
-                        [ Click to view details ]
-                    </p>
                 </div>
 
                 <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black/25 to-transparent pointer-events-none" />
