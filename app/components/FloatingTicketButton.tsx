@@ -36,19 +36,22 @@ export default function FloatingTicketButton() {
                 transition={{ duration: 0.8, delay: 1 }}
             >
                 {isReleased ? (
-                    <a
+                    <motion.a
                         href="https://t.livepocket.jp/t/basusue"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center gap-3 bg-black/60 backdrop-blur-md border border-[#ffbf00] text-[#ffbf00] font-serif px-6 py-3 rounded-full hover:bg-[#ffbf00] hover:text-black transition-all duration-300 shadow-[0_0_20px_rgba(255,191,0,0.2)]"
+                        className="group flex items-center gap-3 bg-black/90 backdrop-blur-md border border-[#ffbf00] text-[#ffbf00] font-serif px-6 py-3 rounded-full hover:bg-[#ffbf00] hover:text-black transition-all duration-300 shadow-[0_0_15px_rgba(255,191,0,0.3)]"
+                        whileHover={{ scale: 1.05 }}
+                        animate={{ boxShadow: ["0 0 15px rgba(255,191,0,0.3)", "0 0 25px rgba(255,191,0,0.6)", "0 0 15px rgba(255,191,0,0.3)"] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                     >
                         <Ticket className="w-5 h-5" />
                         <span className="tracking-widest font-bold">TICKET BUY</span>
-                    </a>
+                    </motion.a>
                 ) : (
                     <button
                         disabled
-                        className="flex items-center gap-3 bg-black/60 backdrop-blur-md border border-[#ffbf00]/50 text-[#ffbf00]/70 font-serif px-6 py-3 rounded-full cursor-not-allowed"
+                        className="flex items-center gap-3 bg-black/80 backdrop-blur-md border border-[#ffbf00]/50 text-[#ffbf00]/70 font-serif px-6 py-3 rounded-full cursor-not-allowed"
                     >
                         <Ticket className="w-5 h-5 opacity-50" />
                         <span className="tracking-widest text-sm">2/21 21:00 発売開始</span>
