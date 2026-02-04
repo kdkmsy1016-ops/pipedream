@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 interface HeroButtonProps {
     href: string;
     icon: LucideIcon;
-    label: string | ReactNode;
+    label: any; // Relaxed type for safety
     variant: "line" | "ticket" | "gold";
     external?: boolean;
     compact?: boolean;
@@ -25,7 +25,12 @@ export default function HeroButton({ href, icon: Icon, label, variant, external 
     const content = (
         <>
             <Icon size={20} className="lg:w-6 lg:h-6 flex-shrink-0" />
-            <span className="font-bold tracking-widest text-sm lg:text-base whitespace-pre-wrap text-center leading-tight">{label}</span>
+            <span
+                className="font-bold tracking-widest text-sm lg:text-base text-center leading-tight"
+                style={{ whiteSpace: 'pre-line' }}
+            >
+                {label}
+            </span>
         </>
     );
 

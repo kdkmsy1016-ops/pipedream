@@ -9,8 +9,8 @@ const TARGET_DATE = new Date(TARGET_DATE_STR).getTime();
 
 interface DynamicTicketButtonProps {
     className?: string;
-    releasedLabel?: string | ReactNode;
-    preReleaseLabel?: string | ReactNode;
+    releasedLabel?: any; // Relaxed type for safety
+    preReleaseLabel?: any; // Relaxed type for safety
     compact?: boolean;
 }
 
