@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
 import { Ticket } from "lucide-react";
 import HeroButton from "./HeroButton";
 
@@ -9,8 +9,8 @@ const TARGET_DATE = new Date(TARGET_DATE_STR).getTime();
 
 interface DynamicTicketButtonProps {
     className?: string;
-    releasedLabel?: string;
-    preReleaseLabel?: string;
+    releasedLabel?: string | ReactNode;
+    preReleaseLabel?: string | ReactNode;
     compact?: boolean;
 }
 
