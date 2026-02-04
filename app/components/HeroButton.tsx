@@ -6,10 +6,12 @@ interface HeroButtonProps {
     label: string;
     variant: "line" | "ticket" | "gold";
     external?: boolean;
+    compact?: boolean;
 }
 
-export default function HeroButton({ href, icon: Icon, label, variant, external = false, className = "", disabled = false }: HeroButtonProps & { className?: string; disabled?: boolean }) {
-    const baseClass = "group relative inline-flex items-center justify-center gap-3 px-8 py-3 lg:px-10 lg:py-4 rounded-sm transition-all mt-4 lg:mt-2 w-full max-w-sm lg:w-auto";
+export default function HeroButton({ href, icon: Icon, label, variant, external = false, className = "", disabled = false, compact = false }: HeroButtonProps & { className?: string; disabled?: boolean }) {
+    const defaultPadding = compact ? "px-6 py-2 lg:px-8 lg:py-3" : "px-8 py-3 lg:px-10 lg:py-4";
+    const baseClass = `group relative inline-flex items-center justify-center gap-3 ${defaultPadding} rounded-sm transition-all mt-4 lg:mt-2 w-full max-w-sm lg:w-auto`;
 
     const variantStyles = {
         line: "bg-[#06c755] text-white hover:bg-[#05b34c]",

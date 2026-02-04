@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import DynamicTicketButton from "../components/DynamicTicketButton";
 import FloatingTicketButton from "../components/FloatingTicketButton";
 
-const fadeIn = {
+const fadeIn: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
         opacity: 1,
