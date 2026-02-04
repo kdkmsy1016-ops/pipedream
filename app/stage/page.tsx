@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 import DynamicTicketButton from "../components/DynamicTicketButton";
+import LineSection from "../components/LineSection";
 import FloatingTicketButton from "../components/FloatingTicketButton";
 
 const fadeIn: Variants = {
@@ -252,6 +253,11 @@ export default function StagePage() {
                     </div>
                 </Section>
 
+            </div>
+
+            {/* Crowdfunding Section */}
+            <div className="border-t border-[#ffbf00]/20 pt-20 pb-20">
+                <LineSection />
             </div>
 
             <FloatingTicketButton />
