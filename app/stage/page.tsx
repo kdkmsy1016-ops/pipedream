@@ -6,15 +6,34 @@ import DynamicTicketButton from "../components/DynamicTicketButton";
 import LineSection from "../components/LineSection";
 import FloatingTicketButton from "../components/FloatingTicketButton";
 
-import { useState, useEffect } from "react";
-import { MoveLeft } from "lucide-react"; // Or default icon if needed, though pure CSS/Text preferred or generic X
-import { X } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { X, ChevronLeft, ChevronRight, Circle } from "lucide-react";
 
-// Image Paths - Update these constants for high-res versions
-const FLYER_PC_LIGHT = "/images/flyer-front-pc.jpg";
-const FLYER_PC_FULL = "/images/flyer-front-full.jpg"; // Change to -full.jpg when available
-const FLYER_MOBILE_LIGHT = "/images/flyer-front-mobile.jpg";
-const FLYER_MOBILE_FULL = "/images/flyer-front-full.jpg"; // Change to -full.jpg when available
+// Gallery Images
+const GALLERY_IMAGES = [
+    { src: "/images/flyer-front-full.webp", alt: "Flyer Front" },
+    { src: "/images/flyer-back-full.webp", alt: "Flyer Back" }
+];
+
+const slideVariants = {
+    enter: (direction: number) => ({
+        x: direction > 0 ? 500 : -500, // Reduced distance for faster feel or screen width based
+        opacity: 0,
+        scale: 0.95
+    }),
+    center: {
+        zIndex: 1,
+        x: 0,
+        opacity: 1,
+        scale: 1
+    },
+    exit: (direction: number) => ({
+        zIndex: 0,
+        x: direction < 0 ? 500 : -500,
+        opacity: 0,
+        scale: 0.95
+    })
+};
 
 const fadeIn: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -44,15 +63,37 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function StagePage() {
-    const [selectedImage, setSelectedImage] = useState<{ light: string; full: string; layoutId: string } | null>(null);
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [direction, setDirection] = useState(0);
+
+    const paginate = useCallback((newDirection: number) => {
+        setDirection(newDirection);
+        setSelectedIndex((prev) => {
+            if (prev === null) return null;
+            let next = prev + newDirection;
+            if (next < 0) next = GALLERY_IMAGES.length - 1;
+            if (next >= GALLERY_IMAGES.length) next = 0;
+            return next;
+        });
+    }, []);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") setSelectedImage(null);
+            if (e.key === "Escape") setSelectedIndex(null);
+            if (e.key === "ArrowRight") paginate(1);
+            if (e.key === "ArrowLeft") paginate(-1);
         };
-        window.addEventListener("keydown", handleKeyDown);
+        if (selectedIndex !== null) {
+            window.addEventListener("keydown", handleKeyDown);
+        }
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, []);
+    }, [selectedIndex, paginate]);
+
+    // Swipe handlers
+    const swipeConfidenceThreshold = 10000;
+    const swipePower = (offset: number, velocity: number) => {
+        return Math.abs(offset) * velocity;
+    };
 
     return (
         <main className="min-h-screen bg-black text-white font-serif relative">
@@ -61,12 +102,12 @@ export default function StagePage() {
             <header className="relative w-full cursor-zoom-in">
                 {/* PC Image (≥768px) */}
                 <motion.div
-                    layoutId="flyer-pc"
+                    layoutId="flyer-front-pc" // Keep distinct layoutId for open animation
                     className="hidden md:block w-full"
-                    onClick={() => setSelectedImage({ light: FLYER_PC_LIGHT, full: FLYER_PC_FULL, layoutId: "flyer-pc" })}
+                    onClick={() => { setDirection(0); setSelectedIndex(0); }}
                 >
                     <Image
-                        src={FLYER_PC_LIGHT}
+                        src="/images/flyer-front-pc.jpg"
                         alt="Stage Play Key Visual"
                         width={1920}
                         height={1080}
@@ -76,12 +117,12 @@ export default function StagePage() {
                 </motion.div>
                 {/* Mobile Image (<768px) */}
                 <motion.div
-                    layoutId="flyer-mobile"
+                    layoutId="flyer-front-mobile"
                     className="block md:hidden w-full bg-black"
-                    onClick={() => setSelectedImage({ light: FLYER_MOBILE_LIGHT, full: FLYER_MOBILE_FULL, layoutId: "flyer-mobile" })}
+                    onClick={() => { setDirection(0); setSelectedIndex(0); }}
                 >
                     <Image
-                        src={FLYER_MOBILE_LIGHT}
+                        src="/images/flyer-front-mobile.jpg"
                         alt="Stage Play Key Visual"
                         width={800}
                         height={1200}
@@ -110,9 +151,10 @@ export default function StagePage() {
                 </motion.div>
             </header>
 
+            {/* Content Sections... (omitted for brevity, keep existing content structure) */}
             <div className="max-w-4xl mx-auto px-6 pt-[40vh] pb-32 space-y-20 md:space-y-32">
-
-                {/* Introduction */}
+                {/* ... existing sections ... */}
+                {/* Intro */}
                 <Section className="text-center leading-loose text-lg md:text-xl text-gray-300">
                     <SectionTitle>Introduction</SectionTitle>
                     <div className="space-y-6">
@@ -129,7 +171,6 @@ export default function StagePage() {
                         </div>
                     </div>
                 </Section>
-
                 {/* Story */}
                 <Section className="text-center bg-white/5 p-8 md:p-12 rounded-sm border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
                     <SectionTitle>Story</SectionTitle>
@@ -151,8 +192,7 @@ export default function StagePage() {
                         </p>
                     </div>
                 </Section>
-
-                {/* Cast & Staff */}
+                {/* Cast */}
                 <Section className="text-center">
                     <SectionTitle>Cast & Staff</SectionTitle>
                     <div className="space-y-12">
@@ -207,7 +247,6 @@ export default function StagePage() {
                         </div>
                     </div>
                 </Section>
-
                 {/* Time Table */}
                 <Section>
                     <SectionTitle>Time Table</SectionTitle>
@@ -258,8 +297,7 @@ export default function StagePage() {
                         </div>
                     </div>
                 </Section>
-
-                {/* Access Map */}
+                {/* Access */}
                 <Section className="text-center space-y-8">
                     <SectionTitle>ACCESS</SectionTitle>
 
@@ -282,7 +320,6 @@ export default function StagePage() {
                         ></iframe>
                     </div>
                 </Section>
-
             </div>
 
             {/* Crowdfunding Section */}
@@ -290,53 +327,90 @@ export default function StagePage() {
                 <LineSection />
             </div>
 
+
             <FloatingTicketButton />
 
+            {/* Gallery Lightbox */}
             <AnimatePresence>
-                {selectedImage && (
+                {selectedIndex !== null && (
                     <motion.div
                         className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-md cursor-zoom-out p-4"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        onClick={() => setSelectedImage(null)}
+                        onClick={() => setSelectedIndex(null)}
                     >
-                        {/* Close Button */}
+                        {/* Controls */}
                         <button
-                            className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-[70]"
+                            className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-[80]"
                         >
                             <X className="w-8 h-8" />
                         </button>
 
-                        <div className="relative w-full h-full max-w-7xl max-h-screen flex items-center justify-center pointer-events-none">
-                            <motion.div
-                                layoutId={selectedImage.layoutId}
-                                className="relative w-full h-full flex items-center justify-center pointer-events-auto"
-                                onClick={(e) => e.stopPropagation()} // Prevent close on image click? User said click area should close, but usually image click toggles or zooms. User said: "Click outside... to close". So image click shouldn't close?
-                            // User said: "Click outside area, or Esc key to close". So image click should NOT close.
-                            >
-                                {/* Low Res Placeholder (Always visible but overshadowed) */}
-                                <motion.img
-                                    src={selectedImage.light}
-                                    alt="Detail View"
-                                    className="absolute w-auto h-auto max-w-full max-h-full object-contain"
-                                    initial={{ opacity: 0.5 }}
-                                    animate={{ opacity: 1 }}
-                                />
+                        <button
+                            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors z-[80] hidden md:block"
+                            onClick={(e) => { e.stopPropagation(); paginate(-1); }}
+                        >
+                            <ChevronLeft className="w-12 h-12" />
+                        </button>
 
-                                {/* High Res Image (Loads on top) */}
-                                <Image
-                                    src={selectedImage.full}
-                                    alt="Detail View High Res"
-                                    fill
-                                    className="object-contain opacity-0 transition-opacity duration-700 data-[loaded=true]:opacity-100"
-                                    onLoad={(e) => {
-                                        const img = e.currentTarget;
-                                        img.setAttribute("data-loaded", "true");
+                        <button
+                            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors z-[80] hidden md:block"
+                            onClick={(e) => { e.stopPropagation(); paginate(1); }}
+                        >
+                            <ChevronRight className="w-12 h-12" />
+                        </button>
+
+                        {/* Image Container */}
+                        <div className="relative w-full h-full max-w-7xl max-h-screen flex items-center justify-center pointer-events-none">
+                            <AnimatePresence initial={false} custom={direction}>
+                                <motion.div
+                                    key={selectedIndex}
+                                    custom={direction}
+                                    variants={slideVariants}
+                                    initial="enter"
+                                    animate="center"
+                                    exit="exit"
+                                    transition={{
+                                        x: { type: "spring", stiffness: 300, damping: 30 },
+                                        opacity: { duration: 0.2 }
                                     }}
-                                    priority
-                                />
-                            </motion.div>
+                                    drag="x"
+                                    dragConstraints={{ left: 0, right: 0 }}
+                                    dragElastic={1}
+                                    onDragEnd={(e, { offset, velocity }) => {
+                                        const swipe = swipePower(offset.x, velocity.x);
+                                        if (swipe < -swipeConfidenceThreshold) {
+                                            paginate(1);
+                                        } else if (swipe > swipeConfidenceThreshold) {
+                                            paginate(-1);
+                                        }
+                                    }}
+                                    className="absolute w-full h-full flex items-center justify-center pointer-events-auto"
+                                    onClick={(e) => e.stopPropagation()} // Keep Open
+                                >
+                                    <Image
+                                        src={GALLERY_IMAGES[selectedIndex].src}
+                                        alt={GALLERY_IMAGES[selectedIndex].alt}
+                                        fill
+                                        className="object-contain"
+                                        priority
+                                    />
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+
+                        {/* Indicators */}
+                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-[80]">
+                            {GALLERY_IMAGES.map((_, i) => (
+                                <button
+                                    key={i}
+                                    onClick={(e) => { e.stopPropagation(); setDirection(i > selectedIndex ? 1 : -1); setSelectedIndex(i); }}
+                                    className={`transition-colors ${i === selectedIndex ? "text-[#ffbf00]" : "text-white/30 hover:text-white/70"}`}
+                                >
+                                    <Circle className={`w-3 h-3 ${i === selectedIndex ? "fill-current" : ""}`} />
+                                </button>
+                            ))}
                         </div>
                     </motion.div>
                 )}
