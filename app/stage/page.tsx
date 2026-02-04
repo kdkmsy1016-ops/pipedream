@@ -1,10 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, AnimatePresence } from "framer-motion";
 import DynamicTicketButton from "../components/DynamicTicketButton";
 import LineSection from "../components/LineSection";
 import FloatingTicketButton from "../components/FloatingTicketButton";
+
+import { useState, useEffect } from "react";
+import { MoveLeft } from "lucide-react"; // Or default icon if needed, though pure CSS/Text preferred or generic X
+import { X } from "lucide-react";
+
+// Image Paths - Update these constants for high-res versions
+const FLYER_PC_LIGHT = "/images/flyer-front-pc.jpg";
+const FLYER_PC_FULL = "/images/flyer-front-pc.jpg"; // Change to -full.jpg when available
+const FLYER_MOBILE_LIGHT = "/images/flyer-front-mobile.jpg";
+const FLYER_MOBILE_FULL = "/images/flyer-front-mobile.jpg"; // Change to -full.jpg when available
 
 const fadeIn: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -34,37 +44,57 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function StagePage() {
+    const [selectedImage, setSelectedImage] = useState<{ light: string; full: string; layoutId: string } | null>(null);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setSelectedImage(null);
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, []);
+
     return (
-        <main className="min-h-screen bg-black text-white font-serif">
+        <main className="min-h-screen bg-black text-white font-serif relative">
 
             {/* Header: Key Visual */}
-            <header className="relative w-full">
+            <header className="relative w-full cursor-zoom-in">
                 {/* PC Image (≥768px) */}
-                <Image
-                    src="/images/flyer-front-pc.jpg"
-                    alt="Stage Play Key Visual"
-                    width={1920}
-                    height={1080}
-                    className="hidden md:block w-full h-auto object-cover opacity-80"
-                    priority
-                />
-                {/* Mobile Image (<768px) */}
-                <div className="block md:hidden w-full bg-black">
+                <motion.div
+                    layoutId="flyer-pc"
+                    className="hidden md:block w-full"
+                    onClick={() => setSelectedImage({ light: FLYER_PC_LIGHT, full: FLYER_PC_FULL, layoutId: "flyer-pc" })}
+                >
                     <Image
-                        src="/images/flyer-front-mobile.jpg"
+                        src={FLYER_PC_LIGHT}
+                        alt="Stage Play Key Visual"
+                        width={1920}
+                        height={1080}
+                        className="w-full h-auto object-cover opacity-80 hover:opacity-100 transition-opacity duration-500"
+                        priority
+                    />
+                </motion.div>
+                {/* Mobile Image (<768px) */}
+                <motion.div
+                    layoutId="flyer-mobile"
+                    className="block md:hidden w-full bg-black"
+                    onClick={() => setSelectedImage({ light: FLYER_MOBILE_LIGHT, full: FLYER_MOBILE_FULL, layoutId: "flyer-mobile" })}
+                >
+                    <Image
+                        src={FLYER_MOBILE_LIGHT}
                         alt="Stage Play Key Visual"
                         width={800}
                         height={1200}
-                        className="w-full h-auto object-cover opacity-80"
+                        className="w-full h-auto object-cover opacity-80 hover:opacity-100 transition-opacity duration-500"
                         priority
                     />
-                </div>
+                </motion.div>
 
                 <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black/25 to-transparent pointer-events-none" />
 
                 {/* Scroll Indicator */}
                 <motion.div
-                    className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
+                    className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10 pointers-events-none"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1, duration: 1.5 }}
@@ -261,6 +291,56 @@ export default function StagePage() {
             </div>
 
             <FloatingTicketButton />
+
+            <AnimatePresence>
+                {selectedImage && (
+                    <motion.div
+                        className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-md cursor-zoom-out p-4"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedImage(null)}
+                    >
+                        {/* Close Button */}
+                        <button
+                            className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-[70]"
+                        >
+                            <X className="w-8 h-8" />
+                        </button>
+
+                        <div className="relative w-full h-full max-w-7xl max-h-screen flex items-center justify-center pointer-events-none">
+                            <motion.div
+                                layoutId={selectedImage.layoutId}
+                                className="relative w-full h-full flex items-center justify-center pointer-events-auto"
+                                onClick={(e) => e.stopPropagation()} // Prevent close on image click? User said click area should close, but usually image click toggles or zooms. User said: "Click outside... to close". So image click shouldn't close?
+                            // User said: "Click outside area, or Esc key to close". So image click should NOT close.
+                            >
+                                {/* Low Res Placeholder (Always visible but overshadowed) */}
+                                <motion.img
+                                    src={selectedImage.light}
+                                    alt="Detail View"
+                                    className="absolute w-auto h-auto max-w-full max-h-full object-contain"
+                                    initial={{ opacity: 0.5 }}
+                                    animate={{ opacity: 1 }}
+                                />
+
+                                {/* High Res Image (Loads on top) */}
+                                <Image
+                                    src={selectedImage.full}
+                                    alt="Detail View High Res"
+                                    fill
+                                    className="object-contain opacity-0 transition-opacity duration-700 data-[loaded=true]:opacity-100"
+                                    onLoad={(e) => {
+                                        const img = e.currentTarget;
+                                        img.setAttribute("data-loaded", "true");
+                                    }}
+                                    priority
+                                />
+                            </motion.div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </main>
     );
 }
