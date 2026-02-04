@@ -12,9 +12,9 @@ import { X } from "lucide-react";
 
 // Image Paths - Update these constants for high-res versions
 const FLYER_PC_LIGHT = "/images/flyer-front-pc.jpg";
-const FLYER_PC_FULL = "/images/flyer-front-pc.jpg"; // Change to -full.jpg when available
+const FLYER_PC_FULL = "/images/flyer-front-full.jpg"; // Change to -full.jpg when available
 const FLYER_MOBILE_LIGHT = "/images/flyer-front-mobile.jpg";
-const FLYER_MOBILE_FULL = "/images/flyer-front-mobile.jpg"; // Change to -full.jpg when available
+const FLYER_MOBILE_FULL = "/images/flyer-front-full.jpg"; // Change to -full.jpg when available
 
 const fadeIn: Variants = {
     hidden: { opacity: 0, y: 20 },
