@@ -23,7 +23,7 @@ export default function FloatingStageLink() {
         <AnimatePresence>
             {isVisible && (
                 <motion.div
-                    className="fixed bottom-10 right-10 z-50"
+                    className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 w-max"
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 50 }}
@@ -31,7 +31,7 @@ export default function FloatingStageLink() {
                 >
                     <Link href="/stage">
                         <motion.div
-                            className="group flex items-center gap-4 bg-black/90 backdrop-blur-xl px-6 py-4 rounded-sm border-l-2 border-[#ffbf00] cursor-pointer shadow-[0_0_15px_rgba(255,191,0,0.3)]"
+                            className="group flex items-center gap-4 bg-black/80 backdrop-blur-lg px-8 py-4 rounded-full border border-[#ffbf00] cursor-pointer shadow-[0_0_20px_rgba(255,191,0,0.4)]"
                             animate={{
                                 y: [0, -8, 0],
                                 scale: [1, 1, 1.05, 1]
@@ -39,7 +39,7 @@ export default function FloatingStageLink() {
                             whileHover={{
                                 y: -5,
                                 scale: 1.02,
-                                boxShadow: "0 0 25px rgba(255,191,0,0.6)"
+                                boxShadow: "0 0 30px rgba(255,191,0,0.7)"
                             }}
                             transition={{
                                 y: { duration: 3, repeat: Infinity, ease: "easeInOut" },

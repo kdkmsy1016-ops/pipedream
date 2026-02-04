@@ -30,7 +30,7 @@ export default function FloatingTicketButton() {
     return (
         <AnimatePresence>
             <motion.div
-                className="fixed bottom-6 right-6 z-40"
+                className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 w-max"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1 }}
@@ -40,7 +40,7 @@ export default function FloatingTicketButton() {
                         href="https://t.livepocket.jp/t/basusue"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center gap-3 bg-black/90 backdrop-blur-md border border-[#ffbf00] text-[#ffbf00] font-serif px-6 py-3 rounded-full hover:bg-[#ffbf00] hover:text-black transition-colors duration-300 shadow-[0_0_20px_rgba(255,191,0,0.4)]"
+                        className="group flex items-center gap-3 bg-black/80 backdrop-blur-lg border border-[#ffbf00] text-[#ffbf00] font-serif px-8 py-4 rounded-full hover:bg-[#ffbf00] hover:text-black transition-colors duration-300 shadow-[0_0_20px_rgba(255,191,0,0.4)]"
                         animate={{
                             y: [0, -6, 0],
                             scale: [1, 1, 1.05, 1],
