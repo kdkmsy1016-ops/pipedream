@@ -32,11 +32,20 @@ export default function FloatingStageLink() {
                     <Link href="/stage">
                         <motion.div
                             className="group flex items-center gap-4 bg-black/90 backdrop-blur-xl px-6 py-4 rounded-sm border-l-2 border-[#ffbf00] cursor-pointer shadow-[0_0_15px_rgba(255,191,0,0.3)]"
+                            animate={{
+                                y: [0, -8, 0],
+                                scale: [1, 1, 1.05, 1]
+                            }}
                             whileHover={{
                                 y: -5,
-                                boxShadow: "0 0 25px rgba(255,191,0,0.5)"
+                                scale: 1.02,
+                                boxShadow: "0 0 25px rgba(255,191,0,0.6)"
                             }}
-                            transition={{ duration: 0.3 }}
+                            transition={{
+                                y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                                scale: { duration: 5, repeat: Infinity, times: [0, 0.9, 0.95, 1], ease: "easeInOut" },
+                                default: { duration: 0.3 }
+                            }}
                         >
                             <div className="flex flex-col">
                                 <span className="text-white/60 text-[10px] tracking-widest font-sans uppercase mb-1">

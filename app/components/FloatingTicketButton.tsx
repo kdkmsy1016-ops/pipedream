@@ -40,10 +40,23 @@ export default function FloatingTicketButton() {
                         href="https://t.livepocket.jp/t/basusue"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center gap-3 bg-black/90 backdrop-blur-md border border-[#ffbf00] text-[#ffbf00] font-serif px-6 py-3 rounded-full hover:bg-[#ffbf00] hover:text-black transition-all duration-300 shadow-[0_0_15px_rgba(255,191,0,0.3)]"
-                        whileHover={{ scale: 1.05 }}
-                        animate={{ boxShadow: ["0 0 15px rgba(255,191,0,0.3)", "0 0 25px rgba(255,191,0,0.6)", "0 0 15px rgba(255,191,0,0.3)"] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        className="group flex items-center gap-3 bg-black/90 backdrop-blur-md border border-[#ffbf00] text-[#ffbf00] font-serif px-6 py-3 rounded-full hover:bg-[#ffbf00] hover:text-black transition-colors duration-300 shadow-[0_0_20px_rgba(255,191,0,0.4)]"
+                        animate={{
+                            y: [0, -6, 0],
+                            scale: [1, 1, 1.05, 1],
+                            boxShadow: ["0 0 20px rgba(255,191,0,0.4)", "0 0 20px rgba(255,191,0,0.4)", "0 0 35px rgba(255,191,0,0.7)", "0 0 20px rgba(255,191,0,0.4)"]
+                        }}
+                        whileHover={{
+                            y: -4,
+                            scale: 1.05,
+                            boxShadow: "0 0 30px rgba(255,191,0,0.8)"
+                        }}
+                        transition={{
+                            y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                            scale: { duration: 4, repeat: Infinity, times: [0, 0.9, 0.95, 1], ease: "easeInOut" },
+                            boxShadow: { duration: 4, repeat: Infinity, times: [0, 0.9, 0.95, 1], ease: "easeInOut" },
+                            default: { duration: 0.3 }
+                        }}
                     >
                         <Ticket className="w-5 h-5" />
                         <span className="tracking-widest font-bold">TICKET BUY</span>
