@@ -8,6 +8,7 @@ import StageSection from "./components/StageSection";
 import Introduction from "./components/Introduction";
 import NoSSR from "./components/NoSSR";
 import SplashScreen from "./components/SplashScreen";
+import FloatingStageLink from "./components/FloatingStageLink";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +26,8 @@ export default function Home() {
         <Introduction />
         <LineSection />
         <StageSection />
+        <StageSection />
+        <FloatingStageLink />
       </NoSSR>
 
       {/* Footer */}

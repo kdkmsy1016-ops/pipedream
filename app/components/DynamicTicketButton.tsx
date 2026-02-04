@@ -9,9 +9,17 @@ const TARGET_DATE = new Date(TARGET_DATE_STR).getTime();
 
 interface DynamicTicketButtonProps {
     className?: string;
+    releasedLabel?: string;
+    preReleaseLabel?: string;
+    compact?: boolean;
 }
 
-export default function DynamicTicketButton({ className = "" }: DynamicTicketButtonProps) {
+export default function DynamicTicketButton({
+    className = "",
+    releasedLabel = "チケット予約",
+    preReleaseLabel = "TICKET (2/21 21:00 START)",
+    compact = false
+}: DynamicTicketButtonProps) {
     const [timeLeft, setTimeLeft] = useState<number | null>(null);
     const [isReleased, setIsReleased] = useState(false);
 
@@ -41,10 +49,11 @@ export default function DynamicTicketButton({ className = "" }: DynamicTicketBut
             <HeroButton
                 href="#"
                 icon={Ticket}
-                label="TICKET (2/21 21:00 START)"
+                label={preReleaseLabel}
                 variant="ticket"
                 disabled={true}
                 className={className}
+                compact={compact}
             />
         );
     }
@@ -54,10 +63,11 @@ export default function DynamicTicketButton({ className = "" }: DynamicTicketBut
             <HeroButton
                 href="https://www.quartet-online.net/ticket/basueno"
                 icon={Ticket}
-                label="チケット予約"
+                label={releasedLabel}
                 variant="gold"
                 external
                 className={className}
+                compact={compact}
             />
         );
     }
@@ -77,10 +87,11 @@ export default function DynamicTicketButton({ className = "" }: DynamicTicketBut
             <HeroButton
                 href="#"
                 icon={Ticket}
-                label="TICKET (2/21 21:00 START)"
+                label={preReleaseLabel}
                 variant="ticket"
                 disabled={true}
                 className="w-full"
+                compact={compact}
             />
             {showCountdown && (
                 <span className="text-accent font-bold tracking-widest text-sm lg:text-base animate-pulse font-serif">
