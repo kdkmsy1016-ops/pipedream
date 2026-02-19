@@ -20,7 +20,7 @@ export default function Navigation() {
         { label: "Introduction", href: "/#introduction" },
         { label: "Film", href: "/film" },
         { label: "Stage", href: "/stage" },
-        { label: "Contact", href: "mailto:contact@example.com" },
+        { label: "Contact", href: "/contact" },
     ];
 
     return (
