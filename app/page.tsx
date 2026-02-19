@@ -8,6 +8,7 @@ import StageSection from "./components/StageSection";
 import Introduction from "./components/Introduction";
 import NoSSR from "./components/NoSSR";
 import SplashScreen from "./components/SplashScreen";
+import ContactSection from "./components/ContactSection";
 import FloatingStageLink from "./components/FloatingStageLink";
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
         <Introduction />
         <LineSection />
         <StageSection />
+        <ContactSection />
         <FloatingStageLink />
       </NoSSR>
 
