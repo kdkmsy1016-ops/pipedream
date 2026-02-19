@@ -5,6 +5,7 @@ import { motion, Variants, AnimatePresence } from "framer-motion";
 import DynamicTicketButton from "../components/DynamicTicketButton";
 import LineSection from "../components/LineSection";
 import FloatingTicketButton from "../components/FloatingTicketButton";
+import ContactSection from "../components/ContactSection";
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { X, ChevronLeft, ChevronRight, Circle } from "lucide-react";
@@ -330,6 +331,9 @@ export default function StagePage() {
                     </div>
                 </Section>
             </div>
+
+            {/* Contact Section */}
+            <ContactSection />
 
             {/* Crowdfunding Section */}
             <div className="border-t border-[#ffbf00]/20 pt-20 pb-20">
