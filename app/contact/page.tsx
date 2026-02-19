@@ -7,8 +7,7 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 
 // === Formspree Configuration ===
-// TODO: Replace with your actual Formspree Form ID
-const FORMSPREE_FORM_ID = "xpwzyqkg";
+const FORMSPREE_FORM_ID = "myznwbdy";
 
 const fadeIn: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -21,7 +20,6 @@ const fadeIn: Variants = {
 
 export default function ContactPage() {
     const [state, handleSubmit] = useForm(FORMSPREE_FORM_ID);
-    const [isSubmitting, setIsSubmitting] = useState(false); // Local state for immediate feedback if needed, though state.submitting exists
 
     // Success State
     if (state.succeeded) {
@@ -37,8 +35,8 @@ export default function ContactPage() {
                         Thank You
                     </p>
                     <div className="space-y-4 text-gray-300 leading-loose">
-                        <p>メッセージを承りました。</p>
-                        <p>折り返し担当よりご連絡いたします。<br />今しばらくお待ちください。</p>
+                        <p className="text-lg">メッセージを承りました。</p>
+                        <p>幕が上がるまで、<br />今しばらくお待ちください。</p>
                     </div>
                     <div className="pt-8">
                         <Link
@@ -101,7 +99,7 @@ export default function ContactPage() {
                             type="text"
                             name="name"
                             required
-                            className="w-full bg-transparent border-b border-white/20 py-3 text-base md:text-lg focus:outline-none focus:border-[#ffbf00] transition-colors rounded-none placeholder-white/10"
+                            className="w-full bg-black/50 border border-[#ffbf00]/30 py-3 px-4 text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:ring-1 focus:ring-[#ffbf00] focus:shadow-[0_0_15px_rgba(255,191,0,0.2)] transition-all duration-300 placeholder-white/10"
                             placeholder="お名前"
                         />
                         <ValidationError prefix="Name" field="name" errors={state.errors} className="text-red-500 text-xs" />
@@ -117,7 +115,7 @@ export default function ContactPage() {
                             type="email"
                             name="email"
                             required
-                            className="w-full bg-transparent border-b border-white/20 py-3 text-base md:text-lg focus:outline-none focus:border-[#ffbf00] transition-colors rounded-none placeholder-white/10"
+                            className="w-full bg-black/50 border border-[#ffbf00]/30 py-3 px-4 text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:ring-1 focus:ring-[#ffbf00] focus:shadow-[0_0_15px_rgba(255,191,0,0.2)] transition-all duration-300 placeholder-white/10"
                             placeholder="メールアドレス"
                         />
                         <ValidationError prefix="Email" field="email" errors={state.errors} className="text-red-500 text-xs" />
@@ -132,7 +130,7 @@ export default function ContactPage() {
                             id="subject"
                             type="text"
                             name="subject"
-                            className="w-full bg-transparent border-b border-white/20 py-3 text-base md:text-lg focus:outline-none focus:border-[#ffbf00] transition-colors rounded-none placeholder-white/10"
+                            className="w-full bg-black/50 border border-[#ffbf00]/30 py-3 px-4 text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:ring-1 focus:ring-[#ffbf00] focus:shadow-[0_0_15px_rgba(255,191,0,0.2)] transition-all duration-300 placeholder-white/10"
                             placeholder="件名"
                         />
                     </div>
@@ -147,25 +145,37 @@ export default function ContactPage() {
                             name="message"
                             required
                             rows={6}
-                            className="w-full bg-transparent border-b border-white/20 py-3 text-base md:text-lg focus:outline-none focus:border-[#ffbf00] transition-colors rounded-none placeholder-white/10 resize-none leading-relaxed"
+                            className="w-full bg-black/50 border border-[#ffbf00]/30 py-3 px-4 text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:ring-1 focus:ring-[#ffbf00] focus:shadow-[0_0_15px_rgba(255,191,0,0.2)] transition-all duration-300 placeholder-white/10 resize-none leading-relaxed"
                             placeholder="お問い合わせ内容"
                         />
                         <ValidationError prefix="Message" field="message" errors={state.errors} className="text-red-500 text-xs" />
                     </div>
 
                     {/* Submit Button */}
-                    <div className="pt-8 text-center">
+                    <div className="pt-8 text-center bg-black">
                         <motion.button
                             type="submit"
                             disabled={state.submitting}
-                            whileHover={{ scale: 1.05 }}
+                            animate={{
+                                y: [0, -4, 0]
+                            }}
+                            transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }}
+                            whileHover={{
+                                scale: 1.05,
+                                y: 0, // Stop bouncing on hover? Or keep it? User said "loop". Let's keep loop but maybe enhance? 
+                                // Actually better to keep simple loop as requested.
+                            }}
                             whileTap={{ scale: 0.95 }}
-                            className="bg-[#ffbf00] text-black px-12 py-4 text-sm tracking-[0.2em] font-bold hover:bg-[#ffbf00]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="bg-[#ffbf00] text-black px-12 py-4 text-sm tracking-[0.2em] font-bold hover:bg-[#ffbf00]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(255,191,0,0.3)]"
                         >
-                            {state.submitting ? "SENDING..." : "SEND MESSAGE"}
+                            {state.submitting ? "送信中..." : "SEND MESSAGE"}
                         </motion.button>
                         {state.errors && Object.keys(state.errors).length > 0 && (
-                            <p className="mt-4 text-red-500 text-sm">エラーが発生しました。内容をご確認ください。</p>
+                            <p className="mt-4 text-red-500 text-sm">エラーが発生しました。入力内容をご確認ください。</p>
                         )}
                     </div>
                 </motion.form>
