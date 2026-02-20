@@ -236,7 +236,7 @@ export default function StagePage() {
                         <div className="bg-white/5 p-6 rounded-sm max-w-2xl mx-auto md:grid md:grid-cols-2 gap-y-4 text-sm md:text-base text-left md:text-center">
                             <div className="flex justify-between md:block px-4 border-b md:border-b-0 md:border-r border-white/10 py-2">
                                 <span className="text-gray-500 md:mr-2">舞台監督</span>
-                                <span>伊東秀吾</span>
+                                <span>伊東秀悟</span>
                             </div>
                             <div className="flex justify-between md:block px-4 border-b md:border-b-0 md:border-r border-white/10 py-2">
                                 <span className="text-gray-500 md:mr-2">音響</span>
