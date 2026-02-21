@@ -85,7 +85,7 @@ export default function DynamicTicketButton({
     return (
         <div className={`flex flex-col items-center gap-3 w-full lg:w-auto ${className}`}>
             <HeroButton
-                href="#"
+                href="https://www.quartet-online.net/ticket/basueno"
                 icon={Ticket}
                 label={preReleaseLabel}
                 variant="ticket"

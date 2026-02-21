@@ -37,7 +37,7 @@ export default function FloatingTicketButton() {
             >
                 {isReleased ? (
                     <motion.a
-                        href="https://t.livepocket.jp/t/basusue"
+                        href="https://www.quartet-online.net/ticket/basueno"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group flex items-center gap-3 bg-black/80 backdrop-blur-lg border border-[#ffbf00] text-[#ffbf00] font-serif px-8 py-4 rounded-full hover:bg-[#ffbf00] hover:text-black transition-colors duration-300 shadow-[0_0_20px_rgba(255,191,0,0.4)]"
