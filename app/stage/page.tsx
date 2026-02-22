@@ -264,8 +264,8 @@ export default function StagePage() {
                         {/* Schedule List */}
                         <div className="space-y-6 font-serif tracking-widest">
                             {[
-                                { date: "4.3 (Fri)", times: ["13:00", "17:00"] },
-                                { date: "4.4 (Sat)", times: ["13:00", "17:00"] },
+                                { date: "4.3 (Fri)", times: ["13:00", "18:00"] },
+                                { date: "4.4 (Sat)", times: ["13:00", "18:00"] },
                                 { date: "4.5 (Sun)", times: ["12:00", "16:00"] },
                             ].map((schedule, i) => (
                                 <div key={i} className="flex justify-between items-baseline border-b border-white/10 pb-2">
