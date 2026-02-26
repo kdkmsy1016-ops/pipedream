@@ -16,19 +16,14 @@ export const metadata: Metadata = {
     template: '%s | 映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』',
     default: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』公式サイト',
   },
-  description: '久高将也監督作品。ユージン・オニール『氷人來たる』を原案に、2021年の「スナックさくらみち」に集う人々を描く映画と舞台のクロスオーバー・プロジェクト。',
+  description: '稲城市に実在するスナック『さくらみち』を舞台に製作される映画『盈虚とパイプドリーム』と、それに連動した舞台『場末のパイプドリーム』の公式サイト。最新の公演情報やチケット予約、映画の最新情報をお届けします。',
   keywords: [
+    'さくらみち',
+    '映画',
     '盈虚とパイプドリーム',
     '場末のパイプドリーム',
-    'スナックさくらみち',
-    '映画',
     '演劇',
-    '久高将也',
-    'ユージン・オニール',
-    '氷人來たる',
-    '福井将真',
-    '町田直樹',
-    'SAKURA ROAD エンタテインメント',
+    'チケット',
   ],
   metadataBase: new URL('https://eikyo-to-pipedream.com'),
   alternates: {
@@ -36,12 +31,12 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』公式サイト',
-    description: '福井将真×久高将也。ユージン・オニール『氷人來たる』を原案に、2021年の「スナックさくらみち」に集う人々を描く映画と舞台のクロスオーバー・プロジェクト。',
+    description: '稲城市に実在するスナック『さくらみち』を舞台に製作される映画『盈虚とパイプドリーム』と、それに連動した舞台『場末のパイプドリーム』の公式サイト。最新の公演情報やチケット予約、映画の最新情報をお届けします。',
     url: 'https://eikyo-to-pipedream.com',
     siteName: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』',
     images: [
       {
-        url: '/ogp-image.png',
+        url: 'https://eikyo-to-pipedream.com/ogp-image.png',
         width: 1200,
         height: 630,
         alt: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』',
@@ -53,8 +48,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』公式サイト',
-    description: '福井将真×久高将也。ユージン・オニール『氷人來たる』を原案に、2021年の「スナックさくらみち」に集う人々を描く映画と舞台のクロスオーバー・プロジェクト。',
-    images: ['/ogp-image.png'],
+    description: '稲城市に実在するスナック『さくらみち』を舞台に製作される映画『盈虚とパイプドリーム』と、それに連動した舞台『場末のパイプドリーム』の公式サイト。最新の公演情報やチケット予約、映画の最新情報をお届けします。',
+    images: ['https://eikyo-to-pipedream.com/ogp-image.png'],
   },
 };
 
@@ -63,9 +58,53 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Movie",
+        "name": "盈虚とパイプドリーム",
+        "alternateName": ["さくらみち", "スナック", "映画"],
+        "description": "スナックさくらみち映画化プロジェクトの一環。稲城市に実在するスナックを舞台に製作される映画。",
+        "url": "https://eikyo-to-pipedream.com/film"
+      },
+      {
+        "@type": "Event",
+        "name": "舞台『場末のパイプドリーム』",
+        "startDate": "2026-04-03T13:00:00+09:00",
+        "endDate": "2026-04-05T16:00:00+09:00",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "location": {
+          "@type": "Place",
+          "name": "下北沢 小劇場 楽園",
+          "address": {
+            "@type": "PostalAddress",
+            "postalCode": "155-0031",
+            "addressLocality": "東京都世田谷区",
+            "streetAddress": "北沢2丁目10-18"
+          }
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://www.quartet-online.net/ticket/basueno",
+          "price": "4000",
+          "priceCurrency": "JPY",
+          "availability": "https://schema.org/InStock",
+          "validFrom": "2025-02-21T21:00:00+09:00"
+        }
+      }
+    ]
+  };
+
   return (
     <html lang="ja">
-
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${notoSerifJP.variable} font-serif antialiased bg-background text-foreground overflow-x-hidden`}
       >
