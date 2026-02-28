@@ -1,0 +1,26 @@
+"use server";
+
+export async function verifyPassword(password: string): Promise<number> {
+    // Check against Environment Variables
+    // Returns the authorized tier level (1-5) or 0 if unauthorized.
+
+    if (!password) return 0;
+
+    if (password === process.env.SUPPORTER_TIER5_PWD) return 5;
+    if (password === process.env.SUPPORTER_TIER4_PWD) return 4;
+    if (password === process.env.SUPPORTER_TIER3_PWD) return 3;
+    if (password === process.env.SUPPORTER_TIER2_PWD) return 2;
+    if (password === process.env.SUPPORTER_TIER1_PWD) return 1;
+
+    // Fallback dev mode (optional, remove in production if preferred)
+    // Useful for local testing before env vars are set.
+    if (process.env.NODE_ENV === "development") {
+        if (password === "tier5pass") return 5;
+        if (password === "tier4pass") return 4;
+        if (password === "tier3pass") return 3;
+        if (password === "tier2pass") return 2;
+        if (password === "tier1pass") return 1;
+    }
+
+    return 0; // Invalid password
+}

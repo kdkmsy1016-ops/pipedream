@@ -5,27 +5,31 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ChevronLeft, Lock } from "lucide-react";
 
-const PASSWORD = "pipedream2026";
+import { verifyPassword } from "./actions";
 
 export default function SupportersPage() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [tier, setTier] = useState<number>(0);
     const [passwordInput, setPasswordInput] = useState("");
     const [error, setError] = useState(false);
     const [isChecking, setIsChecking] = useState(true);
 
     useEffect(() => {
-        const auth = sessionStorage.getItem("supporters_auth");
-        if (auth === "true") {
-            setIsAuthenticated(true);
+        const savedTier = sessionStorage.getItem("supporters_tier");
+        if (savedTier) {
+            setTier(parseInt(savedTier, 10));
         }
         setIsChecking(false);
     }, []);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (passwordInput === PASSWORD) {
-            sessionStorage.setItem("supporters_auth", "true");
-            setIsAuthenticated(true);
+
+        // Use Server Action to verify password securely
+        const authTier = await verifyPassword(passwordInput);
+
+        if (authTier > 0) {
+            sessionStorage.setItem("supporters_tier", authTier.toString());
+            setTier(authTier);
             setError(false);
         } else {
             setError(true);
@@ -57,7 +61,7 @@ export default function SupportersPage() {
             </motion.div>
 
             <AnimatePresence mode="wait">
-                {!isAuthenticated ? (
+                {tier === 0 ? (
                     <motion.div
                         key="login"
                         initial={{ opacity: 0, y: 20 }}
