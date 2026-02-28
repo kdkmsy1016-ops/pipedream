@@ -50,13 +50,18 @@ export default function SupportersPage() {
                 )}
             </div>
 
-            {/* Back Button (Static Flow - Never Overlaps Content) */}
-            <div className="relative z-50 w-full max-w-full box-border px-4 md:px-12 pt-8 md:pt-16 pb-4">
-                <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#ffbf00] transition-colors text-sm tracking-widest group relative z-50">
+            {/* Back Button (Fixed & Safe Area) */}
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="fixed top-0 left-0 w-full z-50 px-4 md:px-12 py-6 bg-gradient-to-b from-zinc-950 via-zinc-950/90 to-transparent pointer-events-none box-border"
+            >
+                <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#ffbf00] transition-colors text-sm tracking-widest group pointer-events-auto">
                     <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
                     BACK
                 </Link>
-            </div>
+            </motion.div>
 
             <AnimatePresence mode="wait">
                 {tier === 0 ? (
