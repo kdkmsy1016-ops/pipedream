@@ -95,7 +95,7 @@ const TIERS = [
 
 export default function CrowdfundingPage() {
     return (
-        <main className="min-h-screen bg-zinc-950 text-white font-serif relative overflow-x-hidden w-full box-border break-words">
+        <main className="min-h-screen bg-zinc-950 text-white font-serif relative overflow-x-hidden w-full max-w-full box-border pb-24">
 
             {/* Background Glows (Optimized for Mobile Performance) */}
             <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden box-border">
@@ -104,68 +104,62 @@ export default function CrowdfundingPage() {
                 <div className="absolute bottom-1/4 right-0 md:right-1/4 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-[#ffbf00]/5 blur-[100px] md:blur-[150px] rounded-full transform-gpu" />
             </div>
 
-            {/* Back Button (Fixed & Safe Area) */}
-            {/* Height is locked to prevent shifting, gradient clears text behind it */}
-            <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="fixed top-0 left-0 w-full z-50 px-4 md:px-12 py-6 bg-gradient-to-b from-zinc-950 via-zinc-950/90 to-transparent pointer-events-none box-border h-24"
-            >
-                <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#ffbf00] transition-colors text-sm tracking-widest group pointer-events-auto">
+            {/* Back Button (Static Flow - Never Overlaps Content) */}
+            <div className="relative z-50 w-full max-w-full box-border px-4 md:px-12 pt-8 md:pt-16 pb-4">
+                <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#ffbf00] transition-colors text-sm tracking-widest group relative z-50">
                     <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
                     BACK
                 </Link>
-            </motion.div>
+            </div>
 
-            {/* Main Content Area - pushed down via pt-32 to clear the fixed Back button height safely */}
-            <div className="w-full max-w-4xl mx-auto relative z-10 space-y-20 pt-32 pb-24 md:pt-40 px-4 md:px-8 box-border">
+            {/* Main Content Area */}
+            <div className="w-full max-w-4xl mx-auto relative z-10 space-y-16 px-4 md:px-8 box-border overflow-hidden">
 
                 {/* Header */}
                 <motion.header
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="w-full text-center space-y-6 md:space-y-8 box-border"
+                    className="w-full max-w-full text-center space-y-6 box-border overflow-hidden"
                 >
-                    <div className="inline-block px-4 md:px-6 py-2 border border-[#8b0000]/50 bg-[#8b0000]/10 rounded-full text-[#ffbf00] tracking-[0.1em] text-xs shadow-[0_0_15px_rgba(139,0,0,0.3)] whitespace-normal">
+                    <div className="inline-block px-4 py-2 border border-[#8b0000]/50 bg-[#8b0000]/10 rounded-full text-[#ffbf00] tracking-widest text-xs shadow-[0_0_15px_rgba(139,0,0,0.3)] break-words whitespace-normal max-w-full">
                         MotionGallery プロジェクト
                     </div>
-                    {/* Added whitespace-pre-line to ensure standard line breaks work. Removed break-keep */}
-                    <h1 className="text-2xl md:text-5xl tracking-widest md:tracking-[0.2em] font-bold text-[#ffbf00] drop-shadow-[0_0_15px_rgba(255,191,0,0.3)] leading-snug whitespace-pre-line">
+                    {/* Added whitespace-pre-line and break-words */}
+                    <h1 className="text-2xl md:text-5xl tracking-wide font-bold text-[#ffbf00] drop-shadow-[0_0_15px_rgba(255,191,0,0.3)] leading-snug whitespace-pre-line break-words max-w-full overflow-hidden">
                         スナック「さくらみち」<br />
                         <span className="text-xl md:text-4xl text-white mt-1 md:mt-2 block">映画化応援プロジェクト</span>
                     </h1>
-                    <p className="text-zinc-300 leading-relaxed w-full mx-auto tracking-wide md:tracking-widest text-sm md:text-base whitespace-pre-line px-2">
+                    <p className="text-zinc-300 leading-relaxed w-full max-w-full mx-auto tracking-wide text-sm whitespace-pre-line break-words overflow-hidden">
                         実在の場所から生まれる、虚実皮膜の物語。<br />
                         映画と舞台をまたにかけるこの挑戦を、<br className="md:hidden block" />ぜひ皆様と一緒に実現させてください。
                     </p>
 
                     {/* Top CTA Button */}
-                    <div className="pt-4 md:pt-6 w-full flex justify-center box-border">
+                    <div className="pt-4 w-full max-w-full flex justify-center box-border overflow-hidden">
                         <a
                             href={MOTION_GALLERY_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group relative inline-flex items-center justify-center gap-2 md:gap-3 w-full sm:w-auto px-4 md:px-8 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-all duration-300 rounded-sm font-bold tracking-widest text-sm shadow-[0_0_20px_rgba(255,191,0,0.4)] box-border"
+                            className="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 md:px-8 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-all duration-300 rounded-sm font-bold tracking-widest text-sm shadow-[0_0_20px_rgba(255,191,0,0.4)] box-border max-w-full"
                         >
-                            <Gift className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform flex-shrink-0" />
-                            <span className="whitespace-normal">プロジェクトの詳細を見る</span>
-                            <ExternalLink className="w-3 h-3 md:w-4 md:h-4 ml-1 flex-shrink-0" />
+                            <Gift className="w-4 h-4 group-hover:scale-110 transition-transform flex-shrink-0" />
+                            <span className="whitespace-normal break-words max-w-full overflow-hidden">プロジェクトの詳細を見る</span>
+                            <ExternalLink className="w-4 h-4 flex-shrink-0" />
                         </a>
                     </div>
                 </motion.header>
 
-                <div className="w-full h-px bg-gradient-to-r from-transparent via-[#ffbf00]/30 to-transparent" />
+                <div className="w-full max-w-full h-px bg-gradient-to-r from-transparent via-[#ffbf00]/30 to-transparent" />
 
                 {/* Tiers List */}
-                <section className="w-full space-y-12 box-border">
-                    <div className="w-full text-center space-y-3 mb-8 md:mb-12">
-                        <h2 className="text-xl md:text-2xl text-[#ffbf00] tracking-widest font-bold">リターンメニュー</h2>
-                        <p className="text-zinc-500 text-xs md:text-sm tracking-widest">お好きなプランをお選びください</p>
+                <section className="w-full max-w-full space-y-8 box-border overflow-hidden">
+                    <div className="w-full max-w-full text-center space-y-2 mb-8 box-border overflow-hidden">
+                        <h2 className="text-xl md:text-2xl text-[#ffbf00] tracking-widest font-bold break-words whitespace-pre-line">リターンメニュー</h2>
+                        <p className="text-zinc-500 text-xs md:text-sm tracking-widest break-words whitespace-pre-line">お好きなプランをお選びください</p>
                     </div>
 
-                    <div className="w-full grid gap-6 md:gap-8 box-border">
+                    <div className="w-full max-w-full grid gap-6 box-border overflow-hidden">
                         {TIERS.map((tier, index) => (
                             <motion.div
                                 key={tier.id}
@@ -173,41 +167,44 @@ export default function CrowdfundingPage() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-50px" }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className={`w-full box-border bg-zinc-900/80 border ${tier.id >= 4 ? 'border-[#ffbf00]/50 shadow-[0_0_20px_rgba(255,191,0,0.1)]' : 'border-zinc-800'} p-5 md:p-8 rounded-sm relative overflow-hidden group hover:border-[#ffbf00]/80 transition-colors duration-300`}
+                                // Reduced padding on mobile (p-4 instead of p-8) and strictly boxed
+                                className={`w-full max-w-full box-border bg-zinc-900/80 border ${tier.id >= 4 ? 'border-[#ffbf00]/50 shadow-[0_0_20px_rgba(255,191,0,0.1)]' : 'border-zinc-800'} p-4 md:p-8 rounded-sm relative overflow-hidden group hover:border-[#ffbf00]/80 transition-colors duration-300`}
                             >
                                 {/* Decorative corner accent */}
                                 <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-[#ffbf00]/20 to-transparent opacity-0 z-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                                <div className="w-full flex flex-col md:flex-row justify-between items-start gap-6 md:gap-8 z-10 relative box-border">
+                                <div className="w-full max-w-full flex flex-col md:flex-row justify-between items-start gap-4 md:gap-8 z-10 relative box-border overflow-hidden">
 
                                     {/* Left Side: Info */}
-                                    <div className="flex-1 space-y-5 w-full box-border">
+                                    <div className="flex-1 space-y-4 w-full max-w-full box-border overflow-hidden">
                                         {/* Icon and Title area */}
-                                        <div className="w-full flex items-start md:items-center gap-3 md:gap-4 border-b border-zinc-800 pb-4">
-                                            <div className="p-2 md:p-3 bg-zinc-950 rounded-full border border-zinc-800 group-hover:border-[#ffbf00]/50 transition-colors flex-shrink-0 mt-1 md:mt-0">
+                                        <div className="w-full max-w-full flex items-start md:items-center gap-3 border-b border-zinc-800 pb-3 overflow-hidden">
+                                            <div className="p-2 bg-zinc-950 rounded-full border border-zinc-800 group-hover:border-[#ffbf00]/50 transition-colors flex-shrink-0 mt-1 md:mt-0">
                                                 {tier.icon}
                                             </div>
-                                            <div className="w-full min-w-0">
-                                                <h3 className="text-base md:text-2xl font-bold tracking-wide text-white mb-1 leading-snug break-words whitespace-pre-line">
+                                            <div className="w-full max-w-full min-w-0 overflow-hidden text-left">
+                                                {/* Pre-line ensures intended line breaks from user */}
+                                                <h3 className="text-sm md:text-2xl font-bold tracking-wide text-white mb-1 leading-snug break-words whitespace-pre-line overflow-hidden w-full max-w-full">
                                                     {tier.name}
                                                 </h3>
-                                                <p className="text-[#ffbf00] text-base md:text-xl font-bold tracking-widest mt-1">
+                                                <p className="text-[#ffbf00] text-sm md:text-xl font-bold tracking-widest mt-1">
                                                     ¥{tier.price}
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <p className="w-full text-zinc-400 text-sm leading-relaxed tracking-wide break-words whitespace-pre-line">
+                                        <p className="w-full max-w-full text-zinc-400 text-xs md:text-base leading-relaxed tracking-wide break-words whitespace-pre-line overflow-hidden">
                                             {tier.description}
                                         </p>
 
-                                        <div className="w-full bg-zinc-950/50 p-4 rounded-sm border border-zinc-900 box-border">
+                                        {/* Reduced padding inside benefits box */}
+                                        <div className="w-full max-w-full bg-zinc-950/50 p-3 md:p-5 rounded-sm border border-zinc-900 box-border overflow-hidden">
                                             <h4 className="text-xs text-zinc-500 tracking-widest mb-3">特典内容</h4>
-                                            <ul className="w-full space-y-3">
+                                            <ul className="w-full max-w-full space-y-2 overflow-hidden">
                                                 {tier.returns.map((ret, i) => (
-                                                    <li key={i} className="flex items-start gap-2 text-xs md:text-sm text-zinc-300 tracking-wide break-words leading-relaxed pt-1">
+                                                    <li key={i} className="flex items-start gap-2 text-xs md:text-sm text-zinc-300 tracking-wide break-words leading-relaxed w-full max-w-full overflow-hidden">
                                                         <span className="text-[#ffbf00] mt-0.5 flex-shrink-0 leading-none">•</span>
-                                                        <span className="whitespace-pre-line">{ret}</span>
+                                                        <span className="whitespace-pre-line break-words max-w-full w-full">{ret}</span>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -215,14 +212,14 @@ export default function CrowdfundingPage() {
                                     </div>
 
                                     {/* Right Side: CTA Action */}
-                                    <div className="w-full md:w-auto mt-2 md:mt-0 flex-shrink-0 flex items-end box-border">
+                                    <div className="w-full max-w-full md:w-auto mt-2 flex-shrink-0 flex items-end box-border overflow-hidden">
                                         <a
                                             href={MOTION_GALLERY_URL}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="w-full flex items-center justify-center gap-2 px-4 md:px-6 py-4 bg-zinc-950 md:bg-transparent border border-[#ffbf00] text-[#ffbf00] hover:bg-[#ffbf00] hover:text-zinc-950 transition-all duration-300 text-xs md:text-sm tracking-widest font-bold rounded-sm group/btn box-border"
+                                            className="w-full max-w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-950 md:bg-transparent border border-[#ffbf00] text-[#ffbf00] hover:bg-[#ffbf00] hover:text-zinc-950 transition-all duration-300 text-xs tracking-widest font-bold rounded-sm group/btn box-border overflow-hidden"
                                         >
-                                            <span className="whitespace-normal">このプランを支援する</span>
+                                            <span className="whitespace-normal break-words">このプランを支援する</span>
                                             <ChevronLeft className="w-4 h-4 rotate-180 md:group-hover/btn:translate-x-1 transition-transform flex-shrink-0" />
                                         </a>
                                     </div>
@@ -233,27 +230,27 @@ export default function CrowdfundingPage() {
                     </div>
                 </section>
 
-                <div className="w-full h-px bg-gradient-to-r from-transparent via-[#8b0000]/50 to-transparent my-16" />
+                <div className="w-full max-w-full h-px bg-gradient-to-r from-transparent via-[#8b0000]/50 to-transparent my-12 box-border overflow-hidden" />
 
                 {/* Bottom CTA */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="w-full text-center space-y-8 box-border"
+                    className="w-full max-w-full text-center space-y-6 box-border overflow-hidden"
                 >
                     <h2 className="text-lg md:text-3xl font-bold text-white tracking-widest leading-relaxed whitespace-pre-line break-words">
                         皆様のご来店、<br className="md:hidden block" />心よりお待ちしております
                     </h2>
-                    <div className="w-full box-border">
+                    <div className="w-full max-w-full box-border overflow-hidden">
                         <a
                             href={MOTION_GALLERY_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 md:gap-3 px-6 md:px-10 py-5 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-all duration-300 rounded-sm font-bold tracking-widest text-sm md:text-lg shadow-[0_0_30px_rgba(255,191,0,0.3)] box-border"
+                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-all duration-300 rounded-sm font-bold tracking-widest text-sm shadow-[0_0_30px_rgba(255,191,0,0.3)] box-border max-w-full overflow-hidden"
                         >
-                            <span className="whitespace-normal">MotionGalleryへ進む</span>
-                            <ExternalLink className="w-4 h-4 md:w-5 md:h-5 ml-1 flex-shrink-0" />
+                            <span className="whitespace-normal break-words">MotionGalleryへ進む</span>
+                            <ExternalLink className="w-4 h-4 ml-1 flex-shrink-0" />
                         </a>
                     </div>
                 </motion.div>
