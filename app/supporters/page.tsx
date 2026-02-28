@@ -40,26 +40,23 @@ export default function SupportersPage() {
     }
 
     return (
-        <main className="min-h-screen bg-zinc-950 text-white font-serif py-32 px-6 md:px-12 relative overflow-hidden flex flex-col items-center">
+        <main className="min-h-screen bg-zinc-950 text-white font-serif relative overflow-x-hidden w-full max-w-full box-border pb-24">
 
             {/* Ambient Glows scaling with tier */}
-            <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-96 ${tier > 0 ? 'bg-[#ffbf00]/10' : 'bg-[#ffbf00]/5'} blur-[120px] rounded-full pointer-events-none transition-colors duration-1000`} />
-            {tier >= 4 && (
-                <div className="absolute bottom-0 right-0 w-full max-w-xl h-96 bg-[#ffbf00]/5 blur-[120px] rounded-full pointer-events-none" />
-            )}
+            <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden box-border">
+                <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 md:w-full md:max-w-3xl md:h-96 ${tier > 0 ? 'bg-[#ffbf00]/10' : 'bg-[#ffbf00]/5'} blur-[100px] md:blur-[120px] rounded-full transform-gpu transition-colors duration-1000`} />
+                {tier >= 4 && (
+                    <div className="absolute bottom-0 right-0 w-64 h-64 md:w-full md:max-w-xl md:h-96 bg-[#ffbf00]/5 blur-[100px] md:blur-[120px] rounded-full transform-gpu" />
+                )}
+            </div>
 
-            {/* Back Link */}
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-                className="absolute top-24 left-6 md:left-12 z-20"
-            >
-                <Link href="/" className="flex items-center gap-2 text-zinc-500 hover:text-[#ffbf00] transition-colors text-sm tracking-widest group">
+            {/* Back Button (Static Flow - Never Overlaps Content) */}
+            <div className="relative z-50 w-full max-w-full box-border px-4 md:px-12 pt-8 md:pt-16 pb-4">
+                <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#ffbf00] transition-colors text-sm tracking-widest group relative z-50">
                     <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
                     BACK
                 </Link>
-            </motion.div>
+            </div>
 
             <AnimatePresence mode="wait">
                 {tier === 0 ? (
@@ -69,18 +66,18 @@ export default function SupportersPage() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.8, ease: "circOut" }}
-                        className="w-full max-w-md mx-auto mt-20 md:mt-32 space-y-12 relative z-10"
+                        className="w-full max-w-md mx-auto space-y-12 relative z-10 px-4 mt-8 md:mt-20 box-border"
                     >
                         <div className="text-center space-y-4">
                             <Lock className="w-8 h-8 mx-auto text-[#ffbf00] opacity-80" />
                             <h1 className="text-2xl md:text-3xl tracking-[0.2em] text-[#ffbf00]">SUPPORTERS</h1>
-                            <p className="text-sm text-zinc-400 tracking-widest leading-loose">
+                            <p className="text-sm text-zinc-400 tracking-widest leading-loose whitespace-pre-line break-words">
                                 クラウドファンディング<br />支援者様 限定エントランス
                             </p>
                         </div>
 
-                        <form onSubmit={handleLogin} className="space-y-8">
-                            <div className="space-y-2 group">
+                        <form onSubmit={handleLogin} className="space-y-8 w-full box-border">
+                            <div className="space-y-2 group w-full box-border">
                                 <label htmlFor="password" className="block text-xs text-zinc-500 tracking-widest group-focus-within:text-[#ffbf00] transition-colors text-center">
                                     合言葉（PASSWORD）
                                 </label>
@@ -89,7 +86,7 @@ export default function SupportersPage() {
                                     type="password"
                                     value={passwordInput}
                                     onChange={(e) => setPasswordInput(e.target.value)}
-                                    className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-3 px-4 text-center text-xl focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/5 tracking-[0.3em] rounded-t-sm"
+                                    className="w-full box-border bg-zinc-900 border-b border-[#ffbf00]/30 py-3 px-4 text-center text-xl focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/5 tracking-[0.3em] rounded-t-sm"
                                     placeholder="••••••••"
                                     autoFocus
                                 />
@@ -104,10 +101,10 @@ export default function SupportersPage() {
                                 )}
                             </div>
 
-                            <div className="text-center">
+                            <div className="text-center w-full box-border">
                                 <button
                                     type="submit"
-                                    className="px-12 py-3 text-sm tracking-[0.2em] text-zinc-950 bg-[#ffbf00] hover:bg-white hover:text-zinc-950 transition-colors duration-300 shadow-[0_0_15px_rgba(255,191,0,0.3)] font-bold rounded-sm"
+                                    className="w-full sm:w-auto px-12 py-3 text-sm tracking-[0.2em] text-zinc-950 bg-[#ffbf00] hover:bg-white hover:text-zinc-950 transition-colors duration-300 shadow-[0_0_15px_rgba(255,191,0,0.3)] font-bold rounded-sm box-border"
                                 >
                                     扉を開ける
                                 </button>
@@ -120,62 +117,61 @@ export default function SupportersPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.2 }}
-                        className="w-full max-w-3xl mx-auto space-y-20 relative z-10 w-full"
+                        className="w-full max-w-full md:max-w-3xl mx-auto space-y-16 md:space-y-20 relative z-10 px-4 box-border overflow-hidden"
                     >
                         {/* Header */}
-                        <header className="text-center space-y-8 pt-12 md:pt-20">
-                            <div className="inline-block px-4 py-1 border border-[#ffbf00]/30 rounded-full text-[#ffbf00] text-xs tracking-widest mb-4">
+                        <header className="w-full max-w-full text-center space-y-6 md:space-y-8 pt-4 md:pt-12 box-border overflow-hidden">
+                            <div className="inline-block px-4 py-1 border border-[#ffbf00]/30 rounded-full text-[#ffbf00] text-xs tracking-widest mb-4 whitespace-normal break-words max-w-full">
                                 VIP TIER {tier} EXCLUSIVE
                             </div>
-                            <h1 className="text-3xl md:text-4xl tracking-[0.2em] text-[#ffbf00] drop-shadow-[0_0_15px_rgba(255,191,0,0.4)]">
+                            <h1 className="text-2xl md:text-4xl tracking-[0.2em] text-[#ffbf00] drop-shadow-[0_0_15px_rgba(255,191,0,0.4)] whitespace-pre-line break-words max-w-full overflow-hidden">
                                 SPECIAL THANKS
                             </h1>
-                            <div className="space-y-4">
-                                <p className="text-zinc-200 text-lg tracking-widest">
+                            <div className="w-full max-w-full space-y-4 box-border overflow-hidden">
+                                <p className="text-zinc-200 text-base md:text-lg tracking-widest whitespace-pre-line break-words">
                                     支援者様、ご来店ありがとうございます。
                                 </p>
-                                <p className="text-zinc-400 text-sm md:text-base leading-loose tracking-wide max-w-2xl mx-auto px-4">
-                                    『盈虚とパイプドリーム』『場末のパイプドリーム』を<br className="md:hidden" />ご支援いただき、心より感謝申し上げます。<br />
+                                <p className="text-zinc-400 text-sm leading-relaxed md:leading-loose tracking-wide w-full max-w-full mx-auto whitespace-pre-line break-words">
+                                    『盈虚とパイプドリーム』『場末のパイプドリーム』を<br className="md:hidden block" />ご支援いただき、心より感謝申し上げます。<br />
                                     限定コンテンツをゆっくりとお愉しみください。
                                 </p>
                             </div>
                         </header>
 
-                        <div className="space-y-12">
+                        <div className="w-full max-w-full space-y-8 md:space-y-12 box-border overflow-hidden">
                             {/* Tier 5 Content */}
                             {tier >= 5 && (
-                                <section className="bg-gradient-to-br from-[#ffbf00]/10 to-transparent border border-[#ffbf00]/30 p-8 rounded-sm shadow-[0_0_30px_rgba(255,191,0,0.1)] space-y-6">
-                                    <div className="flex items-center gap-3 border-b border-[#ffbf00]/30 pb-4">
-                                        <Star className="w-5 h-5 text-[#ffbf00]" />
-                                        <h2 className="text-xl text-[#ffbf00] tracking-widest">
+                                <section className="w-full max-w-full box-border bg-gradient-to-br from-[#ffbf00]/10 to-transparent border border-[#ffbf00]/30 p-5 md:p-8 rounded-sm shadow-[0_0_30px_rgba(255,191,0,0.1)] space-y-4 md:space-y-6 overflow-hidden">
+                                    <div className="w-full flex items-center gap-3 border-b border-[#ffbf00]/30 pb-3 md:pb-4 overflow-hidden">
+                                        <Star className="w-4 h-4 md:w-5 md:h-5 text-[#ffbf00] flex-shrink-0" />
+                                        <h2 className="text-base md:text-xl text-[#ffbf00] tracking-widest break-words whitespace-pre-line">
                                             映画『盈虚とパイプドリーム』先行試写
                                         </h2>
                                     </div>
-                                    <p className="text-zinc-300 text-sm leading-loose">
+                                    <p className="w-full text-zinc-300 text-xs md:text-sm leading-relaxed md:leading-loose break-words whitespace-pre-line text-left">
                                         公開前の本編映像を特別な形でお届けいたします。
                                     </p>
-                                    <div className="aspect-video bg-black flex items-center justify-center border border-zinc-800 rounded-sm relative group overflow-hidden">
-                                        <PlayCircle className="w-12 h-12 text-zinc-600 group-hover:text-[#ffbf00] transition-colors" />
-                                        <span className="absolute bottom-4 right-4 text-xs tracking-widest text-zinc-500">※動画準備中（後日URL紐付け）</span>
+                                    <div className="w-full max-w-full aspect-video bg-black flex items-center justify-center border border-zinc-800 rounded-sm relative group overflow-hidden box-border">
+                                        <PlayCircle className="w-10 h-10 md:w-12 md:h-12 text-zinc-600 group-hover:text-[#ffbf00] transition-colors" />
+                                        <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-[10px] md:text-xs tracking-widest text-zinc-500 text-right whitespace-pre-line break-words max-w-[80%]">※動画準備中（後日URL紐付け）</span>
                                     </div>
                                 </section>
                             )}
 
                             {/* Tier 4 Content */}
                             {tier >= 4 && (
-                                <section className="bg-zinc-900 border border-zinc-800 p-8 rounded-sm space-y-6">
-                                    <div className="flex items-center gap-3 border-b border-zinc-800 pb-4">
-                                        <FileText className="w-5 h-5 text-zinc-400" />
-                                        <h2 className="text-xl text-zinc-200 tracking-widest">
+                                <section className="w-full max-w-full box-border bg-zinc-900 border border-zinc-800 p-5 md:p-8 rounded-sm space-y-4 md:space-y-6 overflow-hidden">
+                                    <div className="w-full flex items-center gap-3 border-b border-zinc-800 pb-3 md:pb-4 overflow-hidden">
+                                        <FileText className="w-4 h-4 md:w-5 md:h-5 text-zinc-400 flex-shrink-0" />
+                                        <h2 className="text-base md:text-xl text-zinc-200 tracking-widest break-words whitespace-pre-line">
                                             Special Thanks お名前掲載確認
                                         </h2>
                                     </div>
-                                    <div className="p-6 bg-zinc-950 border border-zinc-800 text-center rounded-sm">
-                                        <p className="text-zinc-400 text-sm leading-loose mb-4">
-                                            映画のエンドロールおよびパンフレットに掲載される<br className="hidden md:block" />
-                                            皆様のお名前（確定版）はこちらからご確認いただけます。
+                                    <div className="w-full max-w-full p-4 md:p-6 bg-zinc-950 border border-zinc-800 text-center rounded-sm box-border overflow-hidden">
+                                        <p className="w-full max-w-full text-zinc-400 text-xs md:text-sm leading-relaxed md:leading-loose mb-4 break-words whitespace-pre-line">
+                                            映画のエンドロールおよびパンフレットに掲載される<br className="md:hidden block" />皆様のお名前（確定版）はこちらからご確認ください。
                                         </p>
-                                        <button className="text-[#ffbf00] text-sm tracking-widest underline underline-offset-4 hover:text-white transition-colors">
+                                        <button className="text-[#ffbf00] text-xs md:text-sm tracking-widest underline underline-offset-4 hover:text-white transition-colors break-words max-w-full">
                                             掲載名リストを確認する
                                         </button>
                                     </div>
@@ -184,40 +180,40 @@ export default function SupportersPage() {
 
                             {/* Tier 3 Content */}
                             {tier >= 3 && (
-                                <section className="bg-zinc-900 border border-zinc-800 p-8 rounded-sm space-y-6">
-                                    <div className="flex items-center gap-3 border-b border-zinc-800 pb-4">
-                                        <PlayCircle className="w-5 h-5 text-zinc-400" />
-                                        <h2 className="text-xl text-zinc-200 tracking-widest">
+                                <section className="w-full max-w-full box-border bg-zinc-900 border border-zinc-800 p-5 md:p-8 rounded-sm space-y-4 md:space-y-6 overflow-hidden">
+                                    <div className="w-full flex items-center gap-3 border-b border-zinc-800 pb-3 md:pb-4 overflow-hidden">
+                                        <PlayCircle className="w-4 h-4 md:w-5 md:h-5 text-zinc-400 flex-shrink-0" />
+                                        <h2 className="text-base md:text-xl text-zinc-200 tracking-widest break-words whitespace-pre-line">
                                             舞台『場末のパイプドリーム』本編アーカイブ
                                         </h2>
                                     </div>
-                                    <p className="text-zinc-300 text-sm leading-loose">
+                                    <p className="w-full text-zinc-300 text-xs md:text-sm leading-relaxed md:leading-loose break-words whitespace-pre-line text-left">
                                         上演された舞台映像のアーカイブ視聴リンクです。
                                     </p>
-                                    <div className="aspect-video bg-black flex items-center justify-center border border-zinc-800 rounded-sm relative group overflow-hidden">
-                                        <PlayCircle className="w-12 h-12 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
-                                        <span className="absolute bottom-4 right-4 text-xs tracking-widest text-zinc-500">※上演後アップデート</span>
+                                    <div className="w-full max-w-full aspect-video bg-black flex items-center justify-center border border-zinc-800 rounded-sm relative group overflow-hidden box-border">
+                                        <PlayCircle className="w-10 h-10 md:w-12 md:h-12 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+                                        <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-[10px] md:text-xs tracking-widest text-zinc-500 text-right whitespace-pre-line break-words max-w-[80%]">※上演後アップデート</span>
                                     </div>
                                 </section>
                             )}
 
                             {/* Tier 2 Content */}
                             {tier >= 2 && (
-                                <section className="bg-zinc-900 border border-zinc-800 p-8 rounded-sm space-y-6">
-                                    <div className="flex items-center gap-3 border-b border-zinc-800 pb-4">
-                                        <BookOpen className="w-5 h-5 text-zinc-400" />
-                                        <h2 className="text-xl text-zinc-200 tracking-widest">
+                                <section className="w-full max-w-full box-border bg-zinc-900 border border-zinc-800 p-5 md:p-8 rounded-sm space-y-4 md:space-y-6 overflow-hidden">
+                                    <div className="w-full flex items-center gap-3 border-b border-zinc-800 pb-3 md:pb-4 overflow-hidden">
+                                        <BookOpen className="w-4 h-4 md:w-5 md:h-5 text-zinc-400 flex-shrink-0" />
+                                        <h2 className="text-base md:text-xl text-zinc-200 tracking-widest break-words whitespace-pre-line">
                                             脚本PDF & デジタルフォトブック
                                         </h2>
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <a href="#" className="flex flex-col items-center justify-center p-8 bg-black/50 border border-zinc-800 hover:border-[#ffbf00]/50 transition-colors rounded-sm group">
-                                            <FileText className="w-8 h-8 text-zinc-500 group-hover:text-[#ffbf00] mb-3 transition-colors" />
-                                            <span className="text-sm tracking-widest text-zinc-300 group-hover:text-white transition-colors">脚本 PDF版</span>
+                                    <div className="w-full max-w-full grid grid-cols-1 sm:grid-cols-2 gap-4 box-border overflow-hidden">
+                                        <a href="#" className="flex flex-col items-center justify-center p-6 md:p-8 bg-black/50 border border-zinc-800 hover:border-[#ffbf00]/50 transition-colors rounded-sm group box-border w-full max-w-full overflow-hidden">
+                                            <FileText className="w-6 h-6 md:w-8 md:h-8 text-zinc-500 group-hover:text-[#ffbf00] mb-3 transition-colors flex-shrink-0" />
+                                            <span className="text-xs md:text-sm tracking-widest text-zinc-300 group-hover:text-white transition-colors text-center whitespace-pre-line break-words">脚本 PDF版</span>
                                         </a>
-                                        <a href="#" className="flex flex-col items-center justify-center p-8 bg-black/50 border border-zinc-800 hover:border-[#ffbf00]/50 transition-colors rounded-sm group">
-                                            <BookOpen className="w-8 h-8 text-zinc-500 group-hover:text-[#ffbf00] mb-3 transition-colors" />
-                                            <span className="text-sm tracking-widest text-zinc-300 group-hover:text-white transition-colors">フォトブック PDF版</span>
+                                        <a href="#" className="flex flex-col items-center justify-center p-6 md:p-8 bg-black/50 border border-zinc-800 hover:border-[#ffbf00]/50 transition-colors rounded-sm group box-border w-full max-w-full overflow-hidden">
+                                            <BookOpen className="w-6 h-6 md:w-8 md:h-8 text-zinc-500 group-hover:text-[#ffbf00] mb-3 transition-colors flex-shrink-0" />
+                                            <span className="text-xs md:text-sm tracking-widest text-zinc-300 group-hover:text-white transition-colors text-center whitespace-pre-line break-words">フォトブック PDF版</span>
                                         </a>
                                     </div>
                                 </section>
@@ -225,23 +221,23 @@ export default function SupportersPage() {
 
                             {/* Tier 1 Content */}
                             {tier >= 1 && (
-                                <section className="bg-zinc-900 border border-zinc-800 p-8 rounded-sm space-y-6">
-                                    <div className="flex items-center gap-3 border-b border-zinc-800 pb-4">
-                                        <Download className="w-5 h-5 text-zinc-400" />
-                                        <h2 className="text-xl text-zinc-200 tracking-widest">
+                                <section className="w-full max-w-full box-border bg-zinc-900 border border-zinc-800 p-5 md:p-8 rounded-sm space-y-4 md:space-y-6 overflow-hidden">
+                                    <div className="w-full flex items-center gap-3 border-b border-zinc-800 pb-3 md:pb-4 overflow-hidden">
+                                        <Download className="w-4 h-4 md:w-5 md:h-5 text-zinc-400 flex-shrink-0" />
+                                        <h2 className="text-base md:text-xl text-zinc-200 tracking-widest break-words whitespace-pre-line">
                                             限定デジタルカード
                                         </h2>
                                     </div>
-                                    <p className="text-zinc-300 text-sm leading-loose">
+                                    <p className="w-full text-zinc-300 text-xs md:text-sm leading-relaxed md:leading-loose break-words whitespace-pre-line text-left">
                                         本プロジェクト限定のキービジュアルをあしらったデジタルカードです。
                                     </p>
-                                    <div className="flex flex-col items-center bg-black/50 border border-zinc-800 p-6 rounded-sm">
-                                        <div className="w-full max-w-sm aspect-[4/3] bg-zinc-800 flex items-center justify-center mb-6">
-                                            <span className="text-zinc-600 text-xs tracking-widest">画像プレースホルダー</span>
+                                    <div className="w-full max-w-full flex flex-col items-center bg-black/50 border border-zinc-800 p-4 md:p-6 rounded-sm box-border overflow-hidden">
+                                        <div className="w-full max-w-xs md:max-w-sm aspect-[4/3] bg-zinc-800 flex items-center justify-center mb-6 box-border overflow-hidden">
+                                            <span className="text-zinc-600 text-[10px] md:text-xs tracking-widest text-center px-2 break-words">画像プレースホルダー</span>
                                         </div>
-                                        <button className="flex items-center gap-2 px-6 py-2 border border-zinc-600 text-zinc-300 hover:bg-white hover:text-black hover:border-white transition-colors text-sm tracking-widest rounded-sm">
-                                            <Download className="w-4 h-4" />
-                                            ダウンロード
+                                        <button className="flex items-center gap-2 px-6 py-3 md:py-2 border border-zinc-600 text-zinc-300 hover:bg-white hover:text-black hover:border-white transition-colors text-xs md:text-sm tracking-widest rounded-sm w-full sm:w-auto justify-center">
+                                            <Download className="w-4 h-4 flex-shrink-0" />
+                                            <span className="whitespace-nowrap">ダウンロード</span>
                                         </button>
                                     </div>
                                 </section>
@@ -249,15 +245,15 @@ export default function SupportersPage() {
                         </div>
 
                         {/* Footer decorative line */}
-                        <div className="w-1/2 h-[1px] bg-gradient-to-r from-transparent via-[#ffbf00]/30 to-transparent mx-auto mt-32" />
+                        <div className="w-1/2 h-[1px] bg-gradient-to-r from-transparent via-[#ffbf00]/30 to-transparent mx-auto mt-20 md:mt-32 max-w-full box-border overflow-hidden" />
 
-                        <div className="text-center pt-8 pb-20">
+                        <div className="w-full max-w-full text-center pt-8 pb-12 box-border overflow-hidden">
                             <button
                                 onClick={() => {
                                     sessionStorage.removeItem("supporters_tier");
                                     setTier(0);
                                 }}
-                                className="text-zinc-600 hover:text-zinc-400 text-xs tracking-widest transition-colors underline underline-offset-4"
+                                className="text-zinc-600 hover:text-zinc-400 text-xs md:text-sm tracking-widest transition-colors underline underline-offset-4 p-4 inline-block"
                             >
                                 ログアウト
                             </button>
