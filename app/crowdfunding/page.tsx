@@ -95,59 +95,61 @@ const TIERS = [
 
 export default function CrowdfundingPage() {
     return (
-        <main className="min-h-screen bg-zinc-950 text-white font-serif py-24 md:py-32 px-4 md:px-8 relative overflow-hidden">
+        <main className="min-h-screen bg-zinc-950 text-white font-serif py-32 px-4 md:px-8 relative overflow-x-hidden">
 
-            {/* Background Glows (Snack Bar Theme) */}
-            <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#8b0000]/10 blur-[150px] rounded-full" />
-                <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#ffbf00]/5 blur-[150px] rounded-full" />
+            {/* Background Glows (Optimized for Mobile Performance) */}
+            <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+                {/* Reduced blur radius and size on mobile to save GPU overhead */}
+                <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-[#8b0000]/10 blur-[100px] md:blur-[150px] rounded-full transform-gpu" />
+                <div className="absolute bottom-1/4 right-0 md:right-1/4 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-[#ffbf00]/5 blur-[100px] md:blur-[150px] rounded-full transform-gpu" />
             </div>
 
-            {/* Back Button */}
+            {/* Back Button (Fixed & Safe Area) */}
             <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="absolute top-24 left-6 md:left-12 z-20"
+                className="fixed top-0 left-0 w-full z-50 px-6 md:px-12 py-6 bg-gradient-to-b from-zinc-950 via-zinc-950/80 to-transparent pointer-events-none"
             >
-                <Link href="/" className="flex items-center gap-2 text-zinc-500 hover:text-[#ffbf00] transition-colors text-sm tracking-widest group">
+                <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#ffbf00] transition-colors text-sm tracking-widest group pointer-events-auto">
                     <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
                     BACK
                 </Link>
             </motion.div>
 
-            <div className="max-w-4xl mx-auto relative z-10 space-y-16">
+            <div className="max-w-4xl mx-auto relative z-10 space-y-20 mt-8 md:mt-0">
 
                 {/* Header */}
                 <motion.header
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="text-center space-y-8"
+                    className="text-center space-y-8 px-2"
                 >
-                    <div className="inline-block px-6 py-2 border border-[#8b0000]/50 bg-[#8b0000]/10 rounded-full text-[#ffbf00] tracking-[0.2em] text-sm md:text-base mb-4 shadow-[0_0_15px_rgba(139,0,0,0.3)]">
+                    <div className="inline-block px-6 py-2 border border-[#8b0000]/50 bg-[#8b0000]/10 rounded-full text-[#ffbf00] tracking-[0.2em] text-xs md:text-sm shadow-[0_0_15px_rgba(139,0,0,0.3)]">
                         MotionGallery プロジェクト
                     </div>
-                    <h1 className="text-3xl md:text-5xl tracking-[0.1em] md:tracking-[0.2em] font-bold text-[#ffbf00] drop-shadow-[0_0_15px_rgba(255,191,0,0.3)] leading-tight">
+                    {/* break-keep ensures word wrapping doesn't break Japanese mid-word on narrow screens */}
+                    <h1 className="text-3xl md:text-5xl tracking-[0.1em] md:tracking-[0.2em] font-bold text-[#ffbf00] drop-shadow-[0_0_15px_rgba(255,191,0,0.3)] leading-tight break-keep">
                         スナック「さくらみち」<br />
-                        <span className="text-2xl md:text-4xl text-white">映画化応援プロジェクト</span>
+                        <span className="text-2xl md:text-4xl text-white mt-2 block break-keep">映画化応援プロジェクト</span>
                     </h1>
-                    <p className="text-zinc-300 leading-loose max-w-2xl mx-auto tracking-widest text-sm md:text-base">
+                    <p className="text-zinc-300 leading-relaxed max-w-2xl mx-auto tracking-widest text-sm md:text-base break-keep">
                         実在の場所から生まれる、虚実皮膜の物語。<br />
-                        映画と舞台をまたにかけるこの挑戦を、<br className="md:hidden" />ぜひ皆様と一緒に実現させてください。
+                        映画と舞台をまたにかけるこの挑戦を、<br className="md:hidden block" />ぜひ皆様と一緒に実現させてください。
                     </p>
 
                     {/* Top CTA Button */}
-                    <div className="pt-4">
+                    <div className="pt-6">
                         <a
                             href={MOTION_GALLERY_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-white transition-all duration-300 rounded-sm font-bold tracking-widest text-sm md:text-base shadow-[0_0_20px_rgba(255,191,0,0.4)]"
+                            className="group relative inline-flex items-center justify-center gap-3 px-6 md:px-8 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-all duration-300 rounded-sm font-bold tracking-widest text-sm md:text-base shadow-[0_0_20px_rgba(255,191,0,0.4)] w-full sm:w-auto"
                         >
                             <Gift className="w-5 h-5 group-hover:scale-110 transition-transform" />
                             <span>プロジェクトの詳細を見る</span>
-                            <ExternalLink className="w-4 h-4" />
+                            <ExternalLink className="w-4 h-4 ml-1" />
                         </a>
                     </div>
                 </motion.header>
@@ -156,53 +158,53 @@ export default function CrowdfundingPage() {
 
                 {/* Tiers List */}
                 <section className="space-y-12">
-                    <div className="text-center space-y-2 mb-12">
-                        <h2 className="text-2xl text-[#ffbf00] tracking-widest font-bold">リターンメニュー</h2>
-                        <p className="text-zinc-500 text-sm tracking-widest">お好きなプランをお選びください</p>
+                    <div className="text-center space-y-3 mb-12">
+                        <h2 className="text-xl md:text-2xl text-[#ffbf00] tracking-widest font-bold">リターンメニュー</h2>
+                        <p className="text-zinc-500 text-xs md:text-sm tracking-widest">お好きなプランをお選びください</p>
                     </div>
 
-                    <div className="grid gap-8">
+                    <div className="grid gap-6 md:gap-8">
                         {TIERS.map((tier, index) => (
                             <motion.div
                                 key={tier.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-100px" }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                className={`bg-zinc-900/80 border ${tier.id >= 4 ? 'border-[#ffbf00]/50 shadow-[0_0_20px_rgba(255,191,0,0.1)]' : 'border-zinc-800'} p-6 md:p-8 rounded-sm relative overflow-hidden group hover:border-[#ffbf00]/80 transition-colors duration-500`}
+                                viewport={{ once: true, margin: "-50px" }}
+                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                className={`bg-zinc-900/80 border ${tier.id >= 4 ? 'border-[#ffbf00]/50 shadow-[0_0_20px_rgba(255,191,0,0.1)]' : 'border-zinc-800'} p-5 md:p-8 rounded-sm relative overflow-hidden group hover:border-[#ffbf00]/80 transition-colors duration-300`}
                             >
                                 {/* Decorative corner accent */}
-                                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-[#ffbf00]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-[#ffbf00]/20 to-transparent opacity-0 z-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                                <div className="md:flex justify-between items-start gap-8 z-10 relative">
+                                <div className="flex flex-col md:flex-row justify-between items-start gap-6 md:gap-8 z-10 relative">
 
                                     {/* Left Side: Info */}
-                                    <div className="flex-1 space-y-6">
+                                    <div className="flex-1 space-y-6 w-full">
                                         <div className="flex items-center gap-4 border-b border-zinc-800 pb-4">
-                                            <div className="p-3 bg-zinc-950 rounded-full border border-zinc-800 group-hover:border-[#ffbf00]/50 transition-colors">
+                                            <div className="p-3 bg-zinc-950 rounded-full border border-zinc-800 group-hover:border-[#ffbf00]/50 transition-colors flex-shrink-0">
                                                 {tier.icon}
                                             </div>
                                             <div>
-                                                <h3 className="text-xl md:text-2xl font-bold tracking-widest text-white mb-1">
+                                                <h3 className="text-lg md:text-2xl font-bold tracking-wider text-white mb-1 break-keep leading-snug">
                                                     {tier.name}
                                                 </h3>
-                                                <p className="text-[#ffbf00] text-lg md:text-xl font-bold tracking-widest">
+                                                <p className="text-[#ffbf00] text-lg md:text-xl font-bold tracking-widest mt-1">
                                                     ¥{tier.price}
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <p className="text-zinc-400 text-sm leading-loose tracking-wide">
+                                        <p className="text-zinc-400 text-sm md:text-base leading-relaxed tracking-wide break-keep">
                                             {tier.description}
                                         </p>
 
-                                        <div className="bg-zinc-950/50 p-4 rounded-sm border border-zinc-900">
+                                        <div className="bg-zinc-950/50 p-4 md:p-5 rounded-sm border border-zinc-900">
                                             <h4 className="text-xs text-zinc-500 tracking-widest mb-3">特典内容</h4>
-                                            <ul className="space-y-2">
+                                            <ul className="space-y-3">
                                                 {tier.returns.map((ret, i) => (
-                                                    <li key={i} className="flex items-start gap-2 text-sm text-zinc-300 tracking-wide">
-                                                        <span className="text-[#ffbf00] mt-0.5">•</span>
-                                                        <span className="leading-snug">{ret}</span>
+                                                    <li key={i} className="flex items-start gap-2 text-xs md:text-sm text-zinc-300 tracking-wide break-keep leading-relaxed pt-1">
+                                                        <span className="text-[#ffbf00] mt-0.5 flex-shrink-0 leading-none">•</span>
+                                                        <span>{ret}</span>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -210,15 +212,16 @@ export default function CrowdfundingPage() {
                                     </div>
 
                                     {/* Right Side: CTA Action */}
-                                    <div className="mt-8 md:mt-0 flex-shrink-0 flex items-end">
+                                    <div className="mt-2 md:mt-0 w-full md:w-auto flex-shrink-0 flex items-end">
                                         <a
                                             href={MOTION_GALLERY_URL}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-4 bg-transparent border border-[#ffbf00] text-[#ffbf00] hover:bg-[#ffbf00] hover:text-zinc-950 transition-all duration-300 text-sm tracking-widest font-bold rounded-sm group/btn"
+                                            // Changed background on mobile from transparent to dark so it looks like a solid button before hover
+                                            className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-4 bg-zinc-950 md:bg-transparent border border-[#ffbf00] text-[#ffbf00] hover:bg-[#ffbf00] hover:text-zinc-950 transition-all duration-300 text-sm tracking-widest font-bold rounded-sm group/btn"
                                         >
                                             <span>このプランを支援する</span>
-                                            <ChevronLeft className="w-4 h-4 rotate-180 group-hover/btn:translate-x-1 transition-transform" />
+                                            <ChevronLeft className="w-4 h-4 rotate-180 md:group-hover/btn:translate-x-1 transition-transform" />
                                         </a>
                                     </div>
 
@@ -235,19 +238,19 @@ export default function CrowdfundingPage() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center space-y-8 pb-12"
+                    className="text-center space-y-8 pb-12 px-2"
                 >
-                    <h2 className="text-2xl md:text-3xl font-bold text-white tracking-widest">
-                        皆様のご来店、<br className="md:hidden" />心よりお待ちしております
+                    <h2 className="text-xl md:text-3xl font-bold text-white tracking-widest leading-relaxed break-keep">
+                        皆様のご来店、<br className="md:hidden block" />心よりお待ちしております
                     </h2>
                     <a
                         href={MOTION_GALLERY_URL}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-[#ffbf00] text-zinc-950 hover:bg-white transition-all duration-300 rounded-sm font-bold tracking-[0.2em] text-lg shadow-[0_0_30px_rgba(255,191,0,0.5)] animate-pulse hover:animate-none"
+                        className="inline-flex items-center justify-center gap-3 w-full sm:w-auto px-6 md:px-10 py-5 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-all duration-300 rounded-sm font-bold tracking-widest text-sm md:text-lg shadow-[0_0_30px_rgba(255,191,0,0.3)]"
                     >
                         <span>MotionGalleryへ進む</span>
-                        <ExternalLink className="w-5 h-5" />
+                        <ExternalLink className="w-5 h-5 ml-1" />
                     </a>
                 </motion.div>
 
