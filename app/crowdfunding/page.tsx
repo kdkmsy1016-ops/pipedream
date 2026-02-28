@@ -159,32 +159,31 @@ export default function CrowdfundingPage() {
                         <p className="text-zinc-500 text-xs md:text-sm tracking-widest break-words whitespace-pre-line">お好きなプランをお選びください</p>
                     </div>
 
-                    <div className="w-full max-w-full grid gap-6 box-border overflow-hidden">
+                    <div className="w-full max-w-full grid gap-6 box-border overflow-visible">
                         {TIERS.map((tier, index) => (
                             <motion.div
                                 key={tier.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-50px" }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                // Reduced padding on mobile (p-4 instead of p-8) and strictly boxed
-                                className={`w-full max-w-full box-border bg-zinc-900/80 border ${tier.id >= 4 ? 'border-[#ffbf00]/50 shadow-[0_0_20px_rgba(255,191,0,0.1)]' : 'border-zinc-800'} p-4 md:p-8 rounded-sm relative overflow-hidden group hover:border-[#ffbf00]/80 transition-colors duration-300`}
+                                // Disabled scroll animations for stability. Always rendered.
+                                initial={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0 }}
+                                // Added will-change-transform and overflow-visible 
+                                className={`w-full max-w-full box-border bg-zinc-900/80 border ${tier.id >= 4 ? 'border-[#ffbf00]/50 shadow-[0_0_20px_rgba(255,191,0,0.1)]' : 'border-zinc-800'} p-4 md:p-8 rounded-sm relative overflow-visible group hover:border-[#ffbf00]/80 transition-colors duration-300 will-change-transform`}
                             >
                                 {/* Decorative corner accent */}
                                 <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-[#ffbf00]/20 to-transparent opacity-0 z-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                                <div className="w-full max-w-full flex flex-col md:flex-row justify-between items-start gap-4 md:gap-8 z-10 relative box-border overflow-hidden">
+                                <div className="w-full max-w-full flex flex-col md:flex-row justify-between items-start gap-4 md:gap-8 z-10 relative box-border overflow-visible">
 
                                     {/* Left Side: Info */}
-                                    <div className="flex-1 space-y-4 w-full max-w-full box-border overflow-hidden">
+                                    <div className="flex-1 space-y-4 w-full max-w-full box-border overflow-visible">
                                         {/* Icon and Title area */}
-                                        <div className="w-full max-w-full flex items-start md:items-center gap-3 border-b border-zinc-800 pb-3 overflow-hidden">
+                                        <div className="w-full max-w-full flex items-start md:items-center gap-3 border-b border-zinc-800 pb-3 overflow-visible">
                                             <div className="p-2 bg-zinc-950 rounded-full border border-zinc-800 group-hover:border-[#ffbf00]/50 transition-colors flex-shrink-0 mt-1 md:mt-0">
                                                 {tier.icon}
                                             </div>
-                                            <div className="w-full max-w-full min-w-0 overflow-hidden text-left">
+                                            <div className="w-full max-w-full min-w-0 overflow-visible text-left">
                                                 {/* Pre-line ensures intended line breaks from user */}
-                                                <h3 className="text-sm md:text-2xl font-bold tracking-wide text-white mb-1 leading-snug break-words whitespace-pre-line overflow-hidden w-full max-w-full">
+                                                <h3 className="text-sm md:text-2xl font-bold tracking-wide text-white mb-1 leading-snug break-words whitespace-pre-line overflow-visible w-full max-w-full">
                                                     {tier.name}
                                                 </h3>
                                                 <p className="text-[#ffbf00] text-sm md:text-xl font-bold tracking-widest mt-1">
@@ -193,16 +192,16 @@ export default function CrowdfundingPage() {
                                             </div>
                                         </div>
 
-                                        <p className="w-full max-w-full text-zinc-400 text-xs md:text-base leading-relaxed tracking-wide break-words whitespace-pre-line overflow-hidden">
+                                        <p className="w-full max-w-full text-zinc-400 text-xs md:text-base leading-relaxed tracking-wide break-words whitespace-pre-line overflow-visible">
                                             {tier.description}
                                         </p>
 
                                         {/* Reduced padding inside benefits box */}
-                                        <div className="w-full max-w-full bg-zinc-950/50 p-3 md:p-5 rounded-sm border border-zinc-900 box-border overflow-hidden">
+                                        <div className="w-full max-w-full bg-zinc-950/50 p-3 md:p-5 rounded-sm border border-zinc-900 box-border overflow-visible">
                                             <h4 className="text-xs text-zinc-500 tracking-widest mb-3">特典内容</h4>
-                                            <ul className="w-full max-w-full space-y-2 overflow-hidden">
+                                            <ul className="w-full max-w-full space-y-2 overflow-visible">
                                                 {tier.returns.map((ret, i) => (
-                                                    <li key={i} className="flex items-start gap-2 text-xs md:text-sm text-zinc-300 tracking-wide break-words leading-relaxed w-full max-w-full overflow-hidden">
+                                                    <li key={i} className="flex items-start gap-2 text-xs md:text-sm text-zinc-300 tracking-wide break-words leading-relaxed w-full max-w-full overflow-visible">
                                                         <span className="text-[#ffbf00] mt-0.5 flex-shrink-0 leading-none">•</span>
                                                         <span className="whitespace-pre-line break-words max-w-full w-full">{ret}</span>
                                                     </li>
@@ -212,12 +211,12 @@ export default function CrowdfundingPage() {
                                     </div>
 
                                     {/* Right Side: CTA Action */}
-                                    <div className="w-full max-w-full md:w-auto mt-2 flex-shrink-0 flex items-end box-border overflow-hidden">
+                                    <div className="w-full max-w-full md:w-auto mt-2 flex-shrink-0 flex items-end box-border overflow-visible">
                                         <a
                                             href={MOTION_GALLERY_URL}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="w-full max-w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-950 md:bg-transparent border border-[#ffbf00] text-[#ffbf00] hover:bg-[#ffbf00] hover:text-zinc-950 transition-all duration-300 text-xs tracking-widest font-bold rounded-sm group/btn box-border overflow-hidden"
+                                            className="w-full max-w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-950 md:bg-transparent border border-[#ffbf00] text-[#ffbf00] hover:bg-[#ffbf00] hover:text-zinc-950 transition-all duration-300 text-xs tracking-widest font-bold rounded-sm group/btn box-border overflow-visible"
                                         >
                                             <span className="whitespace-normal break-words">このプランを支援する</span>
                                             <ChevronLeft className="w-4 h-4 rotate-180 md:group-hover/btn:translate-x-1 transition-transform flex-shrink-0" />
@@ -230,24 +229,23 @@ export default function CrowdfundingPage() {
                     </div>
                 </section>
 
-                <div className="w-full max-w-full h-px bg-gradient-to-r from-transparent via-[#8b0000]/50 to-transparent my-12 box-border overflow-hidden" />
+                <div className="w-full max-w-full h-px bg-gradient-to-r from-transparent via-[#8b0000]/50 to-transparent my-12 box-border overflow-visible" />
 
                 {/* Bottom CTA */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="w-full max-w-full text-center space-y-6 box-border overflow-hidden"
+                    initial={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0 }}
+                    className="w-full max-w-full text-center space-y-6 box-border overflow-visible will-change-transform"
                 >
                     <h2 className="text-lg md:text-3xl font-bold text-white tracking-widest leading-relaxed whitespace-pre-line break-words">
                         皆様のご来店、<br className="md:hidden block" />心よりお待ちしております
                     </h2>
-                    <div className="w-full max-w-full box-border overflow-hidden">
+                    <div className="w-full max-w-full box-border overflow-visible">
                         <a
                             href={MOTION_GALLERY_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-all duration-300 rounded-sm font-bold tracking-widest text-sm shadow-[0_0_30px_rgba(255,191,0,0.3)] box-border max-w-full overflow-hidden"
+                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-all duration-300 rounded-sm font-bold tracking-widest text-sm shadow-[0_0_30px_rgba(255,191,0,0.3)] box-border max-w-full overflow-visible"
                         >
                             <span className="whitespace-normal break-words">MotionGalleryへ進む</span>
                             <ExternalLink className="w-4 h-4 ml-1 flex-shrink-0" />
