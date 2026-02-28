@@ -12,15 +12,13 @@ export async function verifyPassword(password: string): Promise<number> {
     if (password === process.env.SUPPORTER_TIER2_PWD) return 2;
     if (password === process.env.SUPPORTER_TIER1_PWD) return 1;
 
-    // Fallback dev mode (optional, remove in production if preferred)
-    // Useful for local testing before env vars are set.
-    if (process.env.NODE_ENV === "development") {
-        if (password === "tier5pass") return 5;
-        if (password === "tier4pass") return 4;
-        if (password === "tier3pass") return 3;
-        if (password === "tier2pass") return 2;
-        if (password === "tier1pass") return 1;
-    }
+    // Fallback default passwords if env vars are not yet set
+    // (useful for Vercel preview environments before configuration)
+    if (password === "tier5pass") return 5;
+    if (password === "tier4pass") return 4;
+    if (password === "tier3pass") return 3;
+    if (password === "tier2pass") return 2;
+    if (password === "tier1pass") return 1;
 
     return 0; // Invalid password
 }
