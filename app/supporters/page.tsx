@@ -23,7 +23,19 @@ export default function SupportersPage() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const authTier = await verifyPassword(passwordInput);
+        let authTier = 0;
+
+        if (passwordInput && passwordInput === process.env.NEXT_PUBLIC_TIER5_KEY) {
+            authTier = 5;
+        } else if (passwordInput && passwordInput === process.env.NEXT_PUBLIC_TIER4_KEY) {
+            authTier = 4;
+        } else if (passwordInput && passwordInput === process.env.NEXT_PUBLIC_TIER3_KEY) {
+            authTier = 3;
+        } else if (passwordInput && passwordInput === process.env.NEXT_PUBLIC_TIER2_KEY) {
+            authTier = 2;
+        } else if (passwordInput && passwordInput === process.env.NEXT_PUBLIC_TIER1_KEY) {
+            authTier = 1;
+        }
 
         if (authTier > 0) {
             sessionStorage.setItem("supporters_tier", authTier.toString());
@@ -89,8 +101,8 @@ export default function SupportersPage() {
                                     type="password"
                                     value={passwordInput}
                                     onChange={(e) => setPasswordInput(e.target.value)}
-                                    className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-3 px-4 text-center text-xl focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/5 tracking-[0.3em] rounded-t-sm"
-                                    placeholder="••••••••"
+                                    className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-3 px-4 text-center text-sm md:text-xl focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/30 tracking-[0.1em] md:tracking-[0.3em] rounded-t-sm"
+                                    placeholder="合言葉を入力してください"
                                     autoFocus
                                 />
                                 {error && (
