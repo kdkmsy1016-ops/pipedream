@@ -1,10 +1,6 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { ChevronLeft, ExternalLink, Gift, FileText, Video, PlayCircle, Users, Image as ImageIcon, Ticket, PartyPopper } from "lucide-react";
 
-// Dummy URL for MotionGallery (to be replaced)
 const MOTION_GALLERY_URL = "https://motion-gallery.net/projects/pipedream-movie";
 
 const TIERS = [
@@ -95,163 +91,130 @@ const TIERS = [
 
 export default function CrowdfundingPage() {
     return (
-        <main className="min-h-screen bg-zinc-950 text-white font-serif relative overflow-x-hidden w-full max-w-full box-border pb-24">
+        <main className="min-h-screen bg-zinc-950 text-white font-serif w-full max-w-full box-border pb-24">
 
-            {/* Background Glows (Optimized for Mobile Performance) */}
-            <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden box-border">
-                {/* Reduced blur radius and size on mobile to save GPU overhead */}
-                <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-[#8b0000]/10 blur-[100px] md:blur-[150px] rounded-full transform-gpu" />
-                <div className="absolute bottom-1/4 right-0 md:right-1/4 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-[#ffbf00]/5 blur-[100px] md:blur-[150px] rounded-full transform-gpu" />
-            </div>
-
-            {/* Back Button (Static Flow - Never Overlaps Content) */}
-            <div className="relative z-50 w-full max-w-full box-border px-4 md:px-12 pt-8 md:pt-16 pb-4">
-                <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#ffbf00] transition-colors text-sm tracking-widest group relative z-50">
-                    <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-                    BACK
-                </Link>
+            {/* Top Back Button Area - Completely static, independent block at the very top */}
+            <div className="w-full box-border px-4 py-8 bg-zinc-950 border-b border-zinc-900">
+                <div className="w-full max-w-4xl mx-auto flex">
+                    <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#ffbf00] transition-colors text-sm tracking-widest font-bold">
+                        <ChevronLeft className="w-5 h-5" />
+                        BACK TO HOME
+                    </Link>
+                </div>
             </div>
 
             {/* Main Content Area */}
-            <div className="w-full max-w-4xl mx-auto relative z-10 space-y-16 px-4 md:px-8 box-border overflow-hidden">
+            <div className="w-full max-w-4xl mx-auto pt-10 px-4 box-border space-y-16">
 
                 {/* Header */}
-                <motion.header
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="w-full max-w-full text-center space-y-6 box-border overflow-hidden"
-                >
-                    <div className="inline-block px-4 py-2 border border-[#8b0000]/50 bg-[#8b0000]/10 rounded-full text-[#ffbf00] tracking-widest text-xs shadow-[0_0_15px_rgba(139,0,0,0.3)] break-words whitespace-normal max-w-full">
+                <header className="w-full text-center space-y-6 box-border">
+                    <div className="inline-block px-4 py-2 border border-[#8b0000]/50 bg-[#8b0000]/10 rounded border text-[#ffbf00] tracking-widest text-xs box-border">
                         MotionGallery プロジェクト
                     </div>
-                    {/* Added whitespace-pre-line and break-words */}
-                    <h1 className="text-2xl md:text-5xl tracking-wide font-bold text-[#ffbf00] drop-shadow-[0_0_15px_rgba(255,191,0,0.3)] leading-snug whitespace-pre-line break-words max-w-full overflow-hidden">
+                    <h1 className="text-2xl md:text-4xl font-bold text-[#ffbf00] leading-snug whitespace-pre-line box-border break-words">
                         スナック「さくらみち」<br />
-                        <span className="text-xl md:text-4xl text-white mt-1 md:mt-2 block">映画化応援プロジェクト</span>
+                        <span className="text-xl md:text-3xl text-white mt-2 block">映画化応援プロジェクト</span>
                     </h1>
-                    <p className="text-zinc-300 leading-relaxed w-full max-w-full mx-auto tracking-wide text-sm whitespace-pre-line break-words overflow-hidden">
+                    <p className="text-zinc-300 tracking-wide text-sm md:text-base leading-relaxed whitespace-pre-line box-border break-words">
                         実在の場所から生まれる、虚実皮膜の物語。<br />
                         映画と舞台をまたにかけるこの挑戦を、<br className="md:hidden block" />ぜひ皆様と一緒に実現させてください。
                     </p>
 
                     {/* Top CTA Button */}
-                    <div className="pt-4 w-full max-w-full flex justify-center box-border overflow-hidden">
+                    <div className="pt-4 w-full box-border flex justify-center">
                         <a
                             href={MOTION_GALLERY_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 md:px-8 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-all duration-300 rounded-sm font-bold tracking-widest text-sm shadow-[0_0_20px_rgba(255,191,0,0.4)] box-border max-w-full"
+                            className="inline-flex items-center justify-center gap-2 w-full md:w-auto px-6 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-colors rounded font-bold tracking-widest text-sm box-border"
                         >
-                            <Gift className="w-4 h-4 group-hover:scale-110 transition-transform flex-shrink-0" />
-                            <span className="whitespace-normal break-words max-w-full overflow-hidden">プロジェクトの詳細を見る</span>
+                            <Gift className="w-5 h-5 flex-shrink-0" />
+                            <span className="whitespace-pre-line break-words">プロジェクトの詳細を見る</span>
                             <ExternalLink className="w-4 h-4 flex-shrink-0" />
                         </a>
                     </div>
-                </motion.header>
+                </header>
 
-                <div className="w-full max-w-full h-px bg-gradient-to-r from-transparent via-[#ffbf00]/30 to-transparent" />
+                <div className="w-full h-px bg-zinc-800 my-8 box-border" />
 
                 {/* Tiers List */}
-                <section className="w-full max-w-full space-y-8 box-border overflow-hidden">
-                    <div className="w-full max-w-full text-center space-y-2 mb-8 box-border overflow-hidden">
-                        <h2 className="text-xl md:text-2xl text-[#ffbf00] tracking-widest font-bold break-words whitespace-pre-line">リターンメニュー</h2>
-                        <p className="text-zinc-500 text-xs md:text-sm tracking-widest break-words whitespace-pre-line">お好きなプランをお選びください</p>
+                <section className="w-full space-y-8 box-border">
+                    <div className="w-full text-center space-y-2 mb-6 box-border">
+                        <h2 className="text-xl font-bold text-[#ffbf00] tracking-widest whitespace-pre-line break-words">リターンメニュー</h2>
+                        <p className="text-zinc-500 text-xs tracking-widest whitespace-pre-line break-words">お好きなプランをお選びください</p>
                     </div>
 
-                    <div className="w-full max-w-full grid gap-6 box-border overflow-visible">
-                        {TIERS.map((tier, index) => (
-                            <motion.div
+                    <div className="w-full space-y-6 box-border">
+                        {TIERS.map((tier) => (
+                            <div
                                 key={tier.id}
-                                // Disabled scroll animations for stability. Always rendered.
-                                initial={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0 }}
-                                // Added will-change-transform and overflow-visible 
-                                className={`w-full max-w-full box-border bg-zinc-900/80 border ${tier.id >= 4 ? 'border-[#ffbf00]/50 shadow-[0_0_20px_rgba(255,191,0,0.1)]' : 'border-zinc-800'} p-4 md:p-8 rounded-sm relative overflow-visible group hover:border-[#ffbf00]/80 transition-colors duration-300 will-change-transform`}
+                                className={`w-full box-border bg-zinc-900 border ${tier.id >= 4 ? 'border-[#ffbf00]/50' : 'border-zinc-800'} p-5 rounded-md relative`}
                             >
-                                {/* Decorative corner accent */}
-                                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-[#ffbf00]/20 to-transparent opacity-0 z-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                                <div className="w-full max-w-full flex flex-col md:flex-row justify-between items-start gap-4 md:gap-8 z-10 relative box-border overflow-visible">
-
-                                    {/* Left Side: Info */}
-                                    <div className="flex-1 space-y-4 w-full max-w-full box-border overflow-visible">
-                                        {/* Icon and Title area */}
-                                        <div className="w-full max-w-full flex items-start md:items-center gap-3 border-b border-zinc-800 pb-3 overflow-visible">
-                                            <div className="p-2 bg-zinc-950 rounded-full border border-zinc-800 group-hover:border-[#ffbf00]/50 transition-colors flex-shrink-0 mt-1 md:mt-0">
-                                                {tier.icon}
-                                            </div>
-                                            <div className="w-full max-w-full min-w-0 overflow-visible text-left">
-                                                {/* Pre-line ensures intended line breaks from user */}
-                                                <h3 className="text-sm md:text-2xl font-bold tracking-wide text-white mb-1 leading-snug break-words whitespace-pre-line overflow-visible w-full max-w-full">
-                                                    {tier.name}
-                                                </h3>
-                                                <p className="text-[#ffbf00] text-sm md:text-xl font-bold tracking-widest mt-1">
-                                                    ¥{tier.price}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <p className="w-full max-w-full text-zinc-400 text-xs md:text-base leading-relaxed tracking-wide break-words whitespace-pre-line overflow-visible">
-                                            {tier.description}
+                                <div className="w-full flex items-start gap-4 border-b border-zinc-800 pb-4 mb-4 box-border">
+                                    <div className="p-3 bg-zinc-950 rounded-full border border-zinc-800 flex-shrink-0">
+                                        {tier.icon}
+                                    </div>
+                                    <div className="w-full box-border text-left">
+                                        <h3 className="text-base md:text-xl font-bold text-white mb-2 leading-snug whitespace-pre-line break-words">
+                                            {tier.name}
+                                        </h3>
+                                        <p className="text-[#ffbf00] text-base md:text-lg font-bold tracking-widest">
+                                            ¥{tier.price}
                                         </p>
-
-                                        {/* Reduced padding inside benefits box */}
-                                        <div className="w-full max-w-full bg-zinc-950/50 p-3 md:p-5 rounded-sm border border-zinc-900 box-border overflow-visible">
-                                            <h4 className="text-xs text-zinc-500 tracking-widest mb-3">特典内容</h4>
-                                            <ul className="w-full max-w-full space-y-2 overflow-visible">
-                                                {tier.returns.map((ret, i) => (
-                                                    <li key={i} className="flex items-start gap-2 text-xs md:text-sm text-zinc-300 tracking-wide break-words leading-relaxed w-full max-w-full overflow-visible">
-                                                        <span className="text-[#ffbf00] mt-0.5 flex-shrink-0 leading-none">•</span>
-                                                        <span className="whitespace-pre-line break-words max-w-full w-full">{ret}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
                                     </div>
-
-                                    {/* Right Side: CTA Action */}
-                                    <div className="w-full max-w-full md:w-auto mt-2 flex-shrink-0 flex items-end box-border overflow-visible">
-                                        <a
-                                            href={MOTION_GALLERY_URL}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="w-full max-w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-950 md:bg-transparent border border-[#ffbf00] text-[#ffbf00] hover:bg-[#ffbf00] hover:text-zinc-950 transition-all duration-300 text-xs tracking-widest font-bold rounded-sm group/btn box-border overflow-visible"
-                                        >
-                                            <span className="whitespace-normal break-words">このプランを支援する</span>
-                                            <ChevronLeft className="w-4 h-4 rotate-180 md:group-hover/btn:translate-x-1 transition-transform flex-shrink-0" />
-                                        </a>
-                                    </div>
-
                                 </div>
-                            </motion.div>
+
+                                <p className="w-full text-zinc-300 text-sm leading-relaxed tracking-wide whitespace-pre-line break-words mb-4 box-border">
+                                    {tier.description}
+                                </p>
+
+                                <div className="w-full bg-zinc-950/80 p-4 rounded border border-zinc-900 box-border mb-6">
+                                    <h4 className="text-xs text-zinc-500 tracking-widest mb-3 whitespace-pre-line break-words">特典内容</h4>
+                                    <ul className="w-full space-y-3 box-border">
+                                        {tier.returns.map((ret, i) => (
+                                            <li key={i} className="flex items-start gap-2 text-sm text-zinc-300 tracking-wide leading-relaxed whitespace-pre-line break-words box-border">
+                                                <span className="text-[#ffbf00] flex-shrink-0">•</span>
+                                                <span className="w-full">{ret}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                <div className="w-full box-border">
+                                    <a
+                                        href={MOTION_GALLERY_URL}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-950 border border-[#ffbf00] text-[#ffbf00] hover:bg-[#ffbf00] hover:text-zinc-950 transition-colors text-sm font-bold tracking-widest rounded box-border"
+                                    >
+                                        <span className="whitespace-pre-line break-words">このプランを支援する</span>
+                                        <ChevronLeft className="w-4 h-4 rotate-180 flex-shrink-0" />
+                                    </a>
+                                </div>
+                            </div>
                         ))}
                     </div>
                 </section>
 
-                <div className="w-full max-w-full h-px bg-gradient-to-r from-transparent via-[#8b0000]/50 to-transparent my-12 box-border overflow-visible" />
+                <div className="w-full h-px bg-zinc-800 my-10 box-border" />
 
                 {/* Bottom CTA */}
-                <motion.div
-                    initial={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0 }}
-                    className="w-full max-w-full text-center space-y-6 box-border overflow-visible will-change-transform"
-                >
-                    <h2 className="text-lg md:text-3xl font-bold text-white tracking-widest leading-relaxed whitespace-pre-line break-words">
+                <div className="w-full text-center space-y-6 box-border pb-10">
+                    <h2 className="text-lg md:text-2xl font-bold text-white tracking-widest leading-relaxed whitespace-pre-line break-words">
                         皆様のご来店、<br className="md:hidden block" />心よりお待ちしております
                     </h2>
-                    <div className="w-full max-w-full box-border overflow-visible">
+                    <div className="w-full box-border flex justify-center">
                         <a
                             href={MOTION_GALLERY_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-all duration-300 rounded-sm font-bold tracking-widest text-sm shadow-[0_0_30px_rgba(255,191,0,0.3)] box-border max-w-full overflow-visible"
+                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-colors rounded font-bold tracking-widest text-sm box-border"
                         >
-                            <span className="whitespace-normal break-words">MotionGalleryへ進む</span>
-                            <ExternalLink className="w-4 h-4 ml-1 flex-shrink-0" />
+                            <span className="whitespace-pre-line break-words">MotionGalleryへ進む</span>
+                            <ExternalLink className="w-5 h-5 ml-1 flex-shrink-0" />
                         </a>
                     </div>
-                </motion.div>
+                </div>
 
             </div>
         </main>
