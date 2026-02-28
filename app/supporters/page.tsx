@@ -23,15 +23,44 @@ export default function SupportersPage() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const authTier = await verifyPassword(passwordInput);
+        // 1. Logging for debugging environment variables on Vercel
+        console.log("Tier 1 Key loaded:", !!process.env.NEXT_PUBLIC_TIER1_KEY);
+        console.log("Tier 2 Key loaded:", !!process.env.NEXT_PUBLIC_TIER2_KEY);
+        console.log("Tier 3 Key loaded:", !!process.env.NEXT_PUBLIC_TIER3_KEY);
+        console.log("Tier 4 Key loaded:", !!process.env.NEXT_PUBLIC_TIER4_KEY);
+        console.log("Tier 5 Key loaded:", !!process.env.NEXT_PUBLIC_TIER5_KEY);
+
+        // 2. Strict sanitation
+        const input = passwordInput?.trim().toLowerCase() || "";
+        const t5 = process.env.NEXT_PUBLIC_TIER5_KEY?.trim().toLowerCase();
+        const t4 = process.env.NEXT_PUBLIC_TIER4_KEY?.trim().toLowerCase();
+        const t3 = process.env.NEXT_PUBLIC_TIER3_KEY?.trim().toLowerCase();
+        const t2 = process.env.NEXT_PUBLIC_TIER2_KEY?.trim().toLowerCase();
+        const t1 = process.env.NEXT_PUBLIC_TIER1_KEY?.trim().toLowerCase();
+
+        let authTier = 0;
+
+        // 3. Robust comparison
+        if (input && t5 && input === t5) {
+            authTier = 5;
+        } else if (input && t4 && input === t4) {
+            authTier = 4;
+        } else if (input && t3 && input === t3) {
+            authTier = 3;
+        } else if (input && t2 && input === t2) {
+            authTier = 2;
+        } else if (input && t1 && input === t1) {
+            authTier = 1;
+        }
 
         if (authTier > 0) {
             sessionStorage.setItem("supporters_tier", authTier.toString());
             setTier(authTier);
             setError(false);
+            setPasswordInput(""); // 4. Reset on success
         } else {
             setError(true);
-            setPasswordInput("");
+            setPasswordInput(""); // Reset on failure
         }
     };
 
@@ -91,8 +120,8 @@ export default function SupportersPage() {
                                     type="password"
                                     value={passwordInput}
                                     onChange={(e) => setPasswordInput(e.target.value)}
-                                    className="w-full box-border bg-zinc-900 border-b border-[#ffbf00]/30 py-3 px-4 text-center text-xl focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/5 tracking-[0.3em] rounded-t-sm"
-                                    placeholder="••••••••"
+                                    className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-3 px-4 text-center text-sm md:text-xl focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/30 tracking-[0.1em] md:tracking-[0.3em] rounded-t-sm"
+                                    placeholder="合言葉を入力してください"
                                     autoFocus
                                 />
                                 {error && (
