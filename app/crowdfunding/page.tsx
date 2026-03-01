@@ -12,7 +12,7 @@ const TIERS = [
         name: "【ふらっと一杯！】プラン",
         price: "3,000",
         description: "お気持ちをご支援いただける方に。スナックさくらみちの常連気分が味わえます。",
-        icon: <ImageIcon className="w-5 h-5 text-[#ffbf00]" />,
+        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">A</div>,
         returns: [
             "お礼メール",
             "映画キービジュアル デジタルカード（1点）",
@@ -24,9 +24,9 @@ const TIERS = [
         name: "【マスター、もう一杯だけ！】プラン",
         price: "6,000",
         description: "本編の核となるシナリオと舞台写真で、物語の裏側までお楽しみいただけます。",
-        icon: <FileText className="w-5 h-5 text-[#ffbf00]" />,
+        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">B</div>,
         returns: [
-            "3,000円プランのすべて",
+            "プランAのすべて",
             "脚本（最終稿）PDFデータ",
             "舞台『場末のパイプドリーム』舞台写真デジタルフォトブック（PDF／約20P予定）"
         ]
@@ -36,9 +36,9 @@ const TIERS = [
         name: "【また来ちゃった！さくらみち常連客】プラン",
         price: "12,000",
         description: "舞台の生きた空間を、限定アーカイブ映像で何度でも目撃できます。",
-        icon: <PlayCircle className="w-5 h-5 text-[#ffbf00]" />,
+        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">C</div>,
         returns: [
-            "6,000円プランのすべて",
+            "プランBのすべて",
             "舞台『場末のパイプドリーム』公演本編 限定アーカイブ（限定URL／パスコード）"
         ]
     },
@@ -47,9 +47,9 @@ const TIERS = [
         name: "【マスターいつもの！さくらみち超常連客】プラン",
         price: "30,000",
         description: "作品のエンドロールにお名前を刻み、リアルな完成台本をお届けします。",
-        icon: <Users className="w-5 h-5 text-[#ffbf00]" />,
+        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">D</div>,
         returns: [
-            "12,000円プランのすべて",
+            "プランCのすべて",
             "クレジット等に支援者（Special Thanks）としてお名前記載（1名分）",
             "キャスト・監督のサイン入り完成台本（製本版）"
         ]
@@ -59,9 +59,9 @@ const TIERS = [
         name: "【新しいの入れといて！さくらみちボトルキープ】プラン",
         price: "60,000",
         description: "劇中で実際に使用した「あなた名義のキープ札」と、映画のオンライン先行試写。",
-        icon: <Video className="w-5 h-5 text-[#ffbf00]" />,
+        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">E</div>,
         returns: [
-            "30,000円プランのすべて（台本等含む）",
+            "プランDのすべて（台本等含む）",
             "中ボトルのボトルキープ札にお名前記載（1名分）※劇中で使用後、現物郵送",
             "映画『盈虚とパイプドリーム』限定試写動画 視聴URL（完成後、オンライン／視聴期限1か月）"
         ]
@@ -71,9 +71,9 @@ const TIERS = [
         name: "【スナックさくらみち貸切・完成記念パーティーご招待！】プラン",
         price: "100,000",
         description: "聖地「さくらみち」で関係者と共に完成を祝う、特別なリアルイベントへご招待。",
-        icon: <PartyPopper className="w-5 h-5 text-[#ffbf00]" />,
+        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">F</div>,
         returns: [
-            "60,000円プランのすべて",
+            "プランEのすべて",
             "映画の舞台となるスナック「さくらみち」（東京都稲城市）で行う試写会に、キャスト・スタッフと参加",
             "完成記念パーティー／試写会ご招待"
         ]
@@ -83,9 +83,9 @@ const TIERS = [
         name: "【アソシエイトプロデューサー権】プラン",
         price: "300,000",
         description: "作品を根底から支え、共に創り上げる最高ランクのスポンサー権です。",
-        icon: <Ticket className="w-5 h-5 text-[#ffbf00]" />,
+        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">G</div>,
         returns: [
-            "60,000円または100,000円プラン相当の内容を含みつつ、最上位特典として",
+            "プランEまたはF相当の内容を含みつつ、最上位特典として",
             "クレジット等にアソシエイトプロデューサー（協賛）としてお名前記載（1名分）",
             "法人・企業ロゴ掲載可"
         ]
@@ -281,7 +281,7 @@ export default function CrowdfundingPage() {
                                         </th>
                                         {TIERS.map((tier) => (
                                             <th key={tier.id} className="p-3 md:p-4 border-b border-zinc-800 text-center min-w-[120px]">
-                                                <div className="text-[#ffbf00] font-bold">Tier {tier.id}</div>
+                                                <div className="text-[#ffbf00] font-bold">プラン {String.fromCharCode(64 + tier.id)}</div>
                                                 <div className="text-zinc-300 text-[10px] md:text-xs">¥{tier.price}</div>
                                             </th>
                                         ))}
