@@ -78,7 +78,7 @@ export default function Introduction() {
                     className="pt-16 flex flex-col md:flex-row items-center justify-center gap-4 w-full"
                 >
                     <Link
-                        href="/film"
+                        href="/crowdfunding"
                         className="group relative w-full md:w-auto px-8 py-4 border border-foreground/30 text-foreground/80 font-serif tracking-widest text-sm transition-all hover:bg-foreground hover:text-background hover:border-transparent text-center uppercase"
                     >
                         映画『盈虚とパイプドリーム』詳細
