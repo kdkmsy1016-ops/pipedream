@@ -15,8 +15,8 @@ const TIERS = [
         icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">A</div>,
         returns: [
             "お礼メール",
-            "映画『盈虚とパイプドリーム』キービジュアル デジタルカード（1点）",
-            "舞台『場末のパイプドリーム』キービジュアル デジタルカード（俳優サイン付き／1点）"
+            "映画『盈虚とパイプドリーム』キービジュアル デジタルカード",
+            "舞台『場末のパイプドリーム』キービジュアル デジタルカード（俳優サイン付き）"
         ]
     },
     {
