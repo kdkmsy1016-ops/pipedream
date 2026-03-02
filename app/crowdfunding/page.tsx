@@ -85,7 +85,7 @@ const TIERS = [
         description: "作品を根底から支え、共に創り上げる最高ランクのスポンサー権です。",
         icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">G</div>,
         returns: [
-            "プランEまたはF相当の内容を含みつつ、最上位特典として",
+            "プランFのすべて",
             "クレジット等にアソシエイトプロデューサー（協賛）としてお名前記載（1名分）",
             "法人・企業ロゴ掲載可"
         ]
