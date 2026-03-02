@@ -3,7 +3,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star } from "lucide-react";
+
+// Digital Card Image Sources (Change these paths later when actual assets are ready)
+const MOVIE_KV_SRC = "https://placehold.jp/20/18181b/ffffff/600x800.png?text=Movie%20KeyVisual";
+const STAGE_KV_SRC = "https://placehold.jp/20/18181b/ffffff/600x800.png?text=Stage%20KeyVisual";
 import { verifyPassword } from "./actions";
 
 export default function SupportersPage() {
@@ -263,16 +268,66 @@ export default function SupportersPage() {
                                         </h2>
                                     </div>
                                     <p className="w-full text-zinc-300 text-xs md:text-sm leading-relaxed md:leading-loose break-words whitespace-pre-line text-left">
-                                        本プロジェクト限定のキービジュアルをあしらったデジタルカードです。
+                                        本プロジェクト限定のキービジュアルをあしらったデジタルカードです。<br />
+                                        画像を長押し（PCは右クリック）、または下のボタンから保存いただけます。
                                     </p>
-                                    <div className="w-full max-w-full flex flex-col items-center bg-black/50 border border-zinc-800 p-4 md:p-6 rounded-sm box-border overflow-hidden">
-                                        <div className="w-full max-w-xs md:max-w-sm aspect-[4/3] bg-zinc-800 flex items-center justify-center mb-6 box-border overflow-hidden">
-                                            <span className="text-zinc-600 text-[10px] md:text-xs tracking-widest text-center px-2 break-words">画像プレースホルダー</span>
+
+                                    <div className="w-full max-w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pt-4 box-border overflow-hidden">
+
+                                        {/* Movie Digital Card */}
+                                        <div className="flex flex-col items-center gap-4 w-full">
+                                            <div className="w-full max-w-[280px] md:max-w-sm aspect-[3/4] relative rounded-lg overflow-hidden border border-zinc-700 shadow-[0_10px_30px_rgba(0,0,0,0.8)] hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(255,191,0,0.15)] active:translate-y-1 active:shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-300 bg-zinc-950">
+                                                <Image
+                                                    src={MOVIE_KV_SRC}
+                                                    alt="映画『盈虚とパイプドリーム』キービジュアル デジタルカード"
+                                                    fill
+                                                    className="object-cover pointer-events-auto"
+                                                    unoptimized
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+                                                <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
+                                                    <p className="text-[#ffbf00] font-bold text-xs md:text-sm tracking-widest drop-shadow-md">MOVIE EXCLUSIVE</p>
+                                                </div>
+                                            </div>
+                                            <a
+                                                href={MOVIE_KV_SRC}
+                                                download="pipedream_movie_kv.png"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center justify-center gap-2 px-6 py-3 border border-zinc-600 text-zinc-300 hover:bg-white hover:text-black hover:border-white transition-colors text-xs tracking-widest rounded-sm w-full max-w-[280px]"
+                                            >
+                                                <Download className="w-4 h-4 flex-shrink-0" />
+                                                <span className="whitespace-nowrap">画像を保存</span>
+                                            </a>
                                         </div>
-                                        <button className="flex items-center gap-2 px-6 py-3 md:py-2 border border-zinc-600 text-zinc-300 hover:bg-white hover:text-black hover:border-white transition-colors text-xs md:text-sm tracking-widest rounded-sm w-full sm:w-auto justify-center">
-                                            <Download className="w-4 h-4 flex-shrink-0" />
-                                            <span className="whitespace-nowrap">ダウンロード</span>
-                                        </button>
+
+                                        {/* Stage Digital Card */}
+                                        <div className="flex flex-col items-center gap-4 w-full">
+                                            <div className="w-full max-w-[280px] md:max-w-sm aspect-[3/4] relative rounded-lg overflow-hidden border border-zinc-700 shadow-[0_10px_30px_rgba(0,0,0,0.8)] hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(255,191,0,0.15)] active:translate-y-1 active:shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-300 bg-zinc-950">
+                                                <Image
+                                                    src={STAGE_KV_SRC}
+                                                    alt="舞台『場末のパイプドリーム』キービジュアル デジタルカード"
+                                                    fill
+                                                    className="object-cover pointer-events-auto"
+                                                    unoptimized
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+                                                <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
+                                                    <p className="text-[#ffbf00] font-bold text-xs md:text-sm tracking-widest drop-shadow-md">STAGE EXCLUSIVE</p>
+                                                </div>
+                                            </div>
+                                            <a
+                                                href={STAGE_KV_SRC}
+                                                download="pipedream_stage_kv.png"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center justify-center gap-2 px-6 py-3 border border-zinc-600 text-zinc-300 hover:bg-white hover:text-black hover:border-white transition-colors text-xs tracking-widest rounded-sm w-full max-w-[280px]"
+                                            >
+                                                <Download className="w-4 h-4 flex-shrink-0" />
+                                                <span className="whitespace-nowrap">画像を保存</span>
+                                            </a>
+                                        </div>
+
                                     </div>
                                 </section>
                             )}
