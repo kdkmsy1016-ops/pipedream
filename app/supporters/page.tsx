@@ -25,7 +25,7 @@ function DriveDownloadCard({
     icon?: any;
 }) {
     const downloadUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#";
-    const thumbnailUrl = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w600` : "";
+    const thumbnailUrl = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200` : "";
 
     return (
         <a
