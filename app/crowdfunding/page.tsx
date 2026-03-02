@@ -11,11 +11,11 @@ const TIERS = [
         id: 1,
         name: "【ふらっと一杯！】プラン",
         price: "3,000",
-        description: "お気持ちをご支援いただける方に。スナックさくらみちの常連気分が味わえます。",
+        description: "お気持ちをご支援いただける方に。スナックさくらみちの雰囲気を味わえます。",
         icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">A</div>,
         returns: [
             "お礼メール",
-            "映画キービジュアル デジタルカード（1点）",
+            "映画『盈虚とパイプドリーム』キービジュアル デジタルカード（1点）",
             "舞台『場末のパイプドリーム』キービジュアル デジタルカード（俳優サイン付き／1点）"
         ]
     },
@@ -23,11 +23,11 @@ const TIERS = [
         id: 2,
         name: "【マスター、もう一杯だけ！】プラン",
         price: "6,000",
-        description: "本編の核となるシナリオと舞台写真で、物語の裏側までお楽しみいただけます。",
+        description: "脚本と舞台写真で、物語の裏側までお楽しみいただけます。",
         icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">B</div>,
         returns: [
             "プランAのすべて",
-            "脚本（最終稿）PDFデータ",
+            "舞台『場末のパイプドリーム』脚本（最終稿）PDFデータ",
             "舞台『場末のパイプドリーム』舞台写真デジタルフォトブック（PDF／約20P予定）"
         ]
     },
@@ -50,19 +50,19 @@ const TIERS = [
         icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">D</div>,
         returns: [
             "プランCのすべて",
-            "クレジット等に支援者（Special Thanks）としてお名前記載（1名分）",
-            "キャスト・監督のサイン入り完成台本（製本版）"
+            "映画『盈虚とパイプドリーム』エンドクレジット等に支援者（Special Thanks）としてお名前記載（1名分）",
+            "映画『盈虚とパイプドリーム』のキャスト・監督サイン入り完成台本（製本版）"
         ]
     },
     {
         id: 5,
         name: "【新しいの入れといて！さくらみちボトルキープ】プラン",
         price: "60,000",
-        description: "劇中で実際に使用した「あなた名義のキープ札」と、映画のオンライン先行試写。",
+        description: "映画劇中で実際に使用した「あなた名義のキープ札」と、映画のオンライン先行試写。",
         icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">E</div>,
         returns: [
             "プランDのすべて（台本等含む）",
-            "中ボトルのボトルキープ札にお名前記載（1名分）※劇中で使用後、現物郵送",
+            "映画劇中に登場するボトルのボトルキープ札にお名前記載（1名分）※劇中で使用後、現物郵送",
             "映画『盈虚とパイプドリーム』限定試写動画 視聴URL（完成後、オンライン／視聴期限1か月）"
         ]
     },
@@ -86,7 +86,7 @@ const TIERS = [
         icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">G</div>,
         returns: [
             "プランFのすべて",
-            "クレジット等にアソシエイトプロデューサー（協賛）としてお名前記載（1名分）",
+            "映画のエンドクレジット等にアソシエイトプロデューサー（協賛）としてお名前記載（1名分）",
             "法人・企業ロゴ掲載可"
         ]
     }
@@ -96,12 +96,12 @@ const MATRIX_FEATURES = [
     { name: "お礼メール", tiers: [1, 2, 3, 4, 5, 6, 7] },
     { name: "KV デジタルカード", tiers: [1, 2, 3, 4, 5, 6, 7] },
     { name: "舞台KVサイン付カード", tiers: [1, 2, 3, 4, 5, 6, 7] },
-    { name: "脚本(最終稿)PDFデータ", tiers: [2, 3, 4, 5, 6, 7] },
+    { name: "舞台脚本(最終稿)PDFデータ", tiers: [2, 3, 4, 5, 6, 7] },
     { name: "舞台デジタルフォトブック", tiers: [2, 3, 4, 5, 6, 7] },
     { name: "舞台公演 限定アーカイブ", tiers: [3, 4, 5, 6, 7] },
-    { name: "エンドロールお名前記載", tiers: [4, 5, 6, 7] },
-    { name: "キャスト・監督サイン入り完成台本", tiers: [4, 5, 6, 7] },
-    { name: "あなた名義のキープ札(現物郵送)", tiers: [5, 6, 7] },
+    { name: "映画のエンドロールお名前記載", tiers: [4, 5, 6, 7] },
+    { name: "映画のキャスト・監督サイン入り完成台本", tiers: [4, 5, 6, 7] },
+    { name: "映画劇中にあなた名義のキープ札(現物郵送)", tiers: [5, 6, 7] },
     { name: "映画限定試写動画(オンライン)", tiers: [5, 6, 7] },
     { name: "さくらみち試写会・パーティー参加", tiers: [6, 7] },
     { name: "APクレジット・ロゴ掲載可", tiers: [7] }
