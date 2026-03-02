@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ChevronLeft, ExternalLink, Gift, FileText, Video, PlayCircle, Users, Image as ImageIcon, Ticket, PartyPopper, Check, List, X } from "lucide-react";
 
-const MOTION_GALLERY_URL = "https://motion-gallery.net/projects/pipedream-movie";
+const MOTION_GALLERY_URL = "https://motion-gallery.net/projects/eikyo-to-pipedream";
 
 const TIERS = [
     {
@@ -135,7 +135,13 @@ export default function CrowdfundingPage() {
                         スナック「さくらみち」<br />
                         <span className="text-xl md:text-3xl text-white mt-2 block">映画化応援プロジェクト</span>
                     </h1>
-                    <p className="text-zinc-300 tracking-wide text-sm md:text-base leading-relaxed whitespace-pre-line box-border break-words">
+
+                    <p className="text-sm md:text-base font-bold text-[#ffbf00] tracking-widest mt-2 box-border">
+                        クラウドファンディング実施中<br className="md:hidden block" />
+                        <span className="block mt-1 text-zinc-300 font-normal">2026/4/1 〜 2026/6/1</span>
+                    </p>
+
+                    <p className="text-zinc-400 tracking-wide text-xs md:text-sm leading-relaxed whitespace-pre-line box-border break-words">
                         実在の場所から生まれる、虚実皮膜の物語。<br />
                         映画と舞台をまたにかけるこの挑戦を、<br className="md:hidden block" />ぜひ皆様と一緒に実現させてください。
                     </p>
