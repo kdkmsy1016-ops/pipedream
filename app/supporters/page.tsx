@@ -6,9 +6,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star } from "lucide-react";
 
-// Digital Card Image Sources (Change these paths later when actual assets are ready)
-const MOVIE_KV_SRC = "https://placehold.jp/20/18181b/ffffff/600x800.png?text=Movie%20KeyVisual";
-const STAGE_KV_SRC = "https://placehold.jp/20/18181b/ffffff/600x800.png?text=Stage%20KeyVisual";
+// Digital Card Image Sources
+const MOVIE_KV_SRC = "https://drive.google.com/uc?export=view&id=1SPZleKgUnS3OG277P4KorTrvPGrxRJo3";
+const STAGE_KV_SRC = "https://drive.google.com/uc?export=view&id=15jjVBQ4LBGC2Va7CxXrxzpMwwrjh2mIq";
 import { verifyPassword } from "./actions";
 
 export default function SupportersPage() {
@@ -281,7 +281,7 @@ export default function SupportersPage() {
                                                     src={MOVIE_KV_SRC}
                                                     alt="映画『盈虚とパイプドリーム』キービジュアル デジタルカード"
                                                     fill
-                                                    className="object-cover pointer-events-auto"
+                                                    className="object-contain pointer-events-auto"
                                                     unoptimized
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
@@ -308,7 +308,7 @@ export default function SupportersPage() {
                                                     src={STAGE_KV_SRC}
                                                     alt="舞台『場末のパイプドリーム』キービジュアル デジタルカード"
                                                     fill
-                                                    className="object-cover pointer-events-auto"
+                                                    className="object-contain pointer-events-auto"
                                                     unoptimized
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
