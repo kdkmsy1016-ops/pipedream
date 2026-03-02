@@ -4,12 +4,72 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star } from "lucide-react";
-
-// Digital Card Image Sources
-const MOVIE_KV_SRC = "https://drive.google.com/uc?export=view&id=1SPZleKgUnS3OG277P4KorTrvPGrxRJo3";
-const STAGE_KV_SRC = "https://drive.google.com/uc?export=view&id=15jjVBQ4LBGC2Va7CxXrxzpMwwrjh2mIq";
+import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star, ImageIcon } from "lucide-react";
 import { verifyPassword } from "./actions";
+
+// Google Drive File IDs
+const MOVIE_KV_ID = "1SPZleKgUnS3OG277P4KorTrvPGrxRJo3";
+const STAGE_KV_ID = "15jjVBQ4LBGC2Va7CxXrxzpMwwrjh2mIq";
+const SCRIPT_PDF_ID = ""; // To be filled later
+const PHOTO_BOOK_ID = ""; // To be filled later
+
+function DriveDownloadCard({
+    fileId,
+    title,
+    fallbackText,
+    icon: Icon
+}: {
+    fileId: string;
+    title: string;
+    fallbackText: string;
+    icon?: any;
+}) {
+    const downloadUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#";
+    const thumbnailUrl = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w600` : "";
+
+    return (
+        <a
+            href={downloadUrl}
+            target={fileId ? "_blank" : "_self"}
+            rel={fileId ? "noopener noreferrer" : ""}
+            className={`flex flex-col items-center gap-4 w-full group ${!fileId && "opacity-60 pointer-events-none cursor-not-allowed"}`}
+        >
+            <div className="w-full max-w-[280px] md:max-w-sm aspect-[3/4] relative rounded-lg overflow-hidden border border-zinc-700 shadow-[0_10px_30px_rgba(0,0,0,0.8)] group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(255,191,0,0.15)] active:translate-y-1 active:shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-300 bg-zinc-950 flex items-center justify-center">
+
+                {/* Fallback Placeholder (Always behind the image) */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-0 bg-zinc-900">
+                    {Icon && <Icon className="w-8 h-8 md:w-10 md:h-10 text-zinc-700 mb-4" />}
+                    <span className="text-zinc-500 text-xs md:text-sm tracking-widest leading-loose whitespace-pre-line box-border">
+                        {fallbackText}
+                    </span>
+                </div>
+
+                {/* Drive Thumbnail Image */}
+                {fileId && (
+                    <Image
+                        src={thumbnailUrl}
+                        alt={title}
+                        fill
+                        className="object-cover relative z-10 group-hover:scale-105 group-hover:brightness-110 transition-all duration-500 pointer-events-auto"
+                        unoptimized
+                    />
+                )}
+
+                {/* Gradient Overlay for Text Readability */}
+                {fileId && (
+                    <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none z-20" />
+                )}
+            </div>
+
+            {/* Download Button (below the card) */}
+            <div className="flex items-center justify-center gap-2 px-6 py-3 border border-zinc-600 text-zinc-300 group-hover:bg-white group-hover:text-black group-hover:border-white transition-colors text-xs tracking-widest rounded-sm w-full max-w-[280px]">
+                <Download className="w-4 h-4 flex-shrink-0" />
+                <span className="whitespace-nowrap">{fileId ? "ダウンロード" : "準備中"}</span>
+            </div>
+        </a>
+    );
+}
+
 
 export default function SupportersPage() {
     const [tier, setTier] = useState<number>(0);
@@ -245,15 +305,19 @@ export default function SupportersPage() {
                                             脚本PDF & デジタルフォトブック
                                         </h2>
                                     </div>
-                                    <div className="w-full max-w-full grid grid-cols-1 sm:grid-cols-2 gap-4 box-border overflow-hidden">
-                                        <a href="#" className="flex flex-col items-center justify-center p-6 md:p-8 bg-black/50 border border-zinc-800 hover:border-[#ffbf00]/50 transition-colors rounded-sm group box-border w-full max-w-full overflow-hidden">
-                                            <FileText className="w-6 h-6 md:w-8 md:h-8 text-zinc-500 group-hover:text-[#ffbf00] mb-3 transition-colors flex-shrink-0" />
-                                            <span className="text-xs md:text-sm tracking-widest text-zinc-300 group-hover:text-white transition-colors text-center whitespace-pre-line break-words">脚本 PDF版</span>
-                                        </a>
-                                        <a href="#" className="flex flex-col items-center justify-center p-6 md:p-8 bg-black/50 border border-zinc-800 hover:border-[#ffbf00]/50 transition-colors rounded-sm group box-border w-full max-w-full overflow-hidden">
-                                            <BookOpen className="w-6 h-6 md:w-8 md:h-8 text-zinc-500 group-hover:text-[#ffbf00] mb-3 transition-colors flex-shrink-0" />
-                                            <span className="text-xs md:text-sm tracking-widest text-zinc-300 group-hover:text-white transition-colors text-center whitespace-pre-line break-words">フォトブック PDF版</span>
-                                        </a>
+                                    <div className="w-full max-w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pt-4 box-border overflow-hidden">
+                                        <DriveDownloadCard
+                                            fileId={SCRIPT_PDF_ID}
+                                            title="脚本 PDF版"
+                                            fallbackText="脚本 PDFデータ\n（準備中）"
+                                            icon={FileText}
+                                        />
+                                        <DriveDownloadCard
+                                            fileId={PHOTO_BOOK_ID}
+                                            title="フォトブック PDF版"
+                                            fallbackText="デジタルフォトブック\n（準備中）"
+                                            icon={BookOpen}
+                                        />
                                     </div>
                                 </section>
                             )}
@@ -273,61 +337,18 @@ export default function SupportersPage() {
                                     </p>
 
                                     <div className="w-full max-w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pt-4 box-border overflow-hidden">
-
-                                        {/* Movie Digital Card */}
-                                        <div className="flex flex-col items-center gap-4 w-full">
-                                            <div className="w-full max-w-[280px] md:max-w-sm aspect-[3/4] relative rounded-lg overflow-hidden border border-zinc-700 shadow-[0_10px_30px_rgba(0,0,0,0.8)] hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(255,191,0,0.15)] active:translate-y-1 active:shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-300 bg-zinc-950">
-                                                <Image
-                                                    src={MOVIE_KV_SRC}
-                                                    alt="映画『盈虚とパイプドリーム』キービジュアル デジタルカード"
-                                                    fill
-                                                    className="object-contain pointer-events-auto"
-                                                    unoptimized
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
-                                                <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
-                                                    <p className="text-[#ffbf00] font-bold text-xs md:text-sm tracking-widest drop-shadow-md">MOVIE EXCLUSIVE</p>
-                                                </div>
-                                            </div>
-                                            <a
-                                                href={MOVIE_KV_SRC}
-                                                download="pipedream_movie_kv.png"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center justify-center gap-2 px-6 py-3 border border-zinc-600 text-zinc-300 hover:bg-white hover:text-black hover:border-white transition-colors text-xs tracking-widest rounded-sm w-full max-w-[280px]"
-                                            >
-                                                <Download className="w-4 h-4 flex-shrink-0" />
-                                                <span className="whitespace-nowrap">画像を保存</span>
-                                            </a>
-                                        </div>
-
-                                        {/* Stage Digital Card */}
-                                        <div className="flex flex-col items-center gap-4 w-full">
-                                            <div className="w-full max-w-[280px] md:max-w-sm aspect-[3/4] relative rounded-lg overflow-hidden border border-zinc-700 shadow-[0_10px_30px_rgba(0,0,0,0.8)] hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(255,191,0,0.15)] active:translate-y-1 active:shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-300 bg-zinc-950">
-                                                <Image
-                                                    src={STAGE_KV_SRC}
-                                                    alt="舞台『場末のパイプドリーム』キービジュアル デジタルカード"
-                                                    fill
-                                                    className="object-contain pointer-events-auto"
-                                                    unoptimized
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
-                                                <div className="absolute bottom-4 left-4 right-4 pointer-events-none">
-                                                    <p className="text-[#ffbf00] font-bold text-xs md:text-sm tracking-widest drop-shadow-md">STAGE EXCLUSIVE</p>
-                                                </div>
-                                            </div>
-                                            <a
-                                                href={STAGE_KV_SRC}
-                                                download="pipedream_stage_kv.png"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center justify-center gap-2 px-6 py-3 border border-zinc-600 text-zinc-300 hover:bg-white hover:text-black hover:border-white transition-colors text-xs tracking-widest rounded-sm w-full max-w-[280px]"
-                                            >
-                                                <Download className="w-4 h-4 flex-shrink-0" />
-                                                <span className="whitespace-nowrap">画像を保存</span>
-                                            </a>
-                                        </div>
-
+                                        <DriveDownloadCard
+                                            fileId={MOVIE_KV_ID}
+                                            title="映画『盈虚とパイプドリーム』キービジュアル"
+                                            fallbackText="映画キービジュアル\n（プレースホルダー）"
+                                            icon={ImageIcon}
+                                        />
+                                        <DriveDownloadCard
+                                            fileId={STAGE_KV_ID}
+                                            title="舞台『場末のパイプドリーム』キービジュアル"
+                                            fallbackText="舞台キービジュアル\n（プレースホルダー）"
+                                            icon={ImageIcon}
+                                        />
                                     </div>
                                 </section>
                             )}
