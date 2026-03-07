@@ -97,6 +97,7 @@ export default function SupportersPage() {
 
         // 2. Strict sanitation
         const input = passwordInput?.trim().toLowerCase() || "";
+        const admin = process.env.NEXT_PUBLIC_ADMIN_KEY?.trim().toLowerCase();
         const t5 = process.env.NEXT_PUBLIC_TIER5_KEY?.trim().toLowerCase();
         const t4 = process.env.NEXT_PUBLIC_TIER4_KEY?.trim().toLowerCase();
         const t3 = process.env.NEXT_PUBLIC_TIER3_KEY?.trim().toLowerCase();
@@ -106,7 +107,10 @@ export default function SupportersPage() {
         let authTier = 0;
 
         // 3. Robust comparison
-        if (input && t5 && input === t5) {
+        if (input && admin && input === admin) {
+            authTier = 5;
+            console.log("Admin Logged In");
+        } else if (input && t5 && input === t5) {
             authTier = 5;
         } else if (input && t4 && input === t4) {
             authTier = 4;
