@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ChevronLeft, ExternalLink, Gift, FileText, Video, PlayCircle, Users, Image as ImageIcon, Ticket, PartyPopper, Check, List, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ExternalLink, Gift, FileText, Video, PlayCircle, Users, Image as ImageIcon, Ticket, PartyPopper, Check, List, X, Clock } from "lucide-react";
 
 const MOTION_GALLERY_URL = "https://motion-gallery.net/projects/eikyo-to-pipedream";
 
@@ -109,6 +110,13 @@ const MATRIX_FEATURES = [
 
 export default function CrowdfundingPage() {
     const [isMatrixOpen, setIsMatrixOpen] = useState(false);
+    const [showToast, setShowToast] = useState(false);
+
+    const handleDisabledClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+    };
 
     return (
         <main className="min-h-screen bg-zinc-950 text-white font-serif w-full max-w-full box-border pb-24 relative overflow-x-hidden">
@@ -149,14 +157,13 @@ export default function CrowdfundingPage() {
                     {/* Top CTA Button */}
                     <div className="pt-4 w-full box-border flex justify-center">
                         <a
-                            href={MOTION_GALLERY_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center gap-2 w-full md:w-auto px-6 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-colors rounded font-bold tracking-widest text-sm box-border"
+                            href="#"
+                            onClick={handleDisabledClick}
+                            className="inline-flex items-center justify-center gap-2 w-full md:w-auto px-8 py-4 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors rounded font-bold tracking-widest text-sm box-border cursor-not-allowed"
+                            data-future-href={MOTION_GALLERY_URL}
                         >
-                            <Gift className="w-5 h-5 flex-shrink-0" />
-                            <span className="whitespace-pre-line break-words">プロジェクトの詳細を見る</span>
-                            <ExternalLink className="w-4 h-4 flex-shrink-0" />
+                            <Clock className="w-5 h-5 flex-shrink-0" />
+                            <span className="whitespace-pre-line break-words">2026/4/1 12:00 START</span>
                         </a>
                     </div>
                 </header>
@@ -208,13 +215,13 @@ export default function CrowdfundingPage() {
 
                                 <div className="w-full box-border">
                                     <a
-                                        href={MOTION_GALLERY_URL}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-950 border border-[#ffbf00] text-[#ffbf00] hover:bg-[#ffbf00] hover:text-zinc-950 transition-colors text-sm font-bold tracking-widest rounded box-border"
+                                        href="#"
+                                        onClick={handleDisabledClick}
+                                        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-800/50 border border-zinc-800 text-zinc-500 transition-colors text-sm font-bold tracking-widest rounded box-border cursor-not-allowed"
+                                        data-future-href={MOTION_GALLERY_URL}
                                     >
-                                        <span className="whitespace-pre-line break-words">このプランを支援する</span>
-                                        <ChevronLeft className="w-4 h-4 rotate-180 flex-shrink-0" />
+                                        <Clock className="w-4 h-4 flex-shrink-0" />
+                                        <span className="whitespace-pre-line break-words">2026/4/1 12:00 START</span>
                                     </a>
                                 </div>
                             </div>
@@ -231,13 +238,13 @@ export default function CrowdfundingPage() {
                     </h2>
                     <div className="w-full box-border flex justify-center">
                         <a
-                            href={MOTION_GALLERY_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 bg-[#ffbf00] text-zinc-950 hover:bg-zinc-200 transition-colors rounded font-bold tracking-widest text-sm box-border"
+                            href="#"
+                            onClick={handleDisabledClick}
+                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors rounded font-bold tracking-widest text-sm box-border cursor-not-allowed"
+                            data-future-href={MOTION_GALLERY_URL}
                         >
-                            <span className="whitespace-pre-line break-words">MotionGalleryへ進む</span>
-                            <ExternalLink className="w-5 h-5 ml-1 flex-shrink-0" />
+                            <Clock className="w-5 h-5 flex-shrink-0" />
+                            <span className="whitespace-pre-line break-words">2026/4/1 12:00 START</span>
                         </a>
                     </div>
                 </div>
@@ -319,18 +326,33 @@ export default function CrowdfundingPage() {
 
                         <div className="p-4 bg-zinc-950 border-t border-zinc-800 shrink-0 text-center">
                             <a
-                                href={MOTION_GALLERY_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#ffbf00] text-zinc-950 hover:bg-white transition-colors text-xs font-bold tracking-widest rounded-sm"
+                                href="#"
+                                onClick={handleDisabledClick}
+                                className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors text-xs font-bold tracking-widest rounded-sm cursor-not-allowed"
+                                data-future-href={MOTION_GALLERY_URL}
                             >
-                                MotionGalleryで支援する
-                                <ExternalLink className="w-4 h-4" />
+                                <Clock className="w-4 h-4 flex-shrink-0" />
+                                2026/4/1 12:00 START
                             </a>
                         </div>
                     </div>
                 </div>
             )}
+
+            {/* Disabled Toast Notification */}
+            <AnimatePresence>
+                {showToast && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                        className="fixed bottom-32 md:bottom-32 left-1/2 -translate-x-1/2 z-[60] bg-zinc-800 text-white px-6 py-3 rounded-full shadow-lg border border-zinc-700 flex items-center gap-3 text-sm tracking-widest whitespace-nowrap"
+                    >
+                        <Clock className="w-4 h-4 text-[#ffbf00]" />
+                        <span>開始までお待ちください</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </main>
     );
 }
