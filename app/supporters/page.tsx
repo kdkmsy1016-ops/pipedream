@@ -90,16 +90,24 @@ export default function SupportersPage() {
         setError(null);
         setIsLoading(true);
 
+        // 1. Clear old storage traces immediately to prevent cache bugs
+        sessionStorage.removeItem("supporters_tier");
+        localStorage.removeItem("supporters_tier"); // Also clear local storage just to be safe
+
         try {
             const res = await fetch('/api/auth/verify', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache, no-store, must-revalidate'
+                },
                 body: JSON.stringify({ email: passwordInput })
             });
 
             const data = await res.json();
 
             if (res.ok && data.success) {
+                // 2. Set new verified tier
                 sessionStorage.setItem("supporters_tier", data.tier.toString());
                 setTier(data.tier);
                 setPasswordInput("");
@@ -112,6 +120,14 @@ export default function SupportersPage() {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleLogout = () => {
+        sessionStorage.removeItem("supporters_tier");
+        localStorage.removeItem("supporters_tier");
+        setTier(0);
+        setPasswordInput("");
+        setError(null);
     };
 
     if (isChecking) {
@@ -142,10 +158,7 @@ export default function SupportersPage() {
                 </Link>
                 {tier > 0 && (
                     <button
-                        onClick={() => {
-                            sessionStorage.removeItem("supporters_tier");
-                            setTier(0);
-                        }}
+                        onClick={handleLogout}
                         className="pointer-events-auto text-zinc-400 border border-zinc-700 hover:border-red-500/50 hover:text-red-400 hover:bg-red-500/10 transition-colors px-3 py-1.5 md:px-4 md:py-2 rounded-sm text-[10px] md:text-xs tracking-widest flex items-center gap-2"
                     >
                         テスト用ログアウト
@@ -364,10 +377,7 @@ export default function SupportersPage() {
 
                         <div className="w-full max-w-full text-center pt-8 pb-12 box-border overflow-hidden">
                             <button
-                                onClick={() => {
-                                    sessionStorage.removeItem("supporters_tier");
-                                    setTier(0);
-                                }}
+                                onClick={handleLogout}
                                 className="text-zinc-600 hover:text-zinc-400 text-xs md:text-sm tracking-widest transition-colors underline underline-offset-4 p-4 inline-block"
                             >
                                 ログアウト

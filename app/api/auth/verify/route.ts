@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0; // Double-ensure no cache
 
 function getAllowedEmails(): Record<string, number> {
     try {
         const envVal = process.env.ALLOWED_EMAILS_JSON;
+        
+        // Debug info from user request: Output first 3 chars
+        const debugStart = envVal ? envVal.substring(0, 3) : "N/A";
+        console.log(`[DEBUG] ALLOWED_EMAILS_JSON loaded starts with: ${debugStart}`);
+
         if (!envVal) return {};
         
         const parsed = JSON.parse(envVal);
