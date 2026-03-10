@@ -129,17 +129,28 @@ export default function SupportersPage() {
                 )}
             </div>
 
-            {/* Back Button (Fixed & Safe Area) */}
+            {/* Back & Logout Navigation (Fixed & Safe Area) */}
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="fixed top-0 left-0 w-full z-50 px-4 md:px-12 py-6 bg-gradient-to-b from-zinc-950 via-zinc-950/90 to-transparent pointer-events-none box-border"
+                className="fixed top-0 left-0 w-full z-50 px-4 md:px-12 py-6 bg-gradient-to-b from-zinc-950 via-zinc-950/90 to-transparent pointer-events-none box-border flex justify-between items-center"
             >
                 <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-[#ffbf00] transition-colors text-sm tracking-widest group pointer-events-auto">
                     <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
                     BACK
                 </Link>
+                {tier > 0 && (
+                    <button
+                        onClick={() => {
+                            sessionStorage.removeItem("supporters_tier");
+                            setTier(0);
+                        }}
+                        className="pointer-events-auto text-zinc-400 border border-zinc-700 hover:border-red-500/50 hover:text-red-400 hover:bg-red-500/10 transition-colors px-3 py-1.5 md:px-4 md:py-2 rounded-sm text-[10px] md:text-xs tracking-widest flex items-center gap-2"
+                    >
+                        テスト用ログアウト
+                    </button>
+                )}
             </motion.div>
 
             <AnimatePresence mode="wait">

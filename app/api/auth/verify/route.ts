@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 function getAllowedEmails(): Record<string, number> {
     try {
         const envVal = process.env.ALLOWED_EMAILS_JSON;
