@@ -1,12 +1,25 @@
 import { NextResponse } from 'next/server';
 
-// Temporary mock database of allowed emails and their tiers.
-// In a real application, this should be a DB call or read from a secured file/CMS.
-const ALLOWED_EMAILS: Record<string, number> = {
-    "example1@mail.com": 1,
-    "example2@mail.com": 3,
-    "director@mail.com": 5,
-};
+function getAllowedEmails(): Record<string, number> {
+    try {
+        const envVal = process.env.ALLOWED_EMAILS_JSON;
+        if (!envVal) return {};
+        
+        const parsed = JSON.parse(envVal);
+        const result: Record<string, number> = {};
+        
+        // Normalize keys to lowercase for robust matching
+        for (const [key, value] of Object.entries(parsed)) {
+            if (typeof value === 'number') {
+                result[key.trim().toLowerCase()] = value;
+            }
+        }
+        return result;
+    } catch (e) {
+        console.error("Failed to parse ALLOWED_EMAILS_JSON:", e);
+        return {};
+    }
+}
 
 export async function POST(request: Request) {
     try {
@@ -28,7 +41,8 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: true, tier: 5 });
         }
 
-        const tier = ALLOWED_EMAILS[normalizedEmail];
+        const allowedEmails = getAllowedEmails();
+        const tier = allowedEmails[normalizedEmail];
 
         if (tier !== undefined) {
             return NextResponse.json({ success: true, tier });

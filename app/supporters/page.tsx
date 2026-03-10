@@ -198,7 +198,7 @@ export default function SupportersPage() {
                                     {isLoading ? (
                                         <div className="w-5 h-5 border-2 border-zinc-950/20 border-t-zinc-950 rounded-full animate-spin" />
                                     ) : (
-                                        "ログイン"
+                                        "入店する"
                                     )}
                                 </button>
                             </div>
