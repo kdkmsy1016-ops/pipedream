@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star, ImageIcon } from "lucide-react";
-import { verifyPassword } from "./actions";
+import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star, ImageIcon, Mail } from "lucide-react";
 
 // Google Drive File IDs
 const MOVIE_KV_ID = "1SPZleKgUnS3OG277P4KorTrvPGrxRJo3";
@@ -74,8 +73,9 @@ function DriveDownloadCard({
 export default function SupportersPage() {
     const [tier, setTier] = useState<number>(0);
     const [passwordInput, setPasswordInput] = useState("");
-    const [error, setError] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const [isChecking, setIsChecking] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const savedTier = sessionStorage.getItem("supporters_tier");
@@ -87,45 +87,30 @@ export default function SupportersPage() {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
+        setIsLoading(true);
 
-        // 1. Logging for debugging environment variables on Vercel
-        console.log("Tier 1 Key loaded:", !!process.env.NEXT_PUBLIC_TIER1_KEY);
-        console.log("Tier 2 Key loaded:", !!process.env.NEXT_PUBLIC_TIER2_KEY);
-        console.log("Tier 3 Key loaded:", !!process.env.NEXT_PUBLIC_TIER3_KEY);
-        console.log("Tier 4 Key loaded:", !!process.env.NEXT_PUBLIC_TIER4_KEY);
-        console.log("Tier 5 Key loaded:", !!process.env.NEXT_PUBLIC_TIER5_KEY);
+        try {
+            const res = await fetch('/api/auth/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: passwordInput })
+            });
 
-        // 2. Strict sanitation
-        const input = passwordInput?.trim().toLowerCase() || "";
-        const t5 = process.env.NEXT_PUBLIC_TIER5_KEY?.trim().toLowerCase();
-        const t4 = process.env.NEXT_PUBLIC_TIER4_KEY?.trim().toLowerCase();
-        const t3 = process.env.NEXT_PUBLIC_TIER3_KEY?.trim().toLowerCase();
-        const t2 = process.env.NEXT_PUBLIC_TIER2_KEY?.trim().toLowerCase();
-        const t1 = process.env.NEXT_PUBLIC_TIER1_KEY?.trim().toLowerCase();
+            const data = await res.json();
 
-        let authTier = 0;
-
-        // 3. Robust comparison
-        if (input && t5 && input === t5) {
-            authTier = 5;
-        } else if (input && t4 && input === t4) {
-            authTier = 4;
-        } else if (input && t3 && input === t3) {
-            authTier = 3;
-        } else if (input && t2 && input === t2) {
-            authTier = 2;
-        } else if (input && t1 && input === t1) {
-            authTier = 1;
-        }
-
-        if (authTier > 0) {
-            sessionStorage.setItem("supporters_tier", authTier.toString());
-            setTier(authTier);
-            setError(false);
-            setPasswordInput(""); // 4. Reset on success
-        } else {
-            setError(true);
-            setPasswordInput(""); // Reset on failure
+            if (res.ok && data.success) {
+                sessionStorage.setItem("supporters_tier", data.tier.toString());
+                setTier(data.tier);
+                setPasswordInput("");
+            } else {
+                setError(data.message || "認証に失敗しました。");
+            }
+        } catch (err) {
+            console.error(err);
+            setError("サーバー通信エラーが発生しました。");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -176,26 +161,30 @@ export default function SupportersPage() {
                         </div>
 
                         <form onSubmit={handleLogin} className="space-y-8 w-full box-border">
-                            <div className="space-y-2 group w-full box-border">
-                                <label htmlFor="password" className="block text-xs text-zinc-500 tracking-widest group-focus-within:text-[#ffbf00] transition-colors text-center">
-                                    合言葉（PASSWORD）
+                            <div className="space-y-2 group w-full box-border relative">
+                                <label htmlFor="email" className="block text-xs text-zinc-500 tracking-widest group-focus-within:text-[#ffbf00] transition-colors text-center">
+                                    メールアドレスを入力してください
                                 </label>
-                                <input
-                                    id="password"
-                                    type="password"
-                                    value={passwordInput}
-                                    onChange={(e) => setPasswordInput(e.target.value)}
-                                    className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-3 px-4 text-center text-sm md:text-xl focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/30 tracking-[0.1em] md:tracking-[0.3em] rounded-t-sm"
-                                    placeholder="合言葉を入力してください"
-                                    autoFocus
-                                />
+                                <div className="relative flex items-center justify-center">
+                                    <Mail className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-[#ffbf00] transition-colors" />
+                                    <input
+                                        id="email"
+                                        type="email"
+                                        value={passwordInput}
+                                        onChange={(e) => setPasswordInput(e.target.value)}
+                                        className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-sm md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
+                                        placeholder="your@email.com"
+                                        autoFocus
+                                        required
+                                    />
+                                </div>
                                 {error && (
                                     <motion.p
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
-                                        className="text-red-500/80 text-xs text-center mt-4 tracking-widest"
+                                        className="text-red-500/90 text-xs md:text-sm text-center mt-4 tracking-widest bg-red-500/10 p-3 rounded"
                                     >
-                                        合言葉が異なります
+                                        {error}
                                     </motion.p>
                                 )}
                             </div>
@@ -203,9 +192,14 @@ export default function SupportersPage() {
                             <div className="text-center w-full box-border">
                                 <button
                                     type="submit"
-                                    className="w-full sm:w-auto px-12 py-3 text-sm tracking-[0.2em] text-zinc-950 bg-[#ffbf00] hover:bg-white hover:text-zinc-950 transition-colors duration-300 shadow-[0_0_15px_rgba(255,191,0,0.3)] font-bold rounded-sm box-border"
+                                    disabled={isLoading || !passwordInput}
+                                    className="w-full sm:w-auto px-12 py-3 text-sm tracking-[0.2em] text-zinc-950 bg-[#ffbf00] hover:bg-white hover:text-zinc-950 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 shadow-[0_0_15px_rgba(255,191,0,0.3)] font-bold rounded-sm box-border flex items-center justify-center gap-2 mx-auto"
                                 >
-                                    扉を開ける
+                                    {isLoading ? (
+                                        <div className="w-5 h-5 border-2 border-zinc-950/20 border-t-zinc-950 rounded-full animate-spin" />
+                                    ) : (
+                                        "ログイン"
+                                    )}
                                 </button>
                             </div>
                         </form>
