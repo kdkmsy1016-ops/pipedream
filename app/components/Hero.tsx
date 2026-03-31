@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { MessageCircle, Ticket } from "lucide-react";
+import { MessageCircle, Ticket, Gift } from "lucide-react";
 import { motion } from "framer-motion";
 import HeroButton from "./HeroButton";
 import DynamicTicketButton from "./DynamicTicketButton";
@@ -60,23 +60,14 @@ export default function Hero() {
                                 <p className="text-accent font-bold tracking-widest text-sm lg:text-xl">
                                     映画プロジェクト始動
                                 </p>
-                                <p className="text-white/90 text-base lg:text-base tracking-wider leading-relaxed">
-                                    2026年4月、クラウドファンディング開始。<br />
-                                    <span className="text-white/70 text-sm lg:text-sm block lg:inline mt-1 lg:mt-0">
-                                        制作の裏側や限定情報をLINEでお届けします。
-                                    </span>
-                                </p>
                             </div>
                         </div>
 
-
-
                         <HeroButton
-                            href="https://lin.ee/LChtOnm"
-                            icon={MessageCircle}
-                            label="LINEで応援する"
-                            variant="line"
-                            external
+                            href="/crowdfunding"
+                            icon={Gift}
+                            label="クラウドファンディング実施中"
+                            variant="gold"
                         />
                     </div>
 
