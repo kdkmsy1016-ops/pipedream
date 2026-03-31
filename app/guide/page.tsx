@@ -79,9 +79,16 @@ export default function GuidePage() {
                             </div>
                             <div className="pt-1 md:pt-4">
                                 <h3 className="text-lg font-bold text-white mb-2">ログイン / 新規登録</h3>
-                                <p className="text-sm text-zinc-400 leading-relaxed">
+                                <p className="text-sm text-zinc-400 leading-relaxed mb-4">
                                     MotionGalleryのアカウントをお持ちでない方は、新規登録（無料）をお願いします。登録にはメールアドレスやSNSアカウントが使用できます。
                                 </p>
+                                <Link
+                                    href="/howto"
+                                    className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors rounded text-xs md:text-sm font-bold tracking-widest border border-zinc-700 w-full md:w-auto justify-center"
+                                >
+                                    <FileText className="w-4 h-4" />
+                                    会員登録や決済の詳しい手順はこちら
+                                </Link>
                             </div>
                         </motion.div>
 
