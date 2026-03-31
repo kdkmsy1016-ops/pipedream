@@ -29,7 +29,7 @@ export default function FloatingStageLink() {
                     exit={{ opacity: 0, y: 50 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                    <Link href="/stage">
+                    <Link href="/crowdfunding">
                         <motion.div
                             className="group flex items-center gap-4 bg-black/80 backdrop-blur-lg px-8 py-4 rounded-full border border-[#ffbf00] cursor-pointer shadow-[0_0_20px_rgba(255,191,0,0.4)]"
                             animate={{
@@ -49,10 +49,10 @@ export default function FloatingStageLink() {
                         >
                             <div className="flex flex-col">
                                 <span className="text-white/60 text-[10px] tracking-widest font-sans uppercase mb-1">
-                                    Stage Performance
+                                    Crowdfunding
                                 </span>
                                 <span className="text-white font-serif tracking-wide group-hover:text-accent transition-colors duration-300">
-                                    舞台『場末のパイプドリーム』詳細へ
+                                    クラウドファンディング実施中
                                 </span>
                             </div>
                             <motion.div
