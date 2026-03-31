@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronDown, Check, Info, Mail, UserPlus, LogIn, Gift, CreditCard, ChevronRight, AlertCircle, Clock } from "lucide-react";
+import { ChevronLeft, ChevronDown, Check, Info, Mail, UserPlus, LogIn, Gift, CreditCard, ChevronRight, AlertCircle, Clock, ExternalLink } from "lucide-react";
 
 export default function HowToPage() {
     const [showToast, setShowToast] = useState(false);
@@ -46,6 +46,17 @@ export default function HowToPage() {
                     title="会員登録"
                     icon={<UserPlus className="w-8 h-8 md:w-10 md:h-10 text-[#ffbf00]" />}
                 >
+                    <div className="mb-6">
+                        <a 
+                            href="https://motion-gallery.net/" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-4 py-3 bg-zinc-800 hover:bg-zinc-700 text-[#ffbf00] border border-zinc-700 hover:border-[#ffbf00]/50 transition-colors rounded text-sm font-bold tracking-widest w-full md:w-auto justify-center shadow-sm"
+                        >
+                            MotionGalleryトップページへ
+                            <ExternalLink className="w-4 h-4 ml-1" />
+                        </a>
+                    </div>
                     <ul className="text-zinc-300 text-sm md:text-base space-y-4 tracking-wide font-bold">
                         <li className="flex items-center gap-3">
                             <span className="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center text-xs">A</span>
