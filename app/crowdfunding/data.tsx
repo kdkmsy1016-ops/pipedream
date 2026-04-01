@@ -11,7 +11,8 @@ export const TIERS = [
             "お礼メール",
             "映画『盈虚とパイプドリーム』キービジュアル デジタルカード",
             "舞台『場末のパイプドリーム』キービジュアル デジタルカード（俳優サイン付き）"
-        ]
+        ],
+        url: "https://motion-gallery.net/projects/eikyo-to-pipedream/collection/new?ticket_id=64600"
     },
     {
         id: 2,
@@ -23,7 +24,8 @@ export const TIERS = [
             "プランAのすべて",
             "舞台『場末のパイプドリーム』脚本（最終稿）PDFデータ",
             "舞台『場末のパイプドリーム』舞台写真デジタルフォトブック（PDF／約20P予定）"
-        ]
+        ],
+        url: "https://motion-gallery.net/projects/eikyo-to-pipedream/collection/new?ticket_id=64601"
     },
     {
         id: 3,
@@ -34,7 +36,8 @@ export const TIERS = [
         returns: [
             "プランBのすべて",
             "舞台『場末のパイプドリーム』公演本編 限定アーカイブ（限定URL／パスコード）"
-        ]
+        ],
+        url: "https://motion-gallery.net/projects/eikyo-to-pipedream/collection/new?ticket_id=64602"
     },
     {
         id: 4,
@@ -46,7 +49,8 @@ export const TIERS = [
             "プランCのすべて",
             "映画『盈虚とパイプドリーム』エンドクレジット等に支援者（Special Thanks）としてお名前記載（1名分）",
             "映画『盈虚とパイプドリーム』のキャスト・監督サイン入り完成台本（製本版）"
-        ]
+        ],
+        url: "https://motion-gallery.net/projects/eikyo-to-pipedream/collection/new?ticket_id=64603"
     },
     {
         id: 5,
@@ -58,7 +62,8 @@ export const TIERS = [
             "プランDのすべて（台本等含む）",
             "映画劇中に登場するボトルのボトルキープ札にお名前記載（1名分）※劇中で使用後、現物郵送",
             "映画『盈虚とパイプドリーム』限定試写動画 視聴URL（完成後、オンライン／視聴期限1か月）"
-        ]
+        ],
+        url: "https://motion-gallery.net/projects/eikyo-to-pipedream/collection/new?ticket_id=64604"
     },
     {
         id: 6,
@@ -70,7 +75,8 @@ export const TIERS = [
             "プランEのすべて",
             "映画の舞台となるスナック「さくらみち」（東京都稲城市）で行う試写会に、キャスト・スタッフと参加",
             "完成記念パーティー／試写会ご招待"
-        ]
+        ],
+        url: "https://motion-gallery.net/projects/eikyo-to-pipedream/collection/new?ticket_id=64605"
     },
     {
         id: 7,
@@ -82,7 +88,8 @@ export const TIERS = [
             "プランFのすべて",
             "映画のエンドクレジット等にアソシエイトプロデューサー（協賛）としてお名前記載（1名分）",
             "法人・企業ロゴ掲載可"
-        ]
+        ],
+        url: "https://motion-gallery.net/projects/eikyo-to-pipedream/collection/new?ticket_id=64606"
     }
 ];
 
