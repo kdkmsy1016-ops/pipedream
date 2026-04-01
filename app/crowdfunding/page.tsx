@@ -5,117 +5,19 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ExternalLink, Gift, FileText, Video, PlayCircle, Users, Image as ImageIcon, Ticket, PartyPopper, Check, List, X, Clock } from "lucide-react";
 
-const MOTION_GALLERY_URL = "https://motion-gallery.net/projects/eikyo-to-pipedream";
-
-const TIERS = [
-    {
-        id: 1,
-        name: "【ふらっと一杯！】プラン",
-        price: "3,000",
-        description: "お気持ちをご支援いただける方に。スナックさくらみちの雰囲気を味わえます。",
-        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">A</div>,
-        returns: [
-            "お礼メール",
-            "映画『盈虚とパイプドリーム』キービジュアル デジタルカード",
-            "舞台『場末のパイプドリーム』キービジュアル デジタルカード（俳優サイン付き）"
-        ]
-    },
-    {
-        id: 2,
-        name: "【マスター、もう一杯だけ！】プラン",
-        price: "6,000",
-        description: "脚本と舞台写真で、物語の裏側までお楽しみいただけます。",
-        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">B</div>,
-        returns: [
-            "プランAのすべて",
-            "舞台『場末のパイプドリーム』脚本（最終稿）PDFデータ",
-            "舞台『場末のパイプドリーム』舞台写真デジタルフォトブック（PDF／約20P予定）"
-        ]
-    },
-    {
-        id: 3,
-        name: "【また来ちゃった！さくらみち常連客】プラン",
-        price: "12,000",
-        description: "舞台の生きた空間を、限定アーカイブ映像で何度でも目撃できます。",
-        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">C</div>,
-        returns: [
-            "プランBのすべて",
-            "舞台『場末のパイプドリーム』公演本編 限定アーカイブ（限定URL／パスコード）"
-        ]
-    },
-    {
-        id: 4,
-        name: "【マスターいつもの！さくらみち超常連客】プラン",
-        price: "30,000",
-        description: "作品のエンドロールにお名前を刻み、リアルな完成台本をお届けします。",
-        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">D</div>,
-        returns: [
-            "プランCのすべて",
-            "映画『盈虚とパイプドリーム』エンドクレジット等に支援者（Special Thanks）としてお名前記載（1名分）",
-            "映画『盈虚とパイプドリーム』のキャスト・監督サイン入り完成台本（製本版）"
-        ]
-    },
-    {
-        id: 5,
-        name: "【新しいの入れといて！さくらみちボトルキープ】プラン",
-        price: "60,000",
-        description: "映画劇中で実際に使用した「あなた名義のキープ札」と、映画のオンライン先行試写。",
-        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">E</div>,
-        returns: [
-            "プランDのすべて（台本等含む）",
-            "映画劇中に登場するボトルのボトルキープ札にお名前記載（1名分）※劇中で使用後、現物郵送",
-            "映画『盈虚とパイプドリーム』限定試写動画 視聴URL（完成後、オンライン／視聴期限1か月）"
-        ]
-    },
-    {
-        id: 6,
-        name: "【スナックさくらみち貸切・完成記念パーティーご招待！】プラン",
-        price: "100,000",
-        description: "聖地「さくらみち」で関係者と共に完成を祝う、特別なリアルイベントへご招待。",
-        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">F</div>,
-        returns: [
-            "プランEのすべて",
-            "映画の舞台となるスナック「さくらみち」（東京都稲城市）で行う試写会に、キャスト・スタッフと参加",
-            "完成記念パーティー／試写会ご招待"
-        ]
-    },
-    {
-        id: 7,
-        name: "【アソシエイトプロデューサー権】プラン",
-        price: "300,000",
-        description: "作品を根底から支え、共に創り上げる最高ランクのスポンサー権です。",
-        icon: <div className="text-[#ffbf00] font-bold text-lg leading-none w-5 h-5 flex items-center justify-center">G</div>,
-        returns: [
-            "プランFのすべて",
-            "映画のエンドクレジット等にアソシエイトプロデューサー（協賛）としてお名前記載（1名分）",
-            "法人・企業ロゴ掲載可"
-        ]
-    }
-];
-
-const MATRIX_FEATURES = [
-    { name: "お礼メール", tiers: [1, 2, 3, 4, 5, 6, 7] },
-    { name: "KV デジタルカード", tiers: [1, 2, 3, 4, 5, 6, 7] },
-    { name: "舞台KVサイン付カード", tiers: [1, 2, 3, 4, 5, 6, 7] },
-    { name: "舞台脚本(最終稿)PDFデータ", tiers: [2, 3, 4, 5, 6, 7] },
-    { name: "舞台デジタルフォトブック", tiers: [2, 3, 4, 5, 6, 7] },
-    { name: "舞台公演 限定アーカイブ", tiers: [3, 4, 5, 6, 7] },
-    { name: "映画のエンドロールお名前記載", tiers: [4, 5, 6, 7] },
-    { name: "映画のキャスト・監督サイン入り完成台本", tiers: [4, 5, 6, 7] },
-    { name: "映画劇中にあなた名義のキープ札(現物郵送)", tiers: [5, 6, 7] },
-    { name: "映画限定試写動画(オンライン)", tiers: [5, 6, 7] },
-    { name: "さくらみち試写会・パーティー参加", tiers: [6, 7] },
-    { name: "APクレジット・ロゴ掲載可", tiers: [7] }
-];
+import { TIERS, MOTION_GALLERY_URL } from "./data";
+import CrowdfundingMatrix from "../components/CrowdfundingMatrix";
+import { useCrowdfundingStatus } from "../hooks/useCrowdfundingStatus";
 
 export default function CrowdfundingPage() {
-    const [isMatrixOpen, setIsMatrixOpen] = useState(false);
-    const [showToast, setShowToast] = useState(false);
+    const isStarted = useCrowdfundingStatus();
 
     const handleDisabledClick = (e: React.MouseEvent) => {
-        e.preventDefault();
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 3000);
+        if (!isStarted) {
+            e.preventDefault();
+            const ev = new CustomEvent("show-toast-from-crowdfunding");
+            window.dispatchEvent(ev);
+        }
     };
 
     return (
@@ -154,16 +56,26 @@ export default function CrowdfundingPage() {
                         映画と舞台をまたにかけるこの挑戦を、<br className="md:hidden block" />ぜひ皆様と一緒に実現させてください。
                     </p>
 
-                    {/* Top CTA Button */}
-                    <div className="pt-4 w-full box-border flex justify-center">
+                    <div className="pt-4 w-full box-border flex flex-col md:flex-row items-center justify-center gap-4">
+                        <Link
+                            href="/guide"
+                            className="inline-flex items-center justify-center gap-2 w-full md:w-auto px-8 py-4 bg-[#ffbf00] text-zinc-950 transition-colors rounded font-bold tracking-widest text-sm box-border hover:bg-white shadow-[0_0_15px_rgba(255,191,0,0.3)]"
+                        >
+                            <FileText className="w-5 h-5 flex-shrink-0" />
+                            <span className="whitespace-pre-line break-words">初めての方へ：支援の流れを詳しく見る</span>
+                        </Link>
+                    </div>
+
+                    <div className="pt-2 w-full box-border flex justify-center">
                         <a
                             href="#"
-                            onClick={handleDisabledClick}
-                            className="inline-flex items-center justify-center gap-2 w-full md:w-auto px-8 py-4 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors rounded font-bold tracking-widest text-sm box-border cursor-not-allowed"
-                            data-future-href={MOTION_GALLERY_URL}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                document.getElementById("tiers-list")?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            className="inline-flex items-center justify-center gap-2 w-full md:w-auto px-8 py-4 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors rounded font-bold tracking-widest text-sm box-border hover:bg-zinc-700 hover:text-white"
                         >
-                            <Clock className="w-5 h-5 flex-shrink-0" />
-                            <span className="whitespace-pre-line break-words">2026/4/1 12:00 START</span>
+                            <span className="whitespace-pre-line break-words">リターン（特典）を直接見る</span>
                         </a>
                     </div>
                 </header>
@@ -171,7 +83,7 @@ export default function CrowdfundingPage() {
                 <div className="w-full h-px bg-zinc-800 my-8 box-border" />
 
                 {/* Tiers List */}
-                <section className="w-full space-y-8 box-border">
+                <section id="tiers-list" className="w-full space-y-8 box-border">
                     <div className="w-full text-center space-y-2 mb-6 box-border">
                         <h2 className="text-xl font-bold text-[#ffbf00] tracking-widest whitespace-pre-line break-words">リターンメニュー</h2>
                         <p className="text-zinc-500 text-xs tracking-widest whitespace-pre-line break-words">お好きなプランをお選びください</p>
@@ -237,122 +149,65 @@ export default function CrowdfundingPage() {
                         皆様のご来店、<br className="md:hidden block" />心よりお待ちしております
                     </h2>
                     <div className="w-full box-border flex justify-center">
-                        <a
-                            href="#"
-                            onClick={handleDisabledClick}
-                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors rounded font-bold tracking-widest text-sm box-border cursor-not-allowed"
-                            data-future-href={MOTION_GALLERY_URL}
-                        >
-                            <Clock className="w-5 h-5 flex-shrink-0" />
-                            <span className="whitespace-pre-line break-words">2026/4/1 12:00 START</span>
-                        </a>
+                        {isStarted ? (
+                            <a
+                                href={MOTION_GALLERY_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#ffbf00] text-zinc-950 transition-colors rounded font-bold tracking-widest text-sm box-border hover:bg-white shadow-[0_0_15px_rgba(255,191,0,0.3)]"
+                            >
+                                <span className="whitespace-pre-line break-words">MotionGalleryで支援する</span>
+                                <ExternalLink className="w-4 h-4 flex-shrink-0" />
+                            </a>
+                        ) : (
+                            <a
+                                href="#"
+                                onClick={handleDisabledClick}
+                                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors rounded font-bold tracking-widest text-sm box-border cursor-not-allowed"
+                            >
+                                <Clock className="w-5 h-5 flex-shrink-0" />
+                                <span className="whitespace-pre-line break-words">2026/4/1 12:00 START</span>
+                            </a>
+                        )}
                     </div>
                 </div>
 
             </div>
 
-            {/* Floating Action Button (FAB) for Matrix */}
-            <button
-                onClick={() => setIsMatrixOpen(true)}
-                className="fixed bottom-6 right-6 z-40 bg-[#ffbf00] text-zinc-950 w-20 h-20 md:w-24 md:h-24 rounded-full shadow-[0_0_20px_rgba(255,191,0,0.4)] hover:bg-white hover:scale-105 transition-all duration-300 flex flex-col items-center justify-center gap-0.5 font-bold tracking-widest leading-none pointer-events-auto"
-            >
-                <span className="text-[10px] md:text-xs">各プランの</span>
-                <span className="text-sm md:text-base flex items-center gap-1 mt-0.5">
-                    <List className="w-3 h-3 md:w-4 md:h-4" />
-                    比較
-                </span>
-            </button>
-
-            {/* Matrix Modal */}
-            {isMatrixOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 box-border">
-                    <div
-                        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-                        onClick={() => setIsMatrixOpen(false)}
-                    />
-                    <div className="relative w-full max-w-5xl max-h-[90vh] bg-zinc-900 border border-zinc-800 rounded-lg shadow-2xl flex flex-col overflow-hidden">
-
-                        <div className="flex items-center justify-between p-4 md:p-6 border-b border-zinc-800 bg-zinc-950 shrink-0">
-                            <div>
-                                <h3 className="text-lg md:text-xl font-bold text-[#ffbf00] tracking-widest">特典比較一覧表</h3>
-                                <p className="text-zinc-500 text-xs mt-1">横にスクロールして全プランをご覧いただけます</p>
-                            </div>
-                            <button
-                                onClick={() => setIsMatrixOpen(false)}
-                                className="p-2 bg-zinc-900 hover:bg-zinc-800 rounded-full text-zinc-400 hover:text-white transition-colors"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        <div className="w-full flex-1 overflow-auto bg-zinc-950">
-                            <table className="w-full text-left border-collapse text-xs md:text-sm whitespace-nowrap">
-                                <thead className="bg-zinc-900 sticky top-0 z-20 shadow-md">
-                                    <tr>
-                                        <th className="p-3 md:p-4 border-b border-zinc-800 font-bold tracking-wider text-zinc-400 sticky left-0 z-30 bg-zinc-900 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)]">
-                                            特典項目
-                                        </th>
-                                        {TIERS.map((tier) => (
-                                            <th key={tier.id} className="p-3 md:p-4 border-b border-zinc-800 text-center min-w-[120px]">
-                                                <div className="text-[#ffbf00] font-bold">プラン {String.fromCharCode(64 + tier.id)}</div>
-                                                <div className="text-zinc-300 text-[10px] md:text-xs">¥{tier.price}</div>
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {MATRIX_FEATURES.map((feature, idx) => (
-                                        <tr key={idx} className="hover:bg-zinc-900/50 transition-colors border-b border-zinc-800/50">
-                                            <td className="p-3 md:p-4 text-zinc-300 tracking-wide sticky left-0 z-10 bg-zinc-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.5)]">
-                                                {feature.name}
-                                            </td>
-                                            {TIERS.map((tier) => {
-                                                const hasFeature = feature.tiers.includes(tier.id);
-                                                return (
-                                                    <td key={tier.id} className="p-3 md:p-4 text-center">
-                                                        {hasFeature ? (
-                                                            <Check className="w-4 h-4 text-[#ffbf00] mx-auto" />
-                                                        ) : (
-                                                            <span className="text-zinc-700">-</span>
-                                                        )}
-                                                    </td>
-                                                );
-                                            })}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="p-4 bg-zinc-950 border-t border-zinc-800 shrink-0 text-center">
-                            <a
-                                href="#"
-                                onClick={handleDisabledClick}
-                                className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors text-xs font-bold tracking-widest rounded-sm cursor-not-allowed"
-                                data-future-href={MOTION_GALLERY_URL}
-                            >
-                                <Clock className="w-4 h-4 flex-shrink-0" />
-                                2026/4/1 12:00 START
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Disabled Toast Notification */}
-            <AnimatePresence>
-                {showToast && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 50, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        className="fixed bottom-32 md:bottom-32 left-1/2 -translate-x-1/2 z-[60] bg-zinc-800 text-white px-6 py-3 rounded-full shadow-lg border border-zinc-700 flex items-center gap-3 text-sm tracking-widest whitespace-nowrap"
-                    >
-                        <Clock className="w-4 h-4 text-[#ffbf00]" />
-                        <span>開始までお待ちください</span>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {/* Extracted Crowdfunding Matrix (provides both FAB & Modal & Toast) */}
+            <CrowdfundingMatrix showInlineTrigger={false} />
+            
+            {/* Disabled Toast Notification for Inline buttons */}
+            <ToastListener />
         </main>
+    );
+}
+
+// Simple wrapper component to listen to custom events from inline buttons 
+// and show the disabled toast, so we don't have to rewrite the entire tree context.
+function ToastListener() {
+    const [showToast, setShowToast] = useState(false);
+
+    if (typeof window !== "undefined") {
+        window.addEventListener("show-toast-from-crowdfunding", () => {
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 3000);
+        });
+    }
+
+    return (
+        <AnimatePresence>
+            {showToast && (
+                <motion.div
+                    initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                    className="fixed bottom-32 md:bottom-32 left-1/2 -translate-x-1/2 z-[60] bg-zinc-800 text-white px-6 py-3 rounded-full shadow-lg border border-zinc-700 flex items-center gap-3 text-sm tracking-widest whitespace-nowrap"
+                >
+                    <Clock className="w-4 h-4 text-[#ffbf00]" />
+                    <span>開始までお待ちください</span>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
