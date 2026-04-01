@@ -7,14 +7,17 @@ import { ChevronLeft, ExternalLink, Gift, FileText, Video, PlayCircle, Users, Im
 
 import { TIERS, MOTION_GALLERY_URL } from "./data";
 import CrowdfundingMatrix from "../components/CrowdfundingMatrix";
+import { useCrowdfundingStatus } from "../hooks/useCrowdfundingStatus";
 
 export default function CrowdfundingPage() {
+    const isStarted = useCrowdfundingStatus();
+
     const handleDisabledClick = (e: React.MouseEvent) => {
-        e.preventDefault();
-        // Disabling logic is now partially inside matrix, but we keep this handler for the 
-        // inline buttons here on the page layout.
-        const ev = new CustomEvent("show-toast-from-crowdfunding");
-        window.dispatchEvent(ev);
+        if (!isStarted) {
+            e.preventDefault();
+            const ev = new CustomEvent("show-toast-from-crowdfunding");
+            window.dispatchEvent(ev);
+        }
     };
 
     return (
@@ -146,15 +149,26 @@ export default function CrowdfundingPage() {
                         皆様のご来店、<br className="md:hidden block" />心よりお待ちしております
                     </h2>
                     <div className="w-full box-border flex justify-center">
-                        <a
-                            href="#"
-                            onClick={handleDisabledClick}
-                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors rounded font-bold tracking-widest text-sm box-border cursor-not-allowed"
-                            data-future-href={MOTION_GALLERY_URL}
-                        >
-                            <Clock className="w-5 h-5 flex-shrink-0" />
-                            <span className="whitespace-pre-line break-words">2026/4/1 12:00 START</span>
-                        </a>
+                        {isStarted ? (
+                            <a
+                                href={MOTION_GALLERY_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#ffbf00] text-zinc-950 transition-colors rounded font-bold tracking-widest text-sm box-border hover:bg-white shadow-[0_0_15px_rgba(255,191,0,0.3)]"
+                            >
+                                <span className="whitespace-pre-line break-words">MotionGalleryで支援する</span>
+                                <ExternalLink className="w-4 h-4 flex-shrink-0" />
+                            </a>
+                        ) : (
+                            <a
+                                href="#"
+                                onClick={handleDisabledClick}
+                                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors rounded font-bold tracking-widest text-sm box-border cursor-not-allowed"
+                            >
+                                <Clock className="w-5 h-5 flex-shrink-0" />
+                                <span className="whitespace-pre-line break-words">2026/4/1 12:00 START</span>
+                            </a>
+                        )}
                     </div>
                 </div>
 

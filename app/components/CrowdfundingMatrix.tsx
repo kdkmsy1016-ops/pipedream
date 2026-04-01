@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { List, X, Clock, Check } from "lucide-react";
+import { List, X, Clock, Check, ExternalLink } from "lucide-react";
 import { TIERS, MATRIX_FEATURES, MOTION_GALLERY_URL } from "../crowdfunding/data";
+import { useCrowdfundingStatus } from "../hooks/useCrowdfundingStatus";
 
 interface CrowdfundingMatrixProps {
     showInlineTrigger?: boolean;
@@ -13,10 +14,14 @@ export default function CrowdfundingMatrix({ showInlineTrigger = false }: Crowdf
     const [isMatrixOpen, setIsMatrixOpen] = useState(false);
     const [showToast, setShowToast] = useState(false);
 
+    const isStarted = useCrowdfundingStatus();
+
     const handleDisabledClick = (e: React.MouseEvent) => {
-        e.preventDefault();
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 3000);
+        if (!isStarted) {
+            e.preventDefault();
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 3000);
+        }
     };
 
     return (
@@ -111,15 +116,26 @@ export default function CrowdfundingMatrix({ showInlineTrigger = false }: Crowdf
 
                         {/* Modal Footer CTA */}
                         <div className="p-4 bg-zinc-950 border-t border-zinc-800 shrink-0 text-center">
-                            <a
-                                href="#"
-                                onClick={handleDisabledClick}
-                                className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors text-xs font-bold tracking-widest rounded-sm cursor-not-allowed"
-                                data-future-href={MOTION_GALLERY_URL}
-                            >
-                                <Clock className="w-4 h-4 flex-shrink-0" />
-                                2026/4/1 12:00 START
-                            </a>
+                            {isStarted ? (
+                                <a
+                                    href={MOTION_GALLERY_URL}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-[#ffbf00] text-zinc-950 hover:bg-white transition-colors text-xs md:text-sm font-bold tracking-widest rounded-sm shadow-[0_0_15px_rgba(255,191,0,0.3)]"
+                                >
+                                    MotionGalleryで支援する
+                                    <ExternalLink className="w-4 h-4 ml-1" />
+                                </a>
+                            ) : (
+                                <a
+                                    href="#"
+                                    onClick={handleDisabledClick}
+                                    className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-zinc-800 text-zinc-400 border border-zinc-700 transition-colors text-xs font-bold tracking-widest rounded-sm cursor-not-allowed"
+                                >
+                                    <Clock className="w-4 h-4 flex-shrink-0" />
+                                    2026/4/1 12:00 START
+                                </a>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -4,14 +4,19 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronDown, Check, Info, Mail, UserPlus, LogIn, Gift, CreditCard, ChevronRight, AlertCircle, Clock, ExternalLink } from "lucide-react";
+import { useCrowdfundingStatus } from "../hooks/useCrowdfundingStatus";
+import { MOTION_GALLERY_URL } from "../crowdfunding/data";
 
 export default function HowToPage() {
     const [showToast, setShowToast] = useState(false);
+    const isStarted = useCrowdfundingStatus();
 
     const handleDisabledClick = (e: React.MouseEvent) => {
-        e.preventDefault();
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 3000);
+        if (!isStarted) {
+            e.preventDefault();
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 3000);
+        }
     };
 
     return (
@@ -161,17 +166,32 @@ export default function HowToPage() {
                     <span className="text-sm tracking-widest font-bold">以上の手順で支援完了です</span>
                 </div>
                 
-                <a
-                    href="#"
-                    onClick={handleDisabledClick}
-                    className="flex flex-col items-center justify-center gap-1 w-full p-6 bg-[#ffbf00] text-zinc-950 transition-colors rounded-sm font-bold tracking-widest box-border hover:bg-white shadow-[0_0_20px_rgba(255,191,0,0.5)]"
-                >
-                    <span className="text-xs md:text-sm">クラウドファンディング会場へ戻る</span>
-                    <span className="text-xl md:text-2xl flex items-center gap-2 mt-1">
-                        <Clock className="w-6 h-6" />
-                        2026/4/1 12:00 START
-                    </span>
-                </a>
+                {isStarted ? (
+                    <a
+                        href={MOTION_GALLERY_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center justify-center gap-1 w-full p-6 bg-[#ffbf00] text-zinc-950 transition-colors rounded-sm font-bold tracking-widest box-border hover:bg-white shadow-[0_0_20px_rgba(255,191,0,0.5)]"
+                    >
+                        <span className="text-sm md:text-base">支援先ページへ</span>
+                        <span className="text-base md:text-xl flex items-center gap-2 mt-1">
+                            MotionGalleryで支援する
+                            <ExternalLink className="w-5 h-5 flex-shrink-0" />
+                        </span>
+                    </a>
+                ) : (
+                    <a
+                        href="#"
+                        onClick={handleDisabledClick}
+                        className="flex flex-col items-center justify-center gap-1 w-full p-6 bg-[#ffbf00] text-zinc-950 transition-colors rounded-sm font-bold tracking-widest box-border hover:bg-white shadow-[0_0_20px_rgba(255,191,0,0.5)] cursor-not-allowed"
+                    >
+                        <span className="text-xs md:text-sm">クラウドファンディング会場へ戻る</span>
+                        <span className="text-xl md:text-2xl flex items-center gap-2 mt-1">
+                            <Clock className="w-6 h-6" />
+                            2026/4/1 12:00 START
+                        </span>
+                    </a>
+                )}
             </div>
 
             {/* Disabled Toast Notification */}
