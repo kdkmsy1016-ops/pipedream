@@ -126,15 +126,26 @@ export default function CrowdfundingPage() {
                                 </div>
 
                                 <div className="w-full box-border">
-                                    <a
-                                        href="#"
-                                        onClick={handleDisabledClick}
-                                        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-800/50 border border-zinc-800 text-zinc-500 transition-colors text-sm font-bold tracking-widest rounded box-border cursor-not-allowed"
-                                        data-future-href={MOTION_GALLERY_URL}
-                                    >
-                                        <Clock className="w-4 h-4 flex-shrink-0" />
-                                        <span className="whitespace-pre-line break-words">2026/4/1 12:00 START</span>
-                                    </a>
+                                    {isStarted ? (
+                                        <a
+                                            href={(tier as any).url || MOTION_GALLERY_URL}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#ffbf00] border border-[#ffbf00] text-zinc-950 transition-colors text-sm font-bold tracking-widest rounded box-border hover:bg-white shadow-[0_0_15px_rgba(255,191,0,0.3)]"
+                                        >
+                                            <span className="whitespace-pre-line break-words pl-1">このプランで支援する</span>
+                                            <ExternalLink className="w-4 h-4 flex-shrink-0" />
+                                        </a>
+                                    ) : (
+                                        <a
+                                            href="#"
+                                            onClick={handleDisabledClick}
+                                            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-800/50 border border-zinc-800 text-zinc-500 transition-colors text-sm font-bold tracking-widest rounded box-border cursor-not-allowed"
+                                        >
+                                            <Clock className="w-4 h-4 flex-shrink-0" />
+                                            <span className="whitespace-pre-line break-words">2026/4/1 12:00 START</span>
+                                        </a>
+                                    )}
                                 </div>
                             </div>
                         ))}
