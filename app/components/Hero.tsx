@@ -7,26 +7,22 @@ import HeroButton from "./HeroButton";
 
 export default function Hero() {
     return (
-        <section className="relative w-full h-[100svh] overflow-hidden bg-zinc-950">
+        <section className="relative w-full min-h-[100svh] flex flex-col items-center justify-start bg-zinc-950 pt-20 pb-10 box-border overflow-hidden">
+            
             {/* Background Image (User's attached image) */}
-            <div className="absolute inset-0 z-0">
+            <div className="w-full max-w-7xl mx-auto flex-shrink-0 animate-in fade-in duration-1000">
                 <Image
                     src="/hero-bg.png"
                     alt="盈虚とパイプドリーム"
-                    fill
-                    className="object-cover object-center lg:object-[center_30%]"
+                    width={1920}
+                    height={1080}
+                    className="w-full h-auto object-contain"
                     priority
                     sizes="100vw"
                 />
-                {/* 
-                  Bottom Gradient Overlay 
-                  Fades to dark only at the bottom to ensure the CTA button is visible,
-                  while keeping the image's logo and text completely clear.
-                */}
-                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/40 to-transparent" />
             </div>
 
-            {/* SEO Hidden Text (Since the image contains the typography) */}
+            {/* SEO Hidden Text */}
             <div className="sr-only">
                 <h1>盈虚とパイプドリーム Phases of a Pipe Dream</h1>
                 <p>私たちは『不要不急』の中で、夢を見た。</p>
@@ -34,8 +30,8 @@ export default function Hero() {
                 <p>映画プロジェクト始動</p>
             </div>
 
-            {/* Content Container (Centered CTA at bottom) */}
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-32 lg:pb-24 px-6 box-border">
+            {/* Content Container (Below the Image) */}
+            <div className="w-full flex-1 flex flex-col items-center justify-center px-6 mt-8 md:mt-12 box-border">
                 {/* Crowdfunding CTA */}
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
@@ -57,7 +53,7 @@ export default function Hero() {
 
             {/* Scroll Indicator */}
             <motion.div
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 pointer-events-none lg:bottom-8"
+                className="mt-12 flex flex-col items-center gap-1 pointer-events-none"
                 initial={{ opacity: 0, y: 0 }}
                 animate={{ opacity: 1, y: [0, 6, 0] }}
                 transition={{
