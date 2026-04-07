@@ -69,28 +69,7 @@ export default function Introduction() {
                     </p>
                 </motion.div>
 
-                {/* Navigation Buttons */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1.5, delay: 0.8 }}
-                    className="pt-16 flex flex-col md:flex-row items-center justify-center gap-4 w-full"
-                >
-                    <Link
-                        href="/crowdfunding"
-                        className="group relative w-full md:w-auto px-8 py-4 border border-foreground/30 text-foreground/80 font-serif tracking-widest text-sm transition-all hover:bg-foreground hover:text-background hover:border-transparent text-center uppercase"
-                    >
-                        映画『盈虚とパイプドリーム』詳細
-                    </Link>
 
-                    <Link
-                        href="/stage"
-                        className="group relative w-full md:w-auto px-8 py-4 border border-foreground/30 text-foreground/80 font-serif tracking-widest text-sm transition-all hover:bg-foreground hover:text-background hover:border-transparent text-center uppercase"
-                    >
-                        舞台『場末のパイプドリーム』詳細
-                    </Link>
-                </motion.div>
 
             </div>
         </section>

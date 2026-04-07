@@ -6,6 +6,7 @@ import Hero from "./components/Hero";
 import LineSection from "./components/LineSection";
 import StageSection from "./components/StageSection";
 import Introduction from "./components/Introduction";
+import AboutFilm from "./components/AboutFilm";
 import NoSSR from "./components/NoSSR";
 import SplashScreen from "./components/SplashScreen";
 import ContactSection from "./components/ContactSection";
@@ -25,8 +26,9 @@ export default function Home() {
       <NoSSR>
         <Hero />
         <Introduction />
-        <LineSection />
+        <AboutFilm />
         <StageSection />
+        <LineSection />
         <ContactSection />
         <FloatingStageLink />
       </NoSSR>

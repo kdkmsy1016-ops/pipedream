@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { Gift } from "lucide-react";
+import HeroButton from "./HeroButton";
 
 export default function LineSection() {
     return (
@@ -13,27 +14,24 @@ export default function LineSection() {
                 transition={{ duration: 0.8 }}
                 className="max-w-7xl mx-auto w-full flex flex-col items-center"
             >
-                <div className="max-w-md w-full text-center space-y-8">
+                <div className="max-w-md w-full text-center space-y-8 flex flex-col items-center">
                     <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-accent tracking-widest text-shadow-glow">
                         映画プロジェクト始動
                     </h2>
 
                     <p className="text-foreground/80 leading-loose text-sm md:text-base lg:text-lg font-serif">
-                        2026年4月、クラウドファンディング開始。<br className="block md:hidden" />
-                        制作の裏側や限定情報を<br className="block md:hidden" />LINEでお届けします。
+                        この映画を完成させ、皆様に届けるために。<br className="hidden md:block" />
+                        現在クラウドファンディングを実施中です。
                     </p>
 
-                    <a
-                        href="https://lin.ee/LChtOnm"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 w-full bg-[#06c755] hover:bg-[#05b34c] text-white rounded-sm transition-all duration-300"
-                    >
-                        <MessageCircle size={24} />
-                        <span className="font-bold tracking-wider">LINE公式アカウントを登録</span>
-                        <div className="absolute inset-0 border border-white/20 group-hover:scale-105 transition-transform duration-300 pointer-events-none" />
-                    </a>
-
+                    <div className="pt-4 flex justify-center w-full">
+                        <HeroButton
+                            href="/crowdfunding"
+                            icon={Gift}
+                            label="プロジェクト詳細を見る（MotionGallery）"
+                            variant="gold"
+                        />
+                    </div>
                 </div>
             </motion.div>
         </section>

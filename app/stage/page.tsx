@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion, Variants, AnimatePresence } from "framer-motion";
 import DynamicTicketButton from "../components/DynamicTicketButton";
 import LineSection from "../components/LineSection";
-import FloatingTicketButton from "../components/FloatingTicketButton";
+
 import ContactSection from "../components/ContactSection";
 
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -257,79 +257,7 @@ export default function StagePage() {
                         </div>
                     </div>
                 </Section>
-                {/* Time Table */}
-                <Section>
-                    <SectionTitle>Time Table</SectionTitle>
-                    <div className="max-w-xl mx-auto space-y-12">
-                        {/* Schedule List */}
-                        <div className="space-y-6 font-serif tracking-widest">
-                            {[
-                                { date: "4.3 (Fri)", times: ["13:00", "18:00"] },
-                                { date: "4.4 (Sat)", times: ["13:00", "18:00"] },
-                                { date: "4.5 (Sun)", times: ["12:00", "16:00"] },
-                            ].map((schedule, i) => (
-                                <div key={i} className="flex justify-between items-baseline border-b border-white/10 pb-2">
-                                    <div className="text-2xl md:text-3xl font-bold text-white/90">
-                                        {schedule.date}
-                                    </div>
-                                    <div className="flex gap-6 text-lg md:text-xl text-accent/80">
-                                        {schedule.times.map((time, j) => (
-                                            <span key={j}>{time}</span>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
 
-                        {/* Note & CTA */}
-                        <div className="text-center space-y-8">
-                            <p className="text-s text-gray-500 tracking-wide">
-                                ※受付開始は開演の45分前、開場は30分前
-                            </p>
-
-                            <DynamicTicketButton
-                                className="w-full max-w-md mx-auto"
-                                releasedLabel="BUY TICKET"
-                                preReleaseLabel={`チケット予約はこちら\n（2/21 21:00受付開始）`}
-                            />
-                            <div className="bg-white/5 p-8 rounded-sm space-y-6 max-w-lg mx-auto">
-                                <div className="space-y-2 text-gray-300">
-                                    <div className="flex justify-between border-b border-white/10 pb-2">
-                                        <span>前売り / 当日</span>
-                                        <span>4,000円</span>
-                                    </div>
-                                    <div className="flex justify-between border-b border-white/10 pb-2">
-                                        <span>アフタートーク付き</span>
-                                        <span>5,000円</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Section>
-                {/* Access */}
-                <Section className="text-center space-y-8">
-                    <SectionTitle>ACCESS</SectionTitle>
-
-                    <div className="space-y-2">
-                        <p className="text-lg md:text-xl font-bold">下北沢 小劇場 楽園</p>
-                        <p className="text-gray-300">〒155-0031 東京都世田谷区北沢2丁目10-18</p>
-                        <p className="text-accent text-sm md:text-base">下北沢駅 小田急線・京王井の頭線 東口より徒歩約3分</p>
-                    </div>
-
-                    <div className="w-full h-[400px] border border-accent rounded-sm overflow-hidden">
-                        <iframe
-                            src="https://maps.google.com/maps?q=下北沢+小劇場+楽園&t=&z=17&ie=UTF8&iwloc=&output=embed"
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0 }}
-                            allowFullScreen
-                            loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"
-                            title="Theater Map"
-                        ></iframe>
-                    </div>
-                </Section>
             </div>
 
             {/* Contact Section */}
@@ -341,7 +269,7 @@ export default function StagePage() {
             </div>
 
 
-            <FloatingTicketButton />
+
 
             {/* Gallery Lightbox */}
             <AnimatePresence>
