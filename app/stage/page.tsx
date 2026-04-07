@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion, Variants, AnimatePresence } from "framer-motion";
 import DynamicTicketButton from "../components/DynamicTicketButton";
 import LineSection from "../components/LineSection";
-import FloatingTicketButton from "../components/FloatingTicketButton";
+
 import ContactSection from "../components/ContactSection";
 
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -341,7 +341,7 @@ export default function StagePage() {
             </div>
 
 
-            <FloatingTicketButton />
+
 
             {/* Gallery Lightbox */}
             <AnimatePresence>
