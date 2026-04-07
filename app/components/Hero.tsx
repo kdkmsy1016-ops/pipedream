@@ -1,103 +1,58 @@
 "use client";
 
 import Image from "next/image";
-import { MessageCircle, Ticket, Gift } from "lucide-react";
+import { Gift } from "lucide-react";
 import { motion } from "framer-motion";
 import HeroButton from "./HeroButton";
-import DynamicTicketButton from "./DynamicTicketButton";
 
 export default function Hero() {
     return (
-        <section className="relative w-full h-[100svh] overflow-hidden bg-background">
-            {/* Background Image */}
+        <section className="relative w-full h-[100svh] overflow-hidden bg-zinc-950">
+            {/* Background Image (User's attached image) */}
             <div className="absolute inset-0 z-0">
                 <Image
                     src="/hero-bg.png"
-                    alt="Atmospheric Film Noir Background"
+                    alt="盈虚とパイプドリーム"
                     fill
-                    className="object-cover object-center"
+                    className="object-cover object-center lg:object-[center_30%]"
                     priority
                     sizes="100vw"
                 />
-                {/* Dark Overlay with Gradient */}
-                <div className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/90 via-black/40 to-black/30" />
+                {/* 
+                  Bottom Gradient Overlay 
+                  Fades to dark only at the bottom to ensure the CTA button is visible,
+                  while keeping the image's logo and text completely clear.
+                */}
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/40 to-transparent" />
             </div>
 
-            {/* Content Container */}
-            <div className="absolute inset-0 z-10 flex items-center justify-center px-6 py-4 lg:p-6">
-                <div className="max-w-7xl w-full h-full lg:h-auto flex flex-col lg:flex-row justify-between lg:justify-between items-center lg:items-end py-6 lg:py-0 gap-4 lg:gap-8">
+            {/* SEO Hidden Text (Since the image contains the typography) */}
+            <div className="sr-only">
+                <h1>盈虚とパイプドリーム Phases of a Pipe Dream</h1>
+                <p>私たちは『不要不急』の中で、夢を見た。</p>
+                <p>脚本: 福井 将真 / 監督: 久高 将也</p>
+                <p>映画プロジェクト始動</p>
+            </div>
 
-                    {/* Left: Film Section */}
-                    {/* Mobile: Top half, flexible height. Desktop: Left side */}
-                    <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-2 lg:space-y-6 w-full lg:w-1/2 justify-center lg:justify-start flex-1 lg:flex-auto">
-                        <div className="space-y-2 lg:space-y-4">
-                            <span className="inline-block px-2 py-0.5 lg:px-3 lg:py-1 text-[10px] lg:text-xs font-serif border border-white/30 rounded-full text-white/80 tracking-widest mb-1 lg:mb-2">
-                                映画
-                            </span>
-
-                            {/* Credits: Compact on mobile */}
-                            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 lg:gap-x-6 gap-y-1 text-white/90 font-serif text-sm lg:text-base tracking-widest">
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-[10px] lg:text-xs text-white/50">脚本</span>
-                                    <span>福井 将真</span>
-                                </div>
-                                <div className="hidden sm:block w-[1px] h-3 bg-white/20" />
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-[10px] lg:text-xs text-white/50">監督</span>
-                                    <span>久高 将也</span>
-                                </div>
-                            </div>
-
-                            <h1
-                                className="font-bold font-serif text-white leading-tight tracking-tighter pt-1 lg:pt-2"
-                                style={{ fontSize: "clamp(1.75rem, 5vw, 4rem)" }}
-                            >
-                                <ruby>盈虚<rt className="text-[0.3em] text-white/80 font-normal">えいきょ</rt></ruby>と<br className="lg:hidden" />パイプドリーム
-                            </h1>
-
-                            {/* Project Announcement */}
-                            <div className="pt-2 lg:pt-4 space-y-1 lg:space-y-2 font-serif">
-                                <p className="text-accent font-bold tracking-widest text-sm lg:text-xl">
-                                    映画プロジェクト始動
-                                </p>
-                            </div>
-                        </div>
-
-                        <HeroButton
-                            href="/crowdfunding"
-                            icon={Gift}
-                            label="クラウドファンディング実施中"
-                            variant="gold"
-                        />
-                    </div>
-
-                    {/* Divider for Mobile (Minimal or removed to save space) */}
-                    {/* <div className="w-12 h-[1px] bg-white/10 lg:hidden" /> */}
-
-                    {/* Right: Stage Section */}
-                    {/* Mobile: Bottom half. Desktop: Right side */}
-                    <div className="flex flex-col items-center lg:items-end text-center lg:text-right space-y-2 lg:space-y-6 w-full lg:w-1/2 justify-center lg:justify-end flex-1 lg:flex-auto">
-                        <div className="space-y-2 lg:space-y-4 flex flex-col items-center lg:items-end">
-                            <div className="pt-1 lg:pt-2 flex flex-col items-center lg:items-end">
-                                <span className="inline-block px-2 py-0.5 lg:px-3 lg:py-1 text-[10px] lg:text-xs font-serif border border-white/30 rounded-full text-white/80 tracking-widest mb-1 lg:mb-2">
-                                    二人芝居
-                                </span>
-                                <h2
-                                    className="font-bold font-serif text-white leading-tight tracking-tighter mb-1 lg:mb-2"
-                                    style={{ fontSize: "clamp(1.75rem, 5vw, 4rem)" }}
-                                >
-                                    場末の<br className="lg:hidden" />パイプドリーム
-                                </h2>
-                                <p className="text-accent font-bold tracking-tighter text-xs lg:text-base whitespace-nowrap font-serif">
-                                    2026.4.3(Fri) - 4.5(Sun) at 下北沢 小劇場 楽園
-                                </p>
-                            </div>
-                        </div>
-
-                        <DynamicTicketButton />
-                    </div>
-
-                </div>
+            {/* Content Container (Centered CTA at bottom) */}
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-32 lg:pb-24 px-6 box-border">
+                {/* Crowdfunding CTA */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 1.0 }}
+                    className="flex flex-col items-center space-y-4 max-w-sm w-full"
+                >
+                    <p className="text-[#ffbf00] font-bold tracking-widest text-sm lg:text-base font-serif drop-shadow-md">
+                        映画プロジェクト始動
+                    </p>
+                    <HeroButton
+                        href="/crowdfunding"
+                        icon={Gift}
+                        label="クラウドファンディング実施中"
+                        variant="gold"
+                    />
+                </motion.div>
             </div>
 
             {/* Scroll Indicator */}
@@ -106,12 +61,12 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 0 }}
                 animate={{ opacity: 1, y: [0, 6, 0] }}
                 transition={{
-                    opacity: { delay: 2.5, duration: 1.0 },
+                    opacity: { delay: 1.5, duration: 1.0 },
                     y: { duration: 2.0, repeat: Infinity, ease: "easeInOut" }
                 }}
             >
-                <span className="text-[10px] tracking-[0.2em] text-white/50 uppercase font-serif">Scroll</span>
-                <div className="w-[1px] h-8 bg-white/40" />
+                <span className="text-[10px] tracking-[0.2em] text-white/50 uppercase font-serif drop-shadow-md">Scroll</span>
+                <div className="w-[1px] h-8 bg-white/40 shadow-sm" />
             </motion.div>
         </section>
     );
