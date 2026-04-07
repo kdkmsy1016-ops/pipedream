@@ -18,7 +18,8 @@ export default function Navigation() {
     const menuItems = [
         { label: "Top", href: "/" },
         { label: "Introduction", href: "/#introduction" },
-        { label: "Film", href: "/crowdfunding" },
+        { label: "About Film", href: "/#about-film" },
+        { label: "Crowdfunding", href: "/crowdfunding" },
         { label: "Stage", href: "/stage" },
         { label: "Contact", href: "/contact" },
     ];

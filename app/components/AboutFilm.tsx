@@ -6,7 +6,7 @@ import HeroButton from "./HeroButton";
 
 export default function AboutFilm() {
     return (
-        <section className="bg-background py-24 px-6 md:py-32 flex flex-col items-center">
+        <section id="about-film" className="bg-background py-24 px-6 md:py-32 flex flex-col items-center">
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
