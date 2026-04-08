@@ -7,19 +7,20 @@ import HeroButton from "./HeroButton";
 
 export default function Hero() {
     return (
-        <section className="relative w-full min-h-[100svh] flex flex-col items-center justify-start bg-zinc-950 pt-20 pb-10 box-border overflow-hidden">
+        <section className="relative w-full min-h-[100svh] flex flex-col items-center justify-start bg-black pb-10 box-border overflow-hidden">
             
             {/* Background Image (User's attached image) */}
-            <div className="w-full max-w-7xl mx-auto flex-shrink-0 animate-in fade-in duration-1000">
+            <div className="w-full flex-shrink-0 animate-in fade-in duration-1000 relative">
                 <Image
                     src="/hero-bg.png"
                     alt="盈虚とパイプドリーム"
                     width={1920}
                     height={1080}
-                    className="w-full h-auto object-contain"
+                    className="w-full h-auto object-cover"
                     priority
                     sizes="100vw"
                 />
+                <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-black to-transparent pointer-events-none" />
             </div>
 
             {/* SEO Hidden Text */}
