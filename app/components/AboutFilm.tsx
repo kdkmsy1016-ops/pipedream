@@ -24,7 +24,7 @@ export default function AboutFilm() {
                 </div>
 
                 <div 
-                    className="space-y-8 text-foreground/80 leading-loose font-serif text-base md:text-lg lg:text-xl text-justify md:text-center max-w-3xl mx-auto"
+                    className="space-y-8 text-foreground/80 leading-loose font-serif text-base md:text-lg lg:text-xl px-8 md:px-0 text-center max-w-3xl mx-auto"
                     style={{ wordBreak: "keep-all", overflowWrap: "anywhere" }}
                 >
                     <p>
