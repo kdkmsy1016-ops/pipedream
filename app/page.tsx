@@ -1,28 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { AnimatePresence } from "framer-motion";
 import Hero from "./components/Hero";
 import LineSection from "./components/LineSection";
 import StageSection from "./components/StageSection";
 import Introduction from "./components/Introduction";
 import AboutFilm from "./components/AboutFilm";
 import NoSSR from "./components/NoSSR";
-import SplashScreen from "./components/SplashScreen";
 import ContactSection from "./components/ContactSection";
 import FloatingStageLink from "./components/FloatingStageLink";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-
   return (
     <main className="flex min-h-screen flex-col bg-background text-foreground overflow-x-hidden">
-      <AnimatePresence>
-        {isLoading && (
-          <SplashScreen key="splash" onFinish={() => setIsLoading(false)} />
-        )}
-      </AnimatePresence>
-
       <NoSSR>
         <Hero />
         <Introduction />
