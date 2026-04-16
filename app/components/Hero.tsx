@@ -2,10 +2,13 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { Volume2, VolumeX, Youtube } from "lucide-react";
 
 export default function Hero() {
     const [videoEnded, setVideoEnded] = useState(false);
+    const [isMuted, setIsMuted] = useState(true);
+    const playerRef = useRef<any>(null);
 
     useEffect(() => {
         // Load YouTube Iframe API
@@ -21,7 +24,7 @@ export default function Hero() {
         }
 
         const onYouTubeIframeAPIReady = () => {
-            new (window as any).YT.Player("hero-yt-player", {
+            playerRef.current = new (window as any).YT.Player("hero-yt-player", {
                 videoId: "nbCht1onqWU",
                 playerVars: {
                     autoplay: 1,
@@ -50,11 +53,23 @@ export default function Hero() {
         }
     }, []);
 
+    const toggleMute = () => {
+        if (playerRef.current) {
+            if (isMuted) {
+                playerRef.current.unMute();
+                setIsMuted(false);
+            } else {
+                playerRef.current.mute();
+                setIsMuted(true);
+            }
+        }
+    };
+
     return (
-        <section className="relative w-full h-[100svh] flex flex-col items-center justify-center bg-black overflow-hidden pointer-events-none">
+        <section className="relative w-full h-[100svh] flex flex-col items-center justify-center bg-black overflow-hidden">
             
             {/* Background Container */}
-            <div className="absolute inset-0 z-0 overflow-hidden flex items-center justify-center">
+            <div className="absolute inset-0 z-0 overflow-hidden flex items-center justify-center pointer-events-none">
                 
                 {/* YouTube Video */}
                 <div 
@@ -85,6 +100,33 @@ export default function Hero() {
                 {/* Dark Gradient Overlay for Cinematic Feel */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black pointer-events-none" />
             </div>
+
+            {/* Audio & External Link Controls */}
+            {!videoEnded && (
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.5, duration: 2 }}
+                    className="absolute bottom-8 right-8 z-50 flex items-center gap-6"
+                >
+                    <a
+                        href="https://youtu.be/nbCht1onqWU"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-white/40 hover:text-white/90 transition-all duration-500 font-serif text-[10px] md:text-xs uppercase tracking-widest"
+                    >
+                        <Youtube className="w-4 h-4 md:w-5 md:h-5" strokeWidth={1.5} />
+                        <span className="hidden sm:inline">Watch on YouTube</span>
+                    </a>
+                    <button
+                        onClick={toggleMute}
+                        className="text-white/40 hover:text-white/90 transition-all duration-500 flex items-center justify-center"
+                        aria-label="Toggle mute"
+                    >
+                        {isMuted ? <VolumeX className="w-4 h-4 md:w-5 md:h-5" strokeWidth={1.5} /> : <Volume2 className="w-4 h-4 md:w-5 md:h-5" strokeWidth={1.5} />}
+                    </button>
+                </motion.div>
+            )}
 
             {/* SEO Hidden Text */}
             <div className="sr-only">
