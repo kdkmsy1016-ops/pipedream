@@ -3,9 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import Hero from "./components/Hero";
-import LineSection from "./components/LineSection";
-import StageSection from "./components/StageSection";
-import Introduction from "./components/Introduction";
+
 import AboutFilm from "./components/AboutFilm";
 import NoSSR from "./components/NoSSR";
 import SplashScreen from "./components/SplashScreen";
@@ -25,17 +23,16 @@ export default function Home() {
 
       <NoSSR>
         <Hero />
-        <Introduction />
         <AboutFilm />
-        <StageSection />
-        <LineSection />
         <ContactSection />
         <FloatingStageLink />
       </NoSSR>
 
-      {/* Footer */}
-      <footer className="py-6 text-center text-xs text-foreground/30 font-serif border-t border-white/5">
-        &copy; 2026 Eikyo to Pipe Dream Project
+      <footer className="py-12 flex flex-col items-center gap-6 text-center text-xs text-foreground/30 font-serif border-t border-white/5">
+        <a href="/stage" className="hover:text-white transition-colors tracking-widest uppercase">
+          Past Performance
+        </a>
+        <span>&copy; 2026 Eikyo to Pipe Dream Project</span>
       </footer>
     </main>
   );

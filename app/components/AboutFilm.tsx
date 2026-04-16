@@ -1,51 +1,37 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Gift } from "lucide-react";
-import HeroButton from "./HeroButton";
+import Link from "next/link";
 
 export default function AboutFilm() {
     return (
-        <section id="about-film" className="bg-background py-24 px-6 md:py-32 flex flex-col items-center">
+        <section id="about-film" className="bg-black py-32 px-6 md:py-48 flex flex-col items-center min-h-[100svh] justify-center">
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="max-w-3xl w-full text-center space-y-16"
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+                className="max-w-3xl w-full text-center space-y-24"
             >
-                <div className="space-y-8">
-                    <h2 className="text-sm md:text-base tracking-[0.2em] text-accent/80 font-serif uppercase">
-                        About Film
-                    </h2>
-                    <h3 className="text-2xl md:text-3xl font-bold tracking-widest font-serif text-foreground">
-                        物語
-                    </h3>
-                </div>
-
                 <div 
-                    className="space-y-8 text-foreground/80 leading-loose font-serif text-base md:text-lg lg:text-xl px-8 md:px-0 text-center max-w-3xl mx-auto"
-                    style={{ wordBreak: "keep-all", overflowWrap: "anywhere" }}
+                    className="space-y-12 text-white/80 font-serif text-sm md:text-base px-8 md:px-0 text-center max-w-2xl mx-auto"
+                    style={{ wordBreak: "keep-all", overflowWrap: "anywhere", lineHeight: 2.5, letterSpacing: '0.15em' }}
                 >
                     <p>
-                        2021年、東京郊外。<br className="hidden md:block" />コロナ禍を言い訳に夢を諦め、スナック「さくらみち」でバイトする俳優志望の桃華は、監督志望の恋人・修平と共依存の日々を送っていた。
+                        2021年、東京郊外。<br className="hidden md:block" />コロナ禍を言い訳に夢を諦め、<br className="block md:hidden" />スナック「さくらみち」で<br className="hidden md:block" />バイトする俳優志望の桃華は、<br className="block md:hidden" />監督志望の恋人・修平と<br className="hidden md:block" />共依存の日々を送っていた。
                     </p>
                     <p>
-                        叔父であるマスター・絹山の協力も得て、甘い幻想（パイプドリーム）を断ち切るべくスナックでの演劇上演を決意するが、無常にも3回目の緊急事態宣言が出されてしまう……。
+                        叔父であるマスター・絹山の協力も得て、<br className="block md:hidden" />甘い幻想（パイプドリーム）を断ち切るべく<br className="hidden md:block" />スナックでの演劇上演を決意するが、<br className="block md:hidden" />無常にも3回目の<br className="hidden md:block" />緊急事態宣言が出されてしまう……。
                     </p>
                 </div>
 
-                <div className="pt-16 flex flex-col items-center space-y-6">
-                    <p className="text-sm md:text-base text-foreground/60 font-serif tracking-widest">
-                        この物語を完成させ、劇場へ届けるために。<br className="hidden md:block" />
-                        現在、クラウドファンディングにて制作支援を募っています。
-                    </p>
-                    <HeroButton
+                <div className="pt-16 flex flex-col items-center">
+                    <Link
                         href="/crowdfunding"
-                        icon={Gift}
-                        label="プロジェクト詳細を見る（MotionGallery）"
-                        variant="gold"
-                    />
+                        className="inline-block px-12 py-4 border border-white/20 text-white/80 hover:bg-white hover:text-black hover:border-white transition-all duration-700 font-serif tracking-[0.3em] text-xs uppercase"
+                    >
+                        SUPPORT THIS PROJECT
+                    </Link>
                 </div>
             </motion.div>
         </section>
