@@ -128,7 +128,7 @@ export default function Hero() {
                             alt="盈虚とパイプドリーム"
                             width={isMobile ? 1080 : 1920}
                             height={isMobile ? 1920 : 1080}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                             priority
                             sizes="100vw"
                         />
