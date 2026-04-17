@@ -47,7 +47,7 @@ export default function Hero() {
                 playerRef.current.destroy();
             }
             playerRef.current = new (window as any).YT.Player("hero-yt-player", {
-                videoId: isMobile ? "GzkXTJO6DNc" : "nbCht1onqWU",
+                videoId: isMobile ? "2irEtYqCGZQ" : "nbCht1onqWU",
                 playerVars: {
                     autoplay: 1,
                     mute: 1,
@@ -87,7 +87,7 @@ export default function Hero() {
         }
     };
 
-    const currentVideoId = isMobile ? "GzkXTJO6DNc" : "nbCht1onqWU";
+    const currentVideoId = isMobile ? "2irEtYqCGZQ" : "nbCht1onqWU";
 
     return (
         <section className="relative w-full h-[100svh] flex flex-col items-center justify-center bg-black overflow-hidden pointer-events-none">
