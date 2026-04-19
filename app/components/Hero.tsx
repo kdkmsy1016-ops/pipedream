@@ -8,9 +8,28 @@ import { Volume2, VolumeX, Youtube } from "lucide-react";
 export default function Hero() {
     const [videoEnded, setVideoEnded] = useState(false);
     const [isMuted, setIsMuted] = useState(true);
+    const [isMounted, setIsMounted] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
     const playerRef = useRef<any>(null);
 
     useEffect(() => {
+        setIsMounted(true);
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        
+        let resizeTimer: any;
+        const handleResize = () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(checkMobile, 150);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+        if (!isMounted) return;
+
         // Load YouTube Iframe API
         if (!(window as any).YT) {
             const tag = document.createElement("script");
@@ -23,9 +42,12 @@ export default function Hero() {
             }
         }
 
-        const onYouTubeIframeAPIReady = () => {
+        const initPlayer = () => {
+            if (playerRef.current && typeof playerRef.current.destroy === 'function') {
+                playerRef.current.destroy();
+            }
             playerRef.current = new (window as any).YT.Player("hero-yt-player", {
-                videoId: "nbCht1onqWU",
+                videoId: isMobile ? "2irEtYqCGZQ" : "nbCht1onqWU",
                 playerVars: {
                     autoplay: 1,
                     mute: 1,
@@ -47,11 +69,11 @@ export default function Hero() {
         };
 
         if ((window as any).YT && (window as any).YT.Player) {
-            onYouTubeIframeAPIReady();
+            initPlayer();
         } else {
-            (window as any).onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+            (window as any).onYouTubeIframeAPIReady = initPlayer;
         }
-    }, []);
+    }, [isMounted, isMobile]);
 
     const toggleMute = () => {
         if (playerRef.current) {
@@ -65,51 +87,66 @@ export default function Hero() {
         }
     };
 
+    const currentVideoId = isMobile ? "2irEtYqCGZQ" : "nbCht1onqWU";
+
     return (
-        <section className="relative w-full h-[100svh] flex flex-col items-center justify-center bg-black overflow-hidden">
+        <section className="relative w-full h-[100svh] flex flex-col items-center justify-center bg-black overflow-hidden pointer-events-none">
             
             {/* Background Container */}
-            <div className="absolute inset-0 z-0 overflow-hidden flex items-center justify-center pointer-events-none">
+            <div className="absolute inset-0 z-0 overflow-hidden flex items-center justify-center">
                 
                 {/* YouTube Video */}
-                <div 
-                    className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${videoEnded ? 'opacity-0' : 'opacity-100'}`}
-                >
-                    <div
-                        id="hero-yt-player"
-                        className="w-[300vw] h-[300vh] md:w-[150vw] md:h-[150vh] xl:w-[120vw] xl:h-[120vh]"
-                        style={{ pointerEvents: "none" }}
-                    />
-                </div>
+                {isMounted && (
+                    <div 
+                        className={`absolute inset-0 transition-opacity duration-1000 ${videoEnded ? 'opacity-0' : 'opacity-100'}`}
+                    >
+                        <div
+                            id="hero-yt-player"
+                            style={{
+                                position: "absolute",
+                                top: "50%",
+                                left: "50%",
+                                transform: "translate(-50%, -50%)",
+                                minWidth: "100%",
+                                minHeight: "100%",
+                                width: "auto",
+                                height: "auto",
+                                aspectRatio: isMobile ? "9/16" : "16/9",
+                                pointerEvents: "none",
+                            }}
+                        />
+                    </div>
+                )}
 
                 {/* Fallback / End Image (hero-bg.png) */}
                 <div 
-                    className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${videoEnded ? 'opacity-100' : 'opacity-0'}`}
+                    className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${videoEnded || !isMounted ? 'opacity-100' : 'opacity-0'}`}
                 >
-                    <Image
-                        src="/hero-bg.png"
-                        alt="盈虚とパイプドリーム"
-                        width={1920}
-                        height={1080}
-                        className="w-full h-auto object-cover"
-                        priority
-                        sizes="100vw"
-                    />
+                    {isMounted && (
+                        <Image
+                            src={isMobile ? "/hero-bg-mobile.png" : "/hero-bg.png"}
+                            alt="盈虚とパイプドリーム"
+                            width={isMobile ? 1080 : 1920}
+                            height={isMobile ? 1920 : 1080}
+                            className="w-full h-full object-contain"
+                            priority
+                            sizes="100vw"
+                        />
+                    )}
                 </div>
-
 
             </div>
 
             {/* Audio & External Link Controls */}
-            {!videoEnded && (
+            {!videoEnded && isMounted && (
                 <motion.div 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.5, duration: 2 }}
-                    className="absolute bottom-8 right-8 z-50 flex items-center gap-6"
+                    className="absolute bottom-8 right-8 z-50 flex items-center gap-6 pointer-events-auto"
                 >
                     <a
-                        href="https://youtu.be/nbCht1onqWU"
+                        href={`https://youtu.be/${currentVideoId}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 text-white/40 hover:text-white/90 transition-all duration-500 font-serif text-[10px] md:text-xs uppercase tracking-widest"
