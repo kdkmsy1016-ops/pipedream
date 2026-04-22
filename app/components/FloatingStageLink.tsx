@@ -47,7 +47,7 @@ export default function FloatingStageLink() {
                 >
                     <Link href="/crowdfunding">
                         <motion.div
-                            className="group flex items-center gap-4 bg-black/80 backdrop-blur-lg px-8 py-4 rounded-full border border-[#ffbf00] cursor-pointer shadow-[0_0_20px_rgba(255,191,0,0.4)]"
+                            className="group flex items-center gap-5 bg-black/80 backdrop-blur-lg px-10 py-5 rounded-full border border-[#ffbf00] cursor-pointer shadow-[0_0_20px_rgba(255,191,0,0.4)]"
                             animate={{
                                 y: [0, -8, 0],
                                 scale: [1, 1, 1.05, 1]
@@ -64,11 +64,15 @@ export default function FloatingStageLink() {
                             }}
                         >
                             <div className="flex flex-col">
-                                <span className="text-white/60 text-[10px] tracking-widest font-sans uppercase mb-1">
+                                <span className="text-white/60 text-xs tracking-widest font-sans uppercase mb-1">
                                     クラウドファンディング実施中
                                 </span>
-                                <span className="text-white text-xs md:text-sm font-serif tracking-wide group-hover:text-accent transition-colors duration-300">
-                                    現在：{percent !== null ? percent : "--"}% 達成 支援受付中
+                                <span className="text-white text-sm md:text-base font-serif tracking-wide group-hover:text-accent transition-colors duration-300">
+                                    現在：
+                                    <span className="text-accent font-bold text-lg md:text-xl mx-1">
+                                        {percent !== null ? percent : "--"}%
+                                    </span>
+                                    達成 支援受付中
                                 </span>
                             </div>
                             <motion.div
@@ -76,7 +80,7 @@ export default function FloatingStageLink() {
                                 whileHover={{ x: 3 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <ArrowRight className="w-4 h-4 text-accent/80" />
+                                <ArrowRight className="w-5 h-5 text-accent/80" />
                             </motion.div>
                         </motion.div>
                     </Link>
