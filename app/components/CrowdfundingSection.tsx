@@ -107,12 +107,12 @@ export default function CrowdfundingSection() {
 
                 {/* Optional Matrix Section */}
                 <div className="pt-16 md:pt-24 border-t border-white/5">
-                    <div className="text-center mb-10">
+                    <div className="text-center">
                         <h4 className="text-lg md:text-xl font-bold tracking-widest font-serif text-foreground">
                             プラン特典早見表
                         </h4>
                     </div>
-                    <CrowdfundingMatrix showInlineTrigger={false} />
+                    <CrowdfundingMatrix showInlineTrigger={true} />
                 </div>
                 
             </div>
