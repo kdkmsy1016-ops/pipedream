@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
+
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -45,7 +45,7 @@ export default function FloatingStageLink() {
                     exit={{ opacity: 0, y: 50 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                    <Link href="/crowdfunding">
+                    <a href="https://motion-gallery.net/projects/eikyo-to-pipedream" target="_blank" rel="noopener noreferrer" className="block">
                         <motion.div
                             className="group flex items-center gap-5 bg-black/80 backdrop-blur-lg px-10 py-5 rounded-full border border-[#ffbf00] cursor-pointer shadow-[0_0_20px_rgba(255,191,0,0.4)]"
                             animate={{
@@ -83,7 +83,7 @@ export default function FloatingStageLink() {
                                 <ArrowRight className="w-5 h-5 text-accent/80" />
                             </motion.div>
                         </motion.div>
-                    </Link>
+                    </a>
                 </motion.div>
             )}
         </AnimatePresence>
