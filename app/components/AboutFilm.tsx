@@ -1,12 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Gift } from "lucide-react";
-import HeroButton from "./HeroButton";
 
 export default function AboutFilm() {
     return (
-        <section id="about-film" className="bg-background py-24 px-6 md:py-32 flex flex-col items-center">
+        <section id="about-film" className="bg-background py-32 md:py-48 px-6 flex flex-col items-center">
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -35,18 +33,6 @@ export default function AboutFilm() {
                     </p>
                 </div>
 
-                <div className="pt-16 flex flex-col items-center space-y-6">
-                    <p className="text-sm md:text-base text-foreground/60 font-serif tracking-widest">
-                        この物語を完成させ、劇場へ届けるために。<br className="hidden md:block" />
-                        現在、クラウドファンディングにて制作支援を募っています。
-                    </p>
-                    <HeroButton
-                        href="/crowdfunding"
-                        icon={Gift}
-                        label="プロジェクト詳細を見る（MotionGallery）"
-                        variant="gold"
-                    />
-                </div>
             </motion.div>
         </section>
     );

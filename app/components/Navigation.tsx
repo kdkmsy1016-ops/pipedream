@@ -16,12 +16,12 @@ export default function Navigation() {
     };
 
     const menuItems = [
-        { label: "Top", href: "/" },
-        { label: "Introduction", href: "/#introduction" },
-        { label: "About Film", href: "/#about-film" },
-        { label: "Crowdfunding", href: "/crowdfunding" },
-        { label: "Stage", href: "/stage" },
-        { label: "Contact", href: "/contact" },
+        { label: "Top", href: "#hero" },
+        { label: "Introduction", href: "#introduction" },
+        { label: "About Film", href: "#about-film" },
+        { label: "Rewards", href: "#rewards" },
+        { label: "Stage Archive", href: "#stage-archive" },
+        { label: "Contact", href: "#contact" },
     ];
 
     return (
@@ -68,7 +68,7 @@ export default function Navigation() {
                                         ease: "easeOut",
                                     }}
                                 >
-                                    <Link
+                                    <a
                                         href={item.href}
                                         onClick={closeMenu}
                                         className="text-2xl lg:text-4xl tracking-[0.2em] relative group overflow-hidden block"
@@ -79,7 +79,7 @@ export default function Navigation() {
                                         <span className="absolute top-0 left-0 block translate-y-full transition-transform duration-500 group-hover:translate-y-0 text-gray-400">
                                             {item.label}
                                         </span>
-                                    </Link>
+                                    </a>
                                 </motion.div>
                             ))}
                         </nav>
