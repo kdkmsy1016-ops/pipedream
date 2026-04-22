@@ -1,16 +1,31 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function AboutFilm() {
     return (
-        <section id="about-film" className="bg-background py-32 md:py-48 px-6 flex flex-col items-center">
+        <section id="about-film" className="relative bg-background py-32 md:py-48 px-6 flex flex-col items-center overflow-hidden">
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+                <Image
+                    src="/hero-bg.png"
+                    alt="About Film Background"
+                    fill
+                    priority
+                    className="object-cover object-center"
+                    sizes="100vw"
+                />
+                {/* Dark Overlay for Readability */}
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+            </div>
+
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
-                className="max-w-3xl w-full text-center space-y-16"
+                className="relative z-10 max-w-3xl w-full text-center space-y-16"
             >
                 <div className="space-y-8">
                     <h2 className="text-sm md:text-base tracking-[0.2em] text-accent/80 font-serif uppercase">

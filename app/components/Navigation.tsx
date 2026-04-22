@@ -19,6 +19,8 @@ export default function Navigation() {
         { label: "Top", href: "#hero" },
         { label: "Introduction", href: "#introduction" },
         { label: "About Film", href: "#about-film" },
+        { label: "Gallery", href: "#gallery" },
+        { label: "Staff & Cast", href: "#staff" },
         { label: "Rewards", href: "#rewards" },
         { label: "Stage Archive", href: "#stage-archive" },
         { label: "Contact", href: "#contact" },
