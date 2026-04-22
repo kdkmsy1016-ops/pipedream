@@ -58,7 +58,7 @@ export default function Hero() {
                             src={isMobile ? "/hero-bg-mobile.png" : "/hero-bg.png"}
                             alt="盈虚とパイプドリーム"
                             fill
-                            className="object-cover md:object-contain object-center"
+                            className="object-contain object-center"
                             priority
                             sizes="100vw"
                         />
