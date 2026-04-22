@@ -43,22 +43,23 @@ export default function Hero() {
     }, []);
 
     return (
-        <section className="relative w-full h-[100svh] flex flex-col items-center justify-center bg-black overflow-hidden">
+        <section className="relative w-full h-auto flex flex-col items-center justify-center bg-black overflow-hidden">
             
             {/* Background Image Container */}
-            <div className="absolute inset-0 z-0 overflow-hidden flex items-center justify-center pointer-events-none">
+            <div className="relative w-full h-auto pointer-events-none">
                 {isMounted && (
                     <motion.div
                         initial={{ opacity: 0, scale: 1.05 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 1.5, ease: "easeOut" }}
-                        className="absolute inset-0 flex items-center justify-center"
+                        className="w-full h-auto flex"
                     >
                         <Image
                             src={isMobile ? "/hero-bg-mobile.png" : "/hero-bg.png"}
                             alt="盈虚とパイプドリーム"
-                            fill
-                            className="object-contain object-center"
+                            width={isMobile ? 1080 : 1920}
+                            height={isMobile ? 1920 : 1080}
+                            className="w-full h-auto object-contain"
                             priority
                             sizes="100vw"
                         />
