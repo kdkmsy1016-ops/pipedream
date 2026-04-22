@@ -17,14 +17,21 @@ export async function GET() {
         // Extract the percentage from `<div class="current" style="width: XX%;"></div>`
         const percentMatch = html.match(/<div class="current" style="width:\s*([0-9.]+)%;"/i);
         let percent = "0";
-        
         if (percentMatch && percentMatch[1]) {
             percent = percentMatch[1];
         }
 
+        // Extract remaining days: `<dt>残り日数</dt> <dd><span class="number">40</span>`
+        const daysMatch = html.match(/<dt>残り日数<\/dt>\s*<dd><span class="number">(\d+)<\/span>/i);
+        let remainingDays = "0";
+        if (daysMatch && daysMatch[1]) {
+            remainingDays = daysMatch[1];
+        }
+
         return NextResponse.json({
             success: true,
-            percent: parseFloat(percent)
+            percent: parseFloat(percent),
+            remainingDays: parseInt(remainingDays, 10)
         });
         
     } catch (error) {
@@ -32,6 +39,7 @@ export async function GET() {
         return NextResponse.json({
             success: false,
             percent: 0,
+            remainingDays: 0,
             error: "Failed to fetch stats"
         }, { status: 500 });
     }
