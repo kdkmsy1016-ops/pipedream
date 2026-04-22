@@ -5,8 +5,24 @@ import { useEffect, useState } from "react";
 
 export default function FloatingStageLink() {
     const [isVisible, setIsVisible] = useState(false);
+    const [percent, setPercent] = useState<number | null>(null);
 
     useEffect(() => {
+        // Fetch stats
+        const fetchStats = async () => {
+            try {
+                const res = await fetch("/api/crowdfunding-stats");
+                const data = await res.json();
+                if (data.success) {
+                    setPercent(data.percent);
+                }
+            } catch (error) {
+                console.error("Failed to fetch stats", error);
+            }
+        };
+        fetchStats();
+
+        // Scroll listener
         const handleScroll = () => {
             if (window.scrollY > 50) {
                 setIsVisible(true);
@@ -49,10 +65,10 @@ export default function FloatingStageLink() {
                         >
                             <div className="flex flex-col">
                                 <span className="text-white/60 text-[10px] tracking-widest font-sans uppercase mb-1">
-                                    Crowdfunding
-                                </span>
-                                <span className="text-white font-serif tracking-wide group-hover:text-accent transition-colors duration-300">
                                     クラウドファンディング実施中
+                                </span>
+                                <span className="text-white text-xs md:text-sm font-serif tracking-wide group-hover:text-accent transition-colors duration-300">
+                                    現在：{percent !== null ? percent : "--"}% 達成 支援受付中
                                 </span>
                             </div>
                             <motion.div
