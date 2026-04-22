@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import StageSection from "./components/StageSection";
 import Introduction from "./components/Introduction";
 import AboutFilm from "./components/AboutFilm";
+import TrailerSection from "./components/TrailerSection";
 import GallerySection from "./components/GallerySection";
 import StaffCastSection from "./components/StaffCastSection";
 import CrowdfundingSection from "./components/CrowdfundingSection";
@@ -18,6 +19,7 @@ export default function Home() {
         <Hero />
         <Introduction />
         <AboutFilm />
+        <TrailerSection />
         <GallerySection />
         <StaffCastSection />
         <CrowdfundingSection />
