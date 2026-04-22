@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ExternalLink, Clock } from "lucide-react";
+import Link from "next/link";
+import { ExternalLink, Clock, FileText } from "lucide-react";
 import { TIERS, MOTION_GALLERY_URL } from "../crowdfunding/data";
 import { useCrowdfundingStatus } from "../hooks/useCrowdfundingStatus";
 import CrowdfundingMatrix from "./CrowdfundingMatrix";
@@ -33,6 +34,16 @@ export default function CrowdfundingSection() {
                         映画の完成・上映に向けた製作資金を募っております。<br className="hidden md:block" />
                         皆様の温かいご支援を心よりお待ちしております。
                     </p>
+                    
+                    <div className="pt-4 flex justify-center">
+                        <Link
+                            href="/guide"
+                            className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-zinc-800 text-zinc-300 border border-zinc-700 transition-colors rounded font-bold tracking-widest text-sm hover:bg-zinc-700 hover:text-white"
+                        >
+                            <FileText className="w-4 h-4" />
+                            初めての方へ：支援の流れを見る
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Cards Container: Vertical on Mobile, Horizontal Scroll on Desktop */}
