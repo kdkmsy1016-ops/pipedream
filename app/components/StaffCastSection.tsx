@@ -9,25 +9,7 @@ const STAFF_MEMBERS = [
         role: "監督・脚本",
         name: "久高 将也",
         image: "/prof/kudaka.jpg",
-        comment: "スナックという特異な空間で交差する人間模様を、生々しく、そして美しく描き出します。虚実の境界線が曖昧になる瞬間を楽しんでください。"
-    },
-    {
-        id: "cast-1",
-        role: "如月 桃華",
-        name: "コトハ",
-        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=400&auto=format&fit=crop",
-    },
-    {
-        id: "cast-2",
-        role: "神林 修平",
-        name: "福井 将真",
-        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
-    },
-    {
-        id: "cast-3",
-        role: "絹山 彰（マスター）",
-        name: "未発表",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
+        comment: "「夢」という言葉には、人を前に進ませる力と、現実から遠ざけてしまう危うさの両方があると思っています。<br>この作品は、夢と現実の間で悩み、環境や現状に揺れながらも前に進もうとする人々が、そこから脱却を目指す物語です。<br>この物語が、誰かの中にある“まだ手放していない夢”に触れることができたら嬉しいです。"
     }
 ];
 
@@ -84,7 +66,7 @@ export default function StaffCastSection() {
                                 </div>
                                 <p className="text-sm text-zinc-400 leading-relaxed tracking-wide font-serif relative">
                                     <span className="text-accent/30 text-2xl absolute -top-2 -left-2 md:-left-4">"</span>
-                                    {member.comment}
+                                    <span dangerouslySetInnerHTML={{ __html: member.comment }} />
                                 </p>
                             </div>
                         </motion.div>
