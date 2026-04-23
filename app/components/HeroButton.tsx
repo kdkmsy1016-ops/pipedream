@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 interface HeroButtonProps {
     href: string;
     icon: LucideIcon;
-    label: any; // Relaxed type for safety
+    label: unknown; // Relaxed type for safety
     variant: "line" | "ticket" | "gold";
     external?: boolean;
     compact?: boolean;

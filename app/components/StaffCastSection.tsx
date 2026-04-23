@@ -65,7 +65,7 @@ export default function StaffCastSection() {
                                     </h4>
                                 </div>
                                 <p className="text-sm text-zinc-400 leading-relaxed tracking-wide font-serif relative">
-                                    <span className="text-accent/30 text-2xl absolute -top-2 -left-2 md:-left-4">"</span>
+                                    <span className="text-accent/30 text-2xl absolute -top-2 -left-2 md:-left-4">&quot;</span>
                                     <span dangerouslySetInnerHTML={{ __html: member.comment }} />
                                 </p>
                             </div>

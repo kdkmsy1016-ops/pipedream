@@ -13,11 +13,12 @@ export default function Hero() {
     const [remainingDays, setRemainingDays] = useState<number | null>(null);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMounted(true);
         const checkMobile = () => setIsMobile(window.innerWidth < 768);
         checkMobile();
         
-        let resizeTimer: any;
+        let resizeTimer: ReturnType<typeof setTimeout>;
         const handleResize = () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(checkMobile, 150);
@@ -25,7 +26,7 @@ export default function Hero() {
         window.addEventListener('resize', handleResize);
         
         // Fetch stats
-        const fetchStats = async () => {
+        const fetchStats = async (): Promise<unknown> => {
             try {
                 const res = await fetch("/api/crowdfunding-stats");
                 const data = await res.json();

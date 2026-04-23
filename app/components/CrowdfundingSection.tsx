@@ -94,6 +94,7 @@ export default function CrowdfundingSection() {
                             <div className="mt-auto">
                                 {isStarted ? (
                                     <a
+                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                         href={(tier as any).url || MOTION_GALLERY_URL}
                                         target="_blank"
                                         rel="noopener noreferrer"

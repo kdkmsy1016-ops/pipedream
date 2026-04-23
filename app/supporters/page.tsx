@@ -21,7 +21,7 @@ function DriveDownloadCard({
     fileId: string;
     title: string;
     fallbackText: string;
-    icon?: any;
+    icon?: React.ElementType;
 }) {
     const downloadUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#";
     const thumbnailUrl = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200` : "";
@@ -108,8 +108,8 @@ export default function SupportersPage() {
 
             if (res.ok && data.success) {
                 // 2. Set new verified tier
-                sessionStorage.setItem("supporters_tier", data.tier.toString());
-                setTier(data.tier);
+                sessionStorage.setItem("supporters_tier", String(data.tier));
+                setTier(Number(data.tier));
                 setPasswordInput("");
             } else {
                 setError(data.message || "認証に失敗しました。");
