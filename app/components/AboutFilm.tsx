@@ -9,7 +9,7 @@ export default function AboutFilm() {
             {/* Background Image */}
             <div className="absolute inset-0 z-0">
                 <Image
-                    src="/hero-bg.png"
+                    src="/about_bg.jpg"
                     alt="About Film Background"
                     fill
                     priority
@@ -36,7 +36,7 @@ export default function AboutFilm() {
                     </h3>
                 </div>
 
-                <div 
+                <div
                     className="space-y-8 text-foreground/80 leading-loose font-serif text-base md:text-lg lg:text-xl px-8 md:px-0 text-center max-w-3xl mx-auto"
                     style={{ wordBreak: "keep-all", overflowWrap: "anywhere" }}
                 >
