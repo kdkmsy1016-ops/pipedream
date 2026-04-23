@@ -1,12 +1,28 @@
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
+
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function FloatingStageLink() {
     const [isVisible, setIsVisible] = useState(false);
+    const [percent, setPercent] = useState<number | null>(null);
 
     useEffect(() => {
+        // Fetch stats
+        const fetchStats = async () => {
+            try {
+                const res = await fetch("/api/crowdfunding-stats");
+                const data = await res.json();
+                if (data.success) {
+                    setPercent(data.percent);
+                }
+            } catch (error) {
+                console.error("Failed to fetch stats", error);
+            }
+        };
+        fetchStats();
+
+        // Scroll listener
         const handleScroll = () => {
             if (window.scrollY > 50) {
                 setIsVisible(true);
@@ -29,9 +45,9 @@ export default function FloatingStageLink() {
                     exit={{ opacity: 0, y: 50 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                    <Link href="/crowdfunding">
+                    <a href="https://motion-gallery.net/projects/eikyo-to-pipedream" target="_blank" rel="noopener noreferrer" className="block">
                         <motion.div
-                            className="group flex items-center gap-4 bg-black/80 backdrop-blur-lg px-8 py-4 rounded-full border border-[#ffbf00] cursor-pointer shadow-[0_0_20px_rgba(255,191,0,0.4)]"
+                            className="group flex items-center gap-5 bg-black/80 backdrop-blur-lg px-10 py-5 rounded-full border border-[#ffbf00] cursor-pointer shadow-[0_0_20px_rgba(255,191,0,0.4)]"
                             animate={{
                                 y: [0, -8, 0],
                                 scale: [1, 1, 1.05, 1]
@@ -48,11 +64,15 @@ export default function FloatingStageLink() {
                             }}
                         >
                             <div className="flex flex-col">
-                                <span className="text-white/60 text-[10px] tracking-widest font-sans uppercase mb-1">
-                                    Crowdfunding
-                                </span>
-                                <span className="text-white font-serif tracking-wide group-hover:text-accent transition-colors duration-300">
+                                <span className="text-white/60 text-xs tracking-widest font-sans uppercase mb-1">
                                     クラウドファンディング実施中
+                                </span>
+                                <span className="text-white text-sm md:text-base font-serif tracking-wide group-hover:text-accent transition-colors duration-300">
+                                    現在：
+                                    <span className="text-accent font-bold text-lg md:text-xl mx-1">
+                                        {percent !== null ? percent : "--"}%
+                                    </span>
+                                    達成 支援受付中
                                 </span>
                             </div>
                             <motion.div
@@ -60,10 +80,10 @@ export default function FloatingStageLink() {
                                 whileHover={{ x: 3 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <ArrowRight className="w-4 h-4 text-accent/80" />
+                                <ArrowRight className="w-5 h-5 text-accent/80" />
                             </motion.div>
                         </motion.div>
-                    </Link>
+                    </a>
                 </motion.div>
             )}
         </AnimatePresence>

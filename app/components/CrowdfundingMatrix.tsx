@@ -28,28 +28,18 @@ export default function CrowdfundingMatrix({ showInlineTrigger = false }: Crowdf
         <>
             {/* Optional Inline Trigger Button (For pages like /guide) */}
             {showInlineTrigger && (
-                <div className="w-full text-center py-12 box-border">
+                <div className="w-full text-center mt-6 box-border">
                     <button
                         onClick={() => setIsMatrixOpen(true)}
-                        className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#ffbf00] text-zinc-950 font-bold tracking-widest text-sm md:text-base rounded-sm hover:bg-white transition-colors duration-300 shadow-[0_0_20px_rgba(255,191,0,0.3)]"
+                        className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-accent text-zinc-950 font-bold tracking-widest text-sm md:text-base rounded hover:bg-white transition-colors duration-300 shadow-[0_0_15px_rgba(255,191,0,0.2)] hover:shadow-[0_0_20px_rgba(255,191,0,0.4)]"
                     >
                         <List className="w-5 h-5" />
-                        プランを比較して支援する
+                        比較表を見る
                     </button>
                 </div>
             )}
 
-            {/* Global Floating Action Button (FAB) for Matrix */}
-            <button
-                onClick={() => setIsMatrixOpen(true)}
-                className="fixed bottom-6 right-6 z-40 bg-[#ffbf00] text-zinc-950 w-20 h-20 md:w-24 md:h-24 rounded-full shadow-[0_0_20px_rgba(255,191,0,0.4)] hover:bg-white hover:scale-105 transition-all duration-300 flex flex-col items-center justify-center gap-0.5 font-bold tracking-widest leading-none pointer-events-auto"
-            >
-                <span className="text-[10px] md:text-xs">各プランの</span>
-                <span className="text-sm md:text-base flex items-center gap-1 mt-0.5">
-                    <List className="w-3 h-3 md:w-4 md:h-4" />
-                    比較
-                </span>
-            </button>
+
 
             {/* Matrix Modal */}
             {isMatrixOpen && (

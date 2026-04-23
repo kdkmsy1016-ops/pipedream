@@ -1,10 +1,13 @@
 "use client";
 
 import Hero from "./components/Hero";
-import LineSection from "./components/LineSection";
 import StageSection from "./components/StageSection";
 import Introduction from "./components/Introduction";
 import AboutFilm from "./components/AboutFilm";
+import TrailerSection from "./components/TrailerSection";
+import GallerySection from "./components/GallerySection";
+import StaffCastSection from "./components/StaffCastSection";
+import CrowdfundingSection from "./components/CrowdfundingSection";
 import NoSSR from "./components/NoSSR";
 import ContactSection from "./components/ContactSection";
 import FloatingStageLink from "./components/FloatingStageLink";
@@ -16,8 +19,11 @@ export default function Home() {
         <Hero />
         <Introduction />
         <AboutFilm />
+        <TrailerSection />
+        <GallerySection />
+        <StaffCastSection />
+        <CrowdfundingSection />
         <StageSection />
-        <LineSection />
         <ContactSection />
         <FloatingStageLink />
       </NoSSR>

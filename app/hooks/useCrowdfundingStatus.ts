@@ -7,6 +7,7 @@ export function useCrowdfundingStatus() {
 
     useEffect(() => {
         // Unconditionally enable the buttons (time has already passed).
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsStarted(true);
     }, []);
 

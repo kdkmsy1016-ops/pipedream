@@ -1,18 +1,31 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Gift } from "lucide-react";
-import HeroButton from "./HeroButton";
+import Image from "next/image";
 
 export default function AboutFilm() {
     return (
-        <section id="about-film" className="bg-background py-24 px-6 md:py-32 flex flex-col items-center">
+        <section id="about-film" className="relative bg-background py-32 md:py-48 px-6 flex flex-col items-center overflow-hidden">
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+                <Image
+                    src="/about_bg.jpg"
+                    alt="About Film Background"
+                    fill
+                    priority
+                    className="object-cover object-center"
+                    sizes="100vw"
+                />
+                {/* Dark Overlay for Readability */}
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+            </div>
+
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
-                className="max-w-3xl w-full text-center space-y-16"
+                className="relative z-10 max-w-3xl w-full text-center space-y-16"
             >
                 <div className="space-y-8">
                     <h2 className="text-sm md:text-base tracking-[0.2em] text-accent/80 font-serif uppercase">
@@ -23,7 +36,7 @@ export default function AboutFilm() {
                     </h3>
                 </div>
 
-                <div 
+                <div
                     className="space-y-8 text-foreground/80 leading-loose font-serif text-base md:text-lg lg:text-xl px-8 md:px-0 text-center max-w-3xl mx-auto"
                     style={{ wordBreak: "keep-all", overflowWrap: "anywhere" }}
                 >
@@ -35,18 +48,6 @@ export default function AboutFilm() {
                     </p>
                 </div>
 
-                <div className="pt-16 flex flex-col items-center space-y-6">
-                    <p className="text-sm md:text-base text-foreground/60 font-serif tracking-widest">
-                        この物語を完成させ、劇場へ届けるために。<br className="hidden md:block" />
-                        現在、クラウドファンディングにて制作支援を募っています。
-                    </p>
-                    <HeroButton
-                        href="/crowdfunding"
-                        icon={Gift}
-                        label="プロジェクト詳細を見る（MotionGallery）"
-                        variant="gold"
-                    />
-                </div>
             </motion.div>
         </section>
     );

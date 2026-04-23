@@ -28,12 +28,9 @@ export default function Introduction() {
                     className="mb-12 font-serif"
                 >
                     <h3 className="text-xl md:text-2xl lg:text-3xl leading-relaxed tracking-widest px-8 md:px-0 text-center md:whitespace-nowrap" style={{ wordBreak: "keep-all", overflowWrap: "anywhere" }}>
-                        <span className="inline-block">スクリーンの中の</span>
-                        <span className="font-bold text-accent/90"> “嘘” </span>
-                        <span className="inline-block">が、</span><br className="block md:hidden" />
-                        <span className="inline-block">板の上で</span>
-                        <span className="font-bold text-accent/90"> “真実” </span>
-                        <span className="inline-block">になる。</span>
+                        <span className="inline-block">私たちは</span>
+                        <span className="font-bold text-accent/90">「不要不急」</span>
+                        <span className="inline-block">の中で、夢を見た。</span>
                     </h3>
                 </motion.div>
 
@@ -47,25 +44,15 @@ export default function Introduction() {
                     style={{ wordBreak: "keep-all", overflowWrap: "anywhere" }}
                 >
                     <p>
-                        <span className="inline-block">今秋撮影予定の映画</span>
-                        <span className="inline-block">『盈虚とパイプドリーム』</span><br className="hidden md:inline" />
-                        <span className="inline-block">そして、その世界から派生する舞台</span>
-                        <span className="inline-block">『場末のパイプドリーム』</span><br />
-                        <span className="inline-block">映画の中で描かれる「劇中劇」を、</span>
-                        <span className="inline-block ml-[0.1em] md:ml-0">現実の劇場で上演する——</span><br className="hidden md:inline" />
-                        <span className="inline-block">スクリーンと舞台、</span><span className="inline-block ml-[0.1em] md:ml-0">二つの世界が交錯する</span><span className="inline-block">実験的プロジェクト</span>
+                        <span className="inline-block">コロナ禍のスナックから始まる、</span><br className="block md:hidden" />
+                        <span className="inline-block">“人生の再生”の物語。</span>
                     </p>
                     <p>
-                        <span className="inline-block">原案は、ユージン・オニールの名作</span>
-                        <span className="inline-block">『氷人來たる』</span>
+                        <span className="inline-block">この映画は、まだ制作の過程にあります。</span>
                     </p>
                     <p>
-                        <span className="inline-block">行き場のない魂たちが紡ぐ、</span><span className="inline-block ml-[0.1em] md:ml-0">淡く儚い夢の在り処</span><br className="hidden md:inline" />
-                        <span className="inline-block">煙のくゆる酒場で、</span><span className="inline-block ml-[0.1em] md:ml-0">人々は何を待ち続けているのか</span>
-                    </p>
-                    <p>
-                        <span className="inline-block">その「パイプドリーム（幻想）」の</span><span className="inline-block">果てにあるものは、</span><br className="hidden md:inline" />
-                        <span className="inline-block">絶望か、それとも——</span>
+                        <span className="inline-block">満ちては欠ける人生の痛みと<br />再生を描くこの映画を、</span><br className="block md:hidden" />
+                        <span className="inline-block">一緒に完成させてくれませんか？</span>
                     </p>
                 </motion.div>
 

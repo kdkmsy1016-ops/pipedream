@@ -1,166 +1,114 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState, useRef } from "react";
-import { Volume2, VolumeX, Youtube } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Hero() {
-    const [videoEnded, setVideoEnded] = useState(false);
-    const [isMuted, setIsMuted] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
-
-    const playerRef = useRef<any>(null);
+    
+    // Crowdfunding Stats State
+    const [percent, setPercent] = useState<number | null>(null);
+    const [remainingDays, setRemainingDays] = useState<number | null>(null);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMounted(true);
         const checkMobile = () => setIsMobile(window.innerWidth < 768);
         checkMobile();
         
-        let resizeTimer: any;
+        let resizeTimer: ReturnType<typeof setTimeout>;
         const handleResize = () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(checkMobile, 150);
         };
         window.addEventListener('resize', handleResize);
+        
+        // Fetch stats
+        const fetchStats = async (): Promise<unknown> => {
+            try {
+                const res = await fetch("/api/crowdfunding-stats");
+                const data = await res.json();
+                if (data.success) {
+                    setPercent(data.percent);
+                    setRemainingDays(data.remainingDays);
+                }
+            } catch (error) {
+                console.error("Failed to fetch stats", error);
+            }
+        };
+        fetchStats();
+
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    useEffect(() => {
-        if (!isMounted) return;
-
-        // Load YouTube Iframe API
-        if (!(window as any).YT) {
-            const tag = document.createElement("script");
-            tag.src = "https://www.youtube.com/iframe_api";
-            const firstScriptTag = document.getElementsByTagName("script")[0];
-            if (firstScriptTag && firstScriptTag.parentNode) {
-                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-            } else {
-                document.head.appendChild(tag);
-            }
-        }
-
-        const initPlayer = () => {
-            if (playerRef.current && typeof playerRef.current.destroy === 'function') {
-                playerRef.current.destroy();
-            }
-            playerRef.current = new (window as any).YT.Player("hero-yt-player", {
-                videoId: isMobile ? "2irEtYqCGZQ" : "nbCht1onqWU",
-                playerVars: {
-                    autoplay: 1,
-                    mute: 1,
-                    controls: 0,
-                    showinfo: 0,
-                    rel: 0,
-                    modestbranding: 1,
-                    playsinline: 1,
-                    loop: 0,
-                },
-                events: {
-                    onStateChange: (event: any) => {
-                        if (event.data === (window as any).YT.PlayerState.ENDED) {
-                            setVideoEnded(true);
-                        }
-                    },
-                },
-            });
-        };
-
-        if ((window as any).YT && (window as any).YT.Player) {
-            initPlayer();
-        } else {
-            (window as any).onYouTubeIframeAPIReady = initPlayer;
-        }
-    }, [isMounted, isMobile]);
-
-    const toggleMute = () => {
-        if (playerRef.current) {
-            if (isMuted) {
-                playerRef.current.unMute();
-                setIsMuted(false);
-            } else {
-                playerRef.current.mute();
-                setIsMuted(true);
-            }
-        }
-    };
-
-    const currentVideoId = isMobile ? "2irEtYqCGZQ" : "nbCht1onqWU";
-
     return (
-        <section className="relative w-full h-[100svh] flex flex-col items-center justify-center bg-black overflow-hidden pointer-events-none">
+        <section className="relative w-full h-auto flex flex-col items-center justify-center bg-black overflow-hidden">
             
-            {/* Background Container */}
-            <div className="absolute inset-0 z-0 overflow-hidden flex items-center justify-center">
-                
-                {/* YouTube Video */}
+            {/* Background Image Container */}
+            <div className="relative w-full h-auto pointer-events-none">
                 {isMounted && (
-                    <div 
-                        className={`absolute inset-0 transition-opacity duration-1000 ${videoEnded ? 'opacity-0' : 'opacity-100'}`}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 1.05 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        className="w-full h-auto flex"
                     >
-                        <div
-                            id="hero-yt-player"
-                            style={{
-                                position: "absolute",
-                                top: "50%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                minWidth: "100%",
-                                minHeight: "100%",
-                                width: "auto",
-                                height: "auto",
-                                aspectRatio: isMobile ? "9/16" : "16/9",
-                                pointerEvents: "none",
-                            }}
-                        />
-                    </div>
-                )}
-
-                {/* Fallback / End Image (hero-bg.png) */}
-                <div 
-                    className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ${videoEnded || !isMounted ? 'opacity-100' : 'opacity-0'}`}
-                >
-                    {isMounted && (
                         <Image
                             src={isMobile ? "/hero-bg-mobile.png" : "/hero-bg.png"}
                             alt="盈虚とパイプドリーム"
                             width={isMobile ? 1080 : 1920}
                             height={isMobile ? 1920 : 1080}
-                            className="w-full h-full object-contain"
+                            className="w-full h-auto object-contain"
                             priority
                             sizes="100vw"
                         />
-                    )}
-                </div>
-
+                    </motion.div>
+                )}
+                {/* Subtle dark overlay to ensure text readability if needed */}
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
             </div>
 
-            {/* Audio & External Link Controls */}
-            {!videoEnded && isMounted && (
+            {/* Crowdfunding Stats Overlay */}
+            {isMounted && (
                 <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.5, duration: 2 }}
-                    className="absolute bottom-8 right-8 z-50 flex items-center gap-6 pointer-events-auto"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1, duration: 1.2, ease: "easeOut" }}
+                    className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 w-full max-w-sm px-6 text-center"
                 >
-                    <a
-                        href={`https://youtu.be/${currentVideoId}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-white/40 hover:text-white/90 transition-all duration-500 font-serif text-[10px] md:text-xs uppercase tracking-widest"
+                    <a 
+                        href="#rewards" 
+                        className="block group bg-black/40 backdrop-blur-md border border-white/10 hover:border-accent/50 p-4 md:p-5 rounded-2xl transition-all duration-500 cursor-pointer shadow-2xl"
                     >
-                        <Youtube className="w-4 h-4 md:w-5 md:h-5" strokeWidth={1.5} />
-                        <span className="hidden sm:inline">Watch on YouTube</span>
+                        <div className="space-y-2">
+                            <h3 className="text-white/60 text-xs md:text-sm tracking-[0.2em] font-sans uppercase mb-1">
+                                クラウドファンディング実施中
+                            </h3>
+                            <div className="text-white font-serif tracking-widest text-sm md:text-base group-hover:text-white/90 transition-colors flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-4">
+                                <span>
+                                    現在 <span className="text-accent font-bold text-xl md:text-2xl mx-1">{percent !== null ? percent : "--"}%</span> 達成
+                                </span>
+                                <span className="hidden sm:inline text-white/30">/</span>
+                                <span>
+                                    残り <span className="text-white font-bold text-xl md:text-2xl mx-1">{remainingDays !== null ? remainingDays : "--"}</span> 日
+                                </span>
+                            </div>
+                        </div>
+                        
+                        {/* Progress Bar (Optional Visual Touch) */}
+                        <div className="mt-4 w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                            <motion.div 
+                                initial={{ width: 0 }}
+                                animate={{ width: `${percent !== null ? Math.min(percent, 100) : 0}%` }}
+                                transition={{ delay: 1.5, duration: 1.5, ease: "circOut" }}
+                                className="h-full bg-accent rounded-full relative"
+                            >
+                                <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-white/50" />
+                            </motion.div>
+                        </div>
                     </a>
-                    <button
-                        onClick={toggleMute}
-                        className="text-white/40 hover:text-white/90 transition-all duration-500 flex items-center justify-center"
-                        aria-label="Toggle mute"
-                    >
-                        {isMuted ? <VolumeX className="w-4 h-4 md:w-5 md:h-5" strokeWidth={1.5} /> : <Volume2 className="w-4 h-4 md:w-5 md:h-5" strokeWidth={1.5} />}
-                    </button>
                 </motion.div>
             )}
 
