@@ -8,7 +8,7 @@ const STAFF_MEMBERS = [
         id: "director",
         role: "監督・脚本",
         name: "久高 将也",
-        image: "/prof/kudaka.jpg?q=80&w=400&auto=format&fit=crop",
+        image: "/prof/kudaka.jpg",
         comment: "スナックという特異な空間で交差する人間模様を、生々しく、そして美しく描き出します。虚実の境界線が曖昧になる瞬間を楽しんでください。"
     },
     {
