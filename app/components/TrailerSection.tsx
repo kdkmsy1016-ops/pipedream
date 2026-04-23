@@ -6,14 +6,14 @@ export default function TrailerSection() {
     return (
         <section id="trailer" className="bg-background py-32 md:py-48 px-4 flex flex-col items-center">
             <div className="max-w-4xl w-full space-y-16">
-                
+
                 {/* Header */}
                 <div className="text-center space-y-6">
                     <h2 className="text-sm md:text-base tracking-[0.2em] text-accent/80 font-serif uppercase">
                         Teaser Trailer
                     </h2>
                     <h3 className="text-2xl md:text-3xl font-bold tracking-widest font-serif text-foreground">
-                        特報動画
+                        特報
                     </h3>
                 </div>
 

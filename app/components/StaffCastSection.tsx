@@ -8,29 +8,26 @@ const STAFF_MEMBERS = [
         id: "director",
         role: "監督・脚本",
         name: "久高 将也",
-        image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop",
+        image: "/prof/kudaka.jpg?q=80&w=400&auto=format&fit=crop",
         comment: "スナックという特異な空間で交差する人間模様を、生々しく、そして美しく描き出します。虚実の境界線が曖昧になる瞬間を楽しんでください。"
     },
     {
         id: "cast-1",
-        role: "主演（桃華 役）",
-        name: "未発表",
+        role: "如月 桃華",
+        name: "コトハ",
         image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=400&auto=format&fit=crop",
-        comment: "夢と現実の狭間で揺れる桃華の感情を、繊細に演じ切りたいと思います。彼女の不器用な生き方に共感してもらえると嬉しいです。"
     },
     {
         id: "cast-2",
-        role: "修平 役",
-        name: "未発表",
+        role: "神林 修平",
+        name: "福井 将真",
         image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
-        comment: "共依存という難しいテーマですが、人間らしい弱さや葛藤をリアルに表現できればと思います。劇場でお会いしましょう。"
     },
     {
         id: "cast-3",
-        role: "マスター・絹山 役",
+        role: "絹山 彰（マスター）",
         name: "未発表",
         image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
-        comment: "「さくらみち」の主として、二人の若者を温かく、時に厳しく見守る存在でありたいです。実際のスナックの空気感を感じてください。"
     }
 ];
 
@@ -38,7 +35,7 @@ export default function StaffCastSection() {
     return (
         <section id="staff" className="bg-zinc-950 py-32 md:py-48 px-4 flex flex-col items-center">
             <div className="max-w-6xl w-full space-y-16">
-                
+
                 {/* Header */}
                 <div className="text-center space-y-6">
                     <h2 className="text-sm md:text-base tracking-[0.2em] text-accent/80 font-serif uppercase">
