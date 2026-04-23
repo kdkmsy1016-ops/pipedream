@@ -51,7 +51,7 @@ export default function Introduction() {
                         <span className="inline-block">この映画は、まだ制作の過程にあります。</span>
                     </p>
                     <p>
-                        <span className="inline-block">満ちては欠ける人生の痛みと<br></>再生を描くこの映画を、</span><br className="block md:hidden" />
+                        <span className="inline-block">満ちては欠ける人生の痛みと<br />再生を描くこの映画を、</span><br className="block md:hidden" />
                         <span className="inline-block">一緒に完成させてくれませんか？</span>
                     </p>
                 </motion.div>

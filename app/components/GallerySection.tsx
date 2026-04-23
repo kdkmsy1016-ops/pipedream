@@ -6,12 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
 const GALLERY_IMAGES = [
-    { id: 1, src: "https://picsum.photos/seed/gallery1/800/600", alt: "Gallery Image 1" },
-    { id: 2, src: "https://picsum.photos/seed/gallery2/800/600", alt: "Gallery Image 2" },
-    { id: 3, src: "https://picsum.photos/seed/gallery3/800/600", alt: "Gallery Image 3" },
-    { id: 4, src: "https://picsum.photos/seed/gallery4/800/600", alt: "Gallery Image 4" },
-    { id: 5, src: "https://picsum.photos/seed/gallery5/800/600", alt: "Gallery Image 5" },
-    { id: 6, src: "https://picsum.photos/seed/gallery6/800/600", alt: "Gallery Image 6" },
+    { id: 1, src: "/gallery/gallery-1.png", alt: "盈虚とパイプドリーム 場面写真 1" },
+    { id: 2, src: "/gallery/gallery-2.jpg", alt: "盈虚とパイプドリーム 場面写真 2" },
+    { id: 3, src: "/gallery/gallery-3.png", alt: "盈虚とパイプドリーム 場面写真 3" },
+    { id: 4, src: "/gallery/gallery-4.png", alt: "盈虚とパイプドリーム 場面写真 4" },
+    { id: 5, src: "/gallery/gallery-5.jpg", alt: "盈虚とパイプドリーム 場面写真 5" },
 ];
 
 export default function GallerySection() {
