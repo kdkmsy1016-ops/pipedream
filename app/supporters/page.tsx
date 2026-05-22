@@ -339,9 +339,7 @@ export default function SupportersPage() {
                                             title="フォトブック PDF版"
                                             fallbackText="デジタルフォトブック\n（準備中）"
                                             icon={BookOpen}
-                                            customUrl={PHOTO_BOOK_ID ? `https://drive.google.com/file/d/${PHOTO_BOOK_ID}/view?usp=drive_link` : undefined}
-                                            buttonText="フォトブックを見る"
-                                            customIcon={BookOpen}
+                                            buttonText="フォトブックをダウンロード"
                                         />
                                     </div>
                                 </section>
