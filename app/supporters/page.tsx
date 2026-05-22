@@ -17,7 +17,8 @@ function DriveDownloadCard({
     title,
     fallbackText,
     icon: Icon,
-    customUrl,
+    cardUrl,
+    buttonUrl,
     buttonText,
     customIcon: CustomIcon
 }: {
@@ -25,59 +26,69 @@ function DriveDownloadCard({
     title: string;
     fallbackText: string;
     icon?: React.ElementType;
-    customUrl?: string;
+    cardUrl?: string;
+    buttonUrl?: string;
     buttonText?: string;
     customIcon?: React.ElementType;
 }) {
-    const downloadUrl = customUrl ? customUrl : (fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#");
+    const defaultUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#";
+    const finalCardUrl = cardUrl || defaultUrl;
+    const finalButtonUrl = buttonUrl || defaultUrl;
     const thumbnailUrl = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200&v=20260520` : "";
     const DisplayIcon = CustomIcon || Download;
-    const isLinkActive = !!(fileId || customUrl);
+    const isCardActive = !!(fileId || cardUrl);
+    const isButtonActive = !!(fileId || buttonUrl);
 
     return (
-        <a
-            href={downloadUrl}
-            target={isLinkActive ? "_blank" : "_self"}
-            rel={isLinkActive ? "noopener noreferrer" : ""}
-            className={`flex flex-col items-center gap-4 w-full group transition-opacity duration-300 ${
-                isLinkActive 
-                    ? "cursor-pointer hover:opacity-80" 
-                    : "opacity-60 pointer-events-none cursor-not-allowed"
-            }`}
-        >
-            <div className="w-full max-w-[280px] md:max-w-sm aspect-[3/4] relative rounded-lg overflow-hidden border border-zinc-700 shadow-[0_10px_30px_rgba(0,0,0,0.8)] group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(255,191,0,0.15)] active:translate-y-1 active:shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-300 bg-zinc-950 flex items-center justify-center">
+        <div className={`flex flex-col items-center gap-4 w-full ${!fileId && !cardUrl && !buttonUrl ? "opacity-60 pointer-events-none cursor-not-allowed" : ""}`}>
+            {/* Card Link */}
+            <a
+                href={finalCardUrl}
+                target={isCardActive ? "_blank" : "_self"}
+                rel={isCardActive ? "noopener noreferrer" : ""}
+                className={`w-full flex justify-center group ${isCardActive ? "cursor-pointer hover:opacity-80 transition-opacity duration-300" : "pointer-events-none"}`}
+            >
+                <div className="w-full max-w-[280px] md:max-w-sm aspect-[3/4] relative rounded-lg overflow-hidden border border-zinc-700 shadow-[0_10px_30px_rgba(0,0,0,0.8)] group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(255,191,0,0.15)] active:translate-y-1 active:shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-300 bg-zinc-950 flex items-center justify-center">
 
-                {/* Fallback Placeholder (Always behind the image) */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-0 bg-zinc-900">
-                    {Icon && <Icon className="w-8 h-8 md:w-10 md:h-10 text-zinc-700 mb-4" />}
-                    <span className="text-zinc-500 text-xs md:text-sm tracking-widest leading-loose whitespace-pre-line box-border">
-                        {fallbackText}
-                    </span>
+                    {/* Fallback Placeholder */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-0 bg-zinc-900">
+                        {Icon && <Icon className="w-8 h-8 md:w-10 md:h-10 text-zinc-700 mb-4" />}
+                        <span className="text-zinc-500 text-xs md:text-sm tracking-widest leading-loose whitespace-pre-line box-border">
+                            {fallbackText}
+                        </span>
+                    </div>
+
+                    {/* Drive Thumbnail Image */}
+                    {fileId && (
+                        <Image
+                            src={thumbnailUrl}
+                            alt={title}
+                            fill
+                            className="object-cover relative z-10 group-hover:scale-105 group-hover:brightness-110 transition-all duration-500 pointer-events-auto"
+                            unoptimized
+                        />
+                    )}
+
+                    {/* Gradient Overlay for Text Readability */}
+                    {fileId && (
+                        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none z-20" />
+                    )}
                 </div>
+            </a>
 
-                {/* Drive Thumbnail Image */}
-                {fileId && (
-                    <Image
-                        src={thumbnailUrl}
-                        alt={title}
-                        fill
-                        className="object-cover relative z-10 group-hover:scale-105 group-hover:brightness-110 transition-all duration-500 pointer-events-auto"
-                        unoptimized
-                    />
-                )}
-
-                {/* Gradient Overlay for Text Readability */}
-                {fileId && (
-                    <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none z-20" />
-                )}
-            </div>
-
-            {/* Download Button (below the card) */}
-            <div className="flex items-center justify-center gap-2 px-6 py-3 border border-zinc-600 text-zinc-300 group-hover:bg-white group-hover:text-black group-hover:border-white transition-all duration-300 text-xs tracking-widest rounded-sm w-full max-w-[280px]">
-                <DisplayIcon className="w-4 h-4 flex-shrink-0" />
-                <span className="whitespace-nowrap">{isLinkActive ? (buttonText || "ダウンロード") : "準備中"}</span>
-            </div>
-        </a>
+            {/* Button Link */}
+            <a
+                href={finalButtonUrl}
+                target={isButtonActive ? "_blank" : "_self"}
+                rel={isButtonActive ? "noopener noreferrer" : ""}
+                className={`w-full max-w-[280px] group ${isButtonActive ? "cursor-pointer hover:opacity-80 transition-opacity duration-300" : "pointer-events-none"}`}
+            >
+                <div className="flex items-center justify-center gap-2 px-6 py-3 border border-zinc-600 text-zinc-300 group-hover:bg-white group-hover:text-black group-hover:border-white transition-all duration-300 text-xs tracking-widest rounded-sm w-full">
+                    <DisplayIcon className="w-4 h-4 flex-shrink-0" />
+                    <span className="whitespace-nowrap">{isButtonActive ? (buttonText || "ダウンロード") : "準備中"}</span>
+                </div>
+            </a>
+        </div>
     );
 }
 
@@ -339,6 +350,7 @@ export default function SupportersPage() {
                                             title="フォトブック PDF版"
                                             fallbackText="デジタルフォトブック\n（準備中）"
                                             icon={BookOpen}
+                                            cardUrl={PHOTO_BOOK_ID ? `https://drive.google.com/file/d/${PHOTO_BOOK_ID}/view?usp=drive_link` : undefined}
                                             buttonText="フォトブックをダウンロード"
                                         />
                                     </div>
