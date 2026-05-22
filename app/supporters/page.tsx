@@ -10,28 +10,40 @@ import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star, Imag
 const MOVIE_KV_ID = "1SPZleKgUnS3OG277P4KorTrvPGrxRJo3";
 const STAGE_KV_ID = "15jjVBQ4LBGC2Va7CxXrxzpMwwrjh2mIq";
 const SCRIPT_PDF_ID = ""; // To be filled later
-const PHOTO_BOOK_ID = ""; // To be filled later
+const PHOTO_BOOK_ID = "1g6NfX27qDBMgAcnE3NbxRkZp0AzDUAQe";
 
 function DriveDownloadCard({
     fileId,
     title,
     fallbackText,
-    icon: Icon
+    icon: Icon,
+    customUrl,
+    buttonText,
+    customIcon: CustomIcon
 }: {
     fileId: string;
     title: string;
     fallbackText: string;
     icon?: React.ElementType;
+    customUrl?: string;
+    buttonText?: string;
+    customIcon?: React.ElementType;
 }) {
-    const downloadUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#";
+    const downloadUrl = customUrl ? customUrl : (fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#");
     const thumbnailUrl = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200&v=20260520` : "";
+    const DisplayIcon = CustomIcon || Download;
+    const isLinkActive = !!(fileId || customUrl);
 
     return (
         <a
             href={downloadUrl}
-            target={fileId ? "_blank" : "_self"}
-            rel={fileId ? "noopener noreferrer" : ""}
-            className={`flex flex-col items-center gap-4 w-full group ${!fileId && "opacity-60 pointer-events-none cursor-not-allowed"}`}
+            target={isLinkActive ? "_blank" : "_self"}
+            rel={isLinkActive ? "noopener noreferrer" : ""}
+            className={`flex flex-col items-center gap-4 w-full group transition-opacity duration-300 ${
+                isLinkActive 
+                    ? "cursor-pointer hover:opacity-80" 
+                    : "opacity-60 pointer-events-none cursor-not-allowed"
+            }`}
         >
             <div className="w-full max-w-[280px] md:max-w-sm aspect-[3/4] relative rounded-lg overflow-hidden border border-zinc-700 shadow-[0_10px_30px_rgba(0,0,0,0.8)] group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(255,191,0,0.15)] active:translate-y-1 active:shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-300 bg-zinc-950 flex items-center justify-center">
 
@@ -61,9 +73,9 @@ function DriveDownloadCard({
             </div>
 
             {/* Download Button (below the card) */}
-            <div className="flex items-center justify-center gap-2 px-6 py-3 border border-zinc-600 text-zinc-300 group-hover:bg-white group-hover:text-black group-hover:border-white transition-colors text-xs tracking-widest rounded-sm w-full max-w-[280px]">
-                <Download className="w-4 h-4 flex-shrink-0" />
-                <span className="whitespace-nowrap">{fileId ? "ダウンロード" : "準備中"}</span>
+            <div className="flex items-center justify-center gap-2 px-6 py-3 border border-zinc-600 text-zinc-300 group-hover:bg-white group-hover:text-black group-hover:border-white transition-all duration-300 text-xs tracking-widest rounded-sm w-full max-w-[280px]">
+                <DisplayIcon className="w-4 h-4 flex-shrink-0" />
+                <span className="whitespace-nowrap">{isLinkActive ? (buttonText || "ダウンロード") : "準備中"}</span>
             </div>
         </a>
     );
@@ -327,6 +339,9 @@ export default function SupportersPage() {
                                             title="フォトブック PDF版"
                                             fallbackText="デジタルフォトブック\n（準備中）"
                                             icon={BookOpen}
+                                            customUrl={PHOTO_BOOK_ID ? `https://drive.google.com/file/d/${PHOTO_BOOK_ID}/view?usp=drive_link` : undefined}
+                                            buttonText="フォトブックを見る"
+                                            customIcon={BookOpen}
                                         />
                                     </div>
                                 </section>
