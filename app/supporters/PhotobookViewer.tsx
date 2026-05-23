@@ -100,7 +100,15 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const toggleFullscreen = async () => {
         // iOS / iPhone Chrome ではネイティブFullscreenを試さず、即座に疑似Fullscreenへ切り替える
         if (isIOSDevice()) {
-            setIsPseudoFullscreen((prev) => !prev);
+            setIsPseudoFullscreen((prev) => {
+                const next = !prev;
+                if (next) {
+                    setShowUI(false);
+                } else {
+                    setShowUI(true);
+                }
+                return next;
+            });
             return;
         }
 
@@ -169,9 +177,11 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     let pageHeight = 0;
 
     if (isLandscape) {
-        // Landscape: Double page spread (Total book width = pageWidth * 2)
-        const maxTotalWidth = windowSize.width - 160; // Leave margin for navigation arrows
-        const maxTotalHeight = windowSize.height - 120; // Leave margin for header/footer
+        const horizontalMargin = isActuallyFullscreen ? 48 : 160;
+        const verticalMargin = isActuallyFullscreen ? 32 : 120;
+
+        const maxTotalWidth = windowSize.width - horizontalMargin;
+        const maxTotalHeight = windowSize.height - verticalMargin;
 
         pageWidth = maxTotalWidth / 2;
         pageHeight = pageWidth / pageAspectRatio;
@@ -181,9 +191,11 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
             pageWidth = pageHeight * pageAspectRatio;
         }
     } else {
-        // Portrait: Single page (Total book width = pageWidth)
-        const maxTotalWidth = windowSize.width - 40;
-        const maxTotalHeight = windowSize.height - 160;
+        const horizontalMargin = isActuallyFullscreen ? 8 : 40;
+        const verticalMargin = isActuallyFullscreen ? 24 : 160;
+
+        const maxTotalWidth = windowSize.width - horizontalMargin;
+        const maxTotalHeight = windowSize.height - verticalMargin;
 
         pageWidth = maxTotalWidth;
         pageHeight = pageWidth / pageAspectRatio;
@@ -502,7 +514,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                             transition={{ duration: 0.2 }}
                             className={[
                                 "absolute left-1/2 -translate-x-1/2 z-40",
-                                isActuallyFullscreen ? "bottom-4" : "bottom-8",
+                                isActuallyFullscreen ? "bottom-3" : "bottom-8",
                             ].join(" ")}
                         >
                             <p className="text-zinc-500 text-xs tracking-[0.2em] font-serif uppercase">
