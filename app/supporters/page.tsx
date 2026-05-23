@@ -26,7 +26,8 @@ function DriveDownloadCard({
     buttonUrl,
     buttonText,
     customIcon: CustomIcon,
-    onCardClick
+    onCardClick,
+    customThumbnail
 }: {
     fileId: string;
     title: string;
@@ -37,14 +38,17 @@ function DriveDownloadCard({
     buttonText?: string;
     customIcon?: React.ElementType;
     onCardClick?: () => void;
+    customThumbnail?: string;
 }) {
     const defaultUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#";
     const finalCardUrl = cardUrl || defaultUrl;
     const finalButtonUrl = buttonUrl || defaultUrl;
-    const thumbnailUrl = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200&v=20260520` : "";
+    const defaultThumbnailUrl = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200&v=20260520` : "";
+    const thumbnailUrl = customThumbnail || defaultThumbnailUrl;
     const DisplayIcon = CustomIcon || Download;
     const isCardActive = !!(fileId || cardUrl);
     const isButtonActive = !!(fileId || buttonUrl);
+    const hasThumbnail = !!thumbnailUrl;
 
     return (
         <div className={`flex flex-col items-center gap-4 w-full ${!fileId && !cardUrl && !buttonUrl ? "opacity-60 pointer-events-none cursor-not-allowed" : ""}`}>
@@ -67,7 +71,7 @@ function DriveDownloadCard({
                     </div>
 
                     {/* Drive Thumbnail Image */}
-                    {fileId && (
+                    {hasThumbnail && (
                         <Image
                             src={thumbnailUrl}
                             alt={title}
@@ -78,7 +82,7 @@ function DriveDownloadCard({
                     )}
 
                     {/* Gradient Overlay for Text Readability */}
-                    {fileId && (
+                    {hasThumbnail && (
                         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none z-20" />
                     )}
                 </div>
@@ -354,13 +358,14 @@ export default function SupportersPage() {
                                             fallbackText="脚本 PDFデータ\n（準備中）"
                                             icon={FileText}
                                         />
-                                        <DriveDownloadCard
+                                                                                <DriveDownloadCard
                                             fileId={PHOTO_BOOK_ID}
                                             title="フォトブック PDF版"
                                             fallbackText="デジタルフォトブック\n（準備中）"
                                             icon={BookOpen}
                                             buttonText="フォトブックをダウンロード"
                                             onCardClick={() => setIsViewerOpen(true)}
+                                            customThumbnail="/images/photobook/page-1.webp"
                                         />
                                     </div>
                                 </section>
