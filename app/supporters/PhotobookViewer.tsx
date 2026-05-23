@@ -27,7 +27,9 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [currentPage, setCurrentPage] = useState(0);
     const [preloaded, setPreloaded] = useState(false);
     const transformRef = useRef<ReactZoomPanPinchRef>(null);
-    const tapStartRef = useRef<{ x: number; y: number } | null>(null);
+    const tapStartRef = useRef<{ x: number; y: number; pointerId: number } | null>(null);
+    const activePointersRef = useRef<Set<number>>(new Set());
+    const isPinchingRef = useRef(false);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const flipBookRef = useRef<any>(null);
@@ -240,33 +242,63 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         }
     }, []);
 
-    const handleTapStart = useCallback((e: React.PointerEvent) => {
+    const handleTapPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+        activePointersRef.current.add(e.pointerId);
+
+        if (activePointersRef.current.size > 1) {
+            isPinchingRef.current = true;
+            tapStartRef.current = null;
+            return;
+        }
+
         tapStartRef.current = {
             x: e.clientX,
             y: e.clientY,
+            pointerId: e.pointerId,
         };
     }, []);
 
-    const handleTapEnd = useCallback((
-        e: React.PointerEvent,
-        action: "prev" | "next"
-    ) => {
+    const handleTapPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+        activePointersRef.current.delete(e.pointerId);
+
+        if (isPinchingRef.current) {
+            if (activePointersRef.current.size === 0) {
+                isPinchingRef.current = false;
+            }
+            tapStartRef.current = null;
+            return;
+        }
+
         if (!tapStartRef.current) return;
+        if (tapStartRef.current.pointerId !== e.pointerId) return;
 
         const dx = Math.abs(e.clientX - tapStartRef.current.x);
         const dy = Math.abs(e.clientY - tapStartRef.current.y);
 
         tapStartRef.current = null;
 
-        // 10px以上動いた場合はスワイプ・ドラッグとみなし、ページ送りしない
+        // 10px以上動いた場合はタップではなくドラッグ／フリック扱いにする
         if (dx > 10 || dy > 10) return;
 
-        if (action === "prev") {
+        const tapX = e.clientX;
+        const screenCenter = window.innerWidth / 2;
+
+        if (tapX < screenCenter) {
             handlePrev();
         } else {
             handleNext();
         }
     }, [handlePrev, handleNext]);
+
+    const handleTapPointerCancel = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+        activePointersRef.current.delete(e.pointerId);
+
+        if (activePointersRef.current.size === 0) {
+            isPinchingRef.current = false;
+        }
+
+        tapStartRef.current = null;
+    }, []);
 
     // 2. ページがめくられた時にStateを更新
     const onPageChange = useCallback((e: { data: number }) => {
@@ -298,13 +330,15 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
             document.documentElement.style.overflow = "hidden";
             document.body.style.position = "fixed";
             document.body.style.width = "100%";
-            document.body.style.touchAction = "none";
+            document.body.style.overscrollBehavior = "none";
+            document.documentElement.style.overscrollBehavior = "none";
         } else {
             document.body.style.overflow = "";
             document.documentElement.style.overflow = "";
             document.body.style.position = "";
             document.body.style.width = "";
-            document.body.style.touchAction = "";
+            document.body.style.overscrollBehavior = "";
+            document.documentElement.style.overscrollBehavior = "";
         }
 
         return () => {
@@ -312,7 +346,8 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
             document.documentElement.style.overflow = "";
             document.body.style.position = "";
             document.body.style.width = "";
-            document.body.style.touchAction = "";
+            document.body.style.overscrollBehavior = "";
+            document.documentElement.style.overscrollBehavior = "";
         };
     }, [isOpen, isPseudoFullscreen]);
 
@@ -433,23 +468,15 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                     )}
                 </AnimatePresence>
 
-                {/* Transparent Left/Right Tap Areas */}
-                <div className="absolute inset-0 z-30 pointer-events-none">
-                    <button
-                        type="button"
-                        aria-label="Previous page"
-                        className="absolute left-0 top-0 h-full w-1/2 cursor-pointer bg-transparent pointer-events-auto"
-                        onPointerDown={handleTapStart}
-                        onPointerUp={(e) => handleTapEnd(e, "prev")}
-                    />
-                    <button
-                        type="button"
-                        aria-label="Next page"
-                        className="absolute right-0 top-0 h-full w-1/2 cursor-pointer bg-transparent pointer-events-auto"
-                        onPointerDown={handleTapStart}
-                        onPointerUp={(e) => handleTapEnd(e, "next")}
-                    />
-                </div>
+                <div
+                    className="absolute inset-0 z-30"
+                    style={{
+                        touchAction: "pan-x pan-y pinch-zoom",
+                    }}
+                    onPointerDown={handleTapPointerDown}
+                    onPointerUp={handleTapPointerUp}
+                    onPointerCancel={handleTapPointerCancel}
+                />
 
                 {/* Main Viewer Wrapper */}
                 <div 
