@@ -187,16 +187,15 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     pageWidth = Math.round(pageWidth);
     pageHeight = Math.round(pageHeight);
 
-    const totalPages = 20;
+    const totalPages = PAGES.length;
+    const bookWidth = displayMode === "double" ? pageWidth * 2 : pageWidth;
 
-    // 3. 現在のページに応じてX軸の移動量を計算
-    // 表紙(0)は左へ、裏表紙(最後)は右へズラして強制的に中央に持ってくる
-    let transformStyle = 'translateX(0px)';
+    let coverOffsetX = 0;
     if (displayMode === "double") {
         if (currentPage === 0) {
-            transformStyle = `translateX(${-pageWidth / 2}px)`; 
+            coverOffsetX = -pageWidth / 2;
         } else if (currentPage >= totalPages - 1) {
-            transformStyle = `translateX(${pageWidth / 2}px)`;
+            coverOffsetX = pageWidth / 2;
         }
     }
 
@@ -416,30 +415,26 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                             <div 
                                 className="absolute top-1/2 left-1/2 transition-transform duration-500 ease-out origin-center"
                                 style={{
-                                    width: isLandscape ? `${pageWidth * 2}px` : `${pageWidth}px`,
+                                    width: `${bookWidth}px`,
                                     height: `${pageHeight}px`,
-                                    // 通常の中央寄せ（-50%, -50%）に加えて、表紙/裏表紙のオフセット（transformStyle）を合算する
-                                    transform: `translate(-50%, -50%) ${transformStyle}`
+                                    // 通常の中央寄せ（-50%, -50%）に加えて、表紙/裏表紙 ofset (coverOffsetX) を合算する
+                                    transform: `translate(-50%, -50%) translateX(${coverOffsetX}px)`
                                 }}
                             >
                                 <HTMLFlipBook
                                     width={pageWidth}
                                     height={pageHeight}
-                                    size="stretch"
-                                    minWidth={pageWidth}
-                                    maxWidth={pageWidth}
-                                    minHeight={pageHeight}
-                                    maxHeight={pageHeight}
+                                    size="fixed"
+                                    autoSize={false}
                                     display={displayMode}
                                     ref={flipBookRef}
                                     onFlip={onPageChange}
                                     showCover={true}
                                     drawShadow={false}
-                                    flippingTime={1}
+                                    flippingTime={300}
                                     usePortrait={!isLandscape}
-                                    className="mx-auto shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
+                                    className="shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
                                     style={{
-                                        margin: "0 auto",
                                         maxWidth: "100%",
                                         boxSizing: "border-box"
                                     }}
