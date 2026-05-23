@@ -25,18 +25,12 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const flipBookRef = useRef<any>(null);
 
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [isFullscreenSupported, setIsFullscreenSupported] = useState(false);
+    const [isPseudoFullscreen, setIsPseudoFullscreen] = useState(false);
     const [showUI, setShowUI] = useState(true);
     const uiTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Sync fullscreen state & support
+    // Sync fullscreen state
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setIsFullscreenSupported(
-            typeof window !== "undefined" &&
-            !!document.documentElement.requestFullscreen
-        );
-
         const handleFullscreenChange = () => {
             setIsFullscreen(!!document.fullscreenElement);
         };
@@ -46,23 +40,9 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         };
     }, []);
 
-    // Auto-request native fullscreen on mount when isOpen is true
-    useEffect(() => {
-        if (isOpen) {
-            const enterFullscreen = async () => {
-                try {
-                    const docEl = document.documentElement;
-                    if (docEl.requestFullscreen && !document.fullscreenElement) {
-                        await docEl.requestFullscreen();
-                    }
-                } catch (err) {
-                    console.warn("Auto-fullscreen request failed:", err);
-                }
-            };
-            const timer = setTimeout(enterFullscreen, 100);
-            return () => clearTimeout(timer);
-        }
-    }, [isOpen]);
+    const canUseNativeFullscreen = () => {
+        return typeof document !== "undefined" && !!document.documentElement.requestFullscreen;
+    };
 
     // Timer to auto-hide UI overlays
     const resetUITimer = useCallback(() => {
@@ -102,17 +82,18 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
 
     const toggleFullscreen = async () => {
         try {
-            if (!document.fullscreenElement) {
-                if (document.documentElement.requestFullscreen) {
-                    await document.documentElement.requestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
+            if (canUseNativeFullscreen()) {
+                if (!document.fullscreenElement) {
+                    await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+                } else {
                     await document.exitFullscreen();
                 }
+            } else {
+                setIsPseudoFullscreen((prev) => !prev);
             }
         } catch (err) {
-            console.error("Fullscreen toggle failed:", err);
+            console.warn("Native fullscreen failed. Falling back to pseudo fullscreen.", err);
+            setIsPseudoFullscreen((prev) => !prev);
         }
     };
 
@@ -124,6 +105,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         } catch (err) {
             console.error("Failed to exit fullscreen:", err);
         }
+        setIsPseudoFullscreen(false);
         onClose();
     };
 
@@ -274,17 +256,21 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         touchStartX.current = null;
     };
 
-    // Lock body scroll when modal is open
+    // Lock body and html scroll when modal is open or pseudo-fullscreen is active
     useEffect(() => {
-        if (isOpen) {
+        if (isOpen || isPseudoFullscreen) {
             document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "";
+            document.documentElement.style.overflow = "";
         }
         return () => {
             document.body.style.overflow = "";
+            document.documentElement.style.overflow = "";
         };
-    }, [isOpen]);
+    }, [isOpen, isPseudoFullscreen]);
+
 
     // Performance: Preload pages 5 to 20 in the background
     useEffect(() => {
@@ -334,7 +320,11 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center select-none"
+                className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center select-none overflow-hidden"
+                style={{
+                    height: isPseudoFullscreen ? "100dvh" : "100dvh",
+                    width: "100vw",
+                }}
             >
                 {/* Header Actions */}
                 <AnimatePresence>
@@ -347,19 +337,17 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                             className="absolute top-6 right-6 z-50 flex items-center gap-4"
                         >
                             {/* Fullscreen Button */}
-                            {isFullscreenSupported && (
-                                <button
-                                    onClick={toggleFullscreen}
-                                    className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
-                                >
-                                    <span>{isFullscreen ? "EXIT FULLSCREEN" : "FULLSCREEN"}</span>
-                                    {isFullscreen ? (
-                                        <Minimize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
-                                    ) : (
-                                        <Maximize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
-                                    )}
-                                </button>
-                            )}
+                            <button
+                                onClick={toggleFullscreen}
+                                className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
+                            >
+                                <span>{isFullscreen || isPseudoFullscreen ? "EXIT FULLSCREEN" : "FULLSCREEN"}</span>
+                                {isFullscreen || isPseudoFullscreen ? (
+                                    <Minimize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
+                                ) : (
+                                    <Maximize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
+                                )}
+                            </button>
 
                             {/* Close Button */}
                             <button
