@@ -27,6 +27,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [currentPage, setCurrentPage] = useState(0);
     const [preloaded, setPreloaded] = useState(false);
     const transformRef = useRef<ReactZoomPanPinchRef>(null);
+    const tapStartRef = useRef<{ x: number; y: number } | null>(null);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const flipBookRef = useRef<any>(null);
@@ -239,6 +240,34 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         }
     }, []);
 
+    const handleTapStart = useCallback((e: React.PointerEvent) => {
+        tapStartRef.current = {
+            x: e.clientX,
+            y: e.clientY,
+        };
+    }, []);
+
+    const handleTapEnd = useCallback((
+        e: React.PointerEvent,
+        action: "prev" | "next"
+    ) => {
+        if (!tapStartRef.current) return;
+
+        const dx = Math.abs(e.clientX - tapStartRef.current.x);
+        const dy = Math.abs(e.clientY - tapStartRef.current.y);
+
+        tapStartRef.current = null;
+
+        // 10px以上動いた場合はスワイプ・ドラッグとみなし、ページ送りしない
+        if (dx > 10 || dy > 10) return;
+
+        if (action === "prev") {
+            handlePrev();
+        } else {
+            handleNext();
+        }
+    }, [handlePrev, handleNext]);
+
     // 2. ページがめくられた時にStateを更新
     const onPageChange = useCallback((e: { data: number }) => {
         setCurrentPage(e.data);
@@ -404,6 +433,24 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                     )}
                 </AnimatePresence>
 
+                {/* Transparent Left/Right Tap Areas */}
+                <div className="absolute inset-0 z-30 pointer-events-none">
+                    <button
+                        type="button"
+                        aria-label="Previous page"
+                        className="absolute left-0 top-0 h-full w-1/2 cursor-pointer bg-transparent pointer-events-auto"
+                        onPointerDown={handleTapStart}
+                        onPointerUp={(e) => handleTapEnd(e, "prev")}
+                    />
+                    <button
+                        type="button"
+                        aria-label="Next page"
+                        className="absolute right-0 top-0 h-full w-1/2 cursor-pointer bg-transparent pointer-events-auto"
+                        onPointerDown={handleTapStart}
+                        onPointerUp={(e) => handleTapEnd(e, "next")}
+                    />
+                </div>
+
                 {/* Main Viewer Wrapper */}
                 <div 
                     className="relative flex items-center justify-center w-full h-full"
@@ -444,8 +491,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                     drawShadow={false}
                                     flippingTime={300}
                                     usePortrait={!isLandscape}
-                                    useMouseEvents={true}
-                                    swipeDistance={30}
+                                    useMouseEvents={false}
                                     mobileScrollSupport={true}
                                     className="shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
                                     style={{
