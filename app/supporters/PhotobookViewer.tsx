@@ -19,6 +19,58 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const transformRef = useRef<ReactZoomPanPinchRef>(null);
     const touchStartX = useRef<number | null>(null);
 
+    // Track window resize to determine orientation
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleResize = () => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [isOpen]);
+
+    const isLandscape = windowSize.width > windowSize.height;
+
+    const handlePrev = useCallback(() => {
+        if (transformRef.current) {
+            transformRef.current.resetTransform();
+        }
+        if (!isLandscape) {
+            setCurrentPage((prev) => Math.max(prev - 1, 0));
+        } else {
+            if (currentPage === PAGES.length - 1) {
+                setCurrentPage(PAGES.length - 3); // Go back to last spread (18 & 19, indices 17 & 18)
+            } else if (currentPage === 1) {
+                setCurrentPage(0); // Go back to Cover (index 0)
+            } else {
+                setCurrentPage((prev) => Math.max(prev - 2, 0));
+            }
+        }
+    }, [isLandscape, currentPage]);
+
+    const handleNext = useCallback(() => {
+        if (transformRef.current) {
+            transformRef.current.resetTransform();
+        }
+        if (!isLandscape) {
+            setCurrentPage((prev) => Math.min(prev + 1, PAGES.length - 1));
+        } else {
+            if (currentPage === 0) {
+                setCurrentPage(1); // Go to first spread (2 & 3, indices 1 & 2)
+            } else if (currentPage === PAGES.length - 3) {
+                setCurrentPage(PAGES.length - 1); // Go to Back Cover (index 19)
+            } else {
+                setCurrentPage((prev) => Math.min(prev + 2, PAGES.length - 1));
+            }
+        }
+    }, [isLandscape, currentPage]);
+
     // Keyboard navigation (Arrow keys)
     useEffect(() => {
         if (!isOpen) return;
@@ -73,29 +125,12 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         };
     }, [isOpen]);
 
-    // Track window resize to determine orientation
-    useEffect(() => {
-        if (!isOpen) return;
-
-        const handleResize = () => {
-            setWindowSize({
-                width: window.innerWidth,
-                height: window.innerHeight
-            });
-        };
-
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, [isOpen]);
-
-    const isLandscape = windowSize.width > windowSize.height;
-
     // Adjust page position when orientation changes to align with spreads
     useEffect(() => {
         if (isLandscape) {
             if (currentPage > 0 && currentPage < PAGES.length - 1) {
                 if (currentPage % 2 === 0) {
+                    // eslint-disable-next-line react-hooks/set-state-in-effect
                     setCurrentPage(currentPage - 1);
                 }
             }
@@ -124,40 +159,6 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
 
         return () => clearTimeout(timer);
     }, [isOpen]);
-
-    const handlePrev = useCallback(() => {
-        if (transformRef.current) {
-            transformRef.current.resetTransform();
-        }
-        if (!isLandscape) {
-            setCurrentPage((prev) => Math.max(prev - 1, 0));
-        } else {
-            if (currentPage === PAGES.length - 1) {
-                setCurrentPage(PAGES.length - 3); // Go back to last spread (18 & 19, indices 17 & 18)
-            } else if (currentPage === 1) {
-                setCurrentPage(0); // Go back to Cover (index 0)
-            } else {
-                setCurrentPage((prev) => Math.max(prev - 2, 0));
-            }
-        }
-    }, [isLandscape, currentPage]);
-
-    const handleNext = useCallback(() => {
-        if (transformRef.current) {
-            transformRef.current.resetTransform();
-        }
-        if (!isLandscape) {
-            setCurrentPage((prev) => Math.min(prev + 1, PAGES.length - 1));
-        } else {
-            if (currentPage === 0) {
-                setCurrentPage(1); // Go to first spread (2 & 3, indices 1 & 2)
-            } else if (currentPage === PAGES.length - 3) {
-                setCurrentPage(PAGES.length - 1); // Go to Back Cover (index 19)
-            } else {
-                setCurrentPage((prev) => Math.min(prev + 2, PAGES.length - 1));
-            }
-        }
-    }, [isLandscape, currentPage]);
 
     if (!isOpen) return null;
 
