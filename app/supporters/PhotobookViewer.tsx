@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react";
 import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
 
 const PAGES = Array.from({ length: 20 }, (_, i) => `/images/photobook/page-${i + 1}.webp`);
@@ -18,6 +18,34 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [preloaded, setPreloaded] = useState(false);
     const transformRef = useRef<ReactZoomPanPinchRef>(null);
     const touchStartX = useRef<number | null>(null);
+
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+        document.addEventListener("fullscreenchange", handleFullscreenChange);
+        return () => {
+            document.removeEventListener("fullscreenchange", handleFullscreenChange);
+        };
+    }, []);
+
+    const toggleFullscreen = async () => {
+        try {
+            if (!document.fullscreenElement) {
+                if (document.documentElement.requestFullscreen) {
+                    await document.documentElement.requestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    await document.exitFullscreen();
+                }
+            }
+        } catch (err) {
+            console.error("Fullscreen toggle failed:", err);
+        }
+    };
 
     // Track window resize to determine orientation
     useEffect(() => {
@@ -189,8 +217,22 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 transition={{ duration: 0.3 }}
                 className="fixed inset-0 z-50 bg-[#0b0e14] flex flex-col items-center justify-center select-none"
             >
-                {/* Header / A24 Minimal Close Button */}
-                <div className="absolute top-6 right-6 z-50">
+                {/* Header Actions */}
+                <div className="absolute top-6 right-6 z-50 flex items-center gap-4">
+                    {/* Fullscreen Button */}
+                    <button
+                        onClick={toggleFullscreen}
+                        className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
+                    >
+                        <span>{isFullscreen ? "EXIT FULLSCREEN" : "FULLSCREEN"}</span>
+                        {isFullscreen ? (
+                            <Minimize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
+                        ) : (
+                            <Maximize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
+                        )}
+                    </button>
+
+                    {/* A24 Minimal Close Button */}
                     <button
                         onClick={onClose}
                         className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
