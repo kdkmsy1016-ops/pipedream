@@ -409,15 +409,17 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                             contentClass="flex items-center justify-center"
                         >
                             {/* Centering Wrapper Container with custom flex centering & slide transform */}
-                            <div className="flex items-center justify-center">
-                                <div 
-                                    className="relative flex items-center justify-center transition-transform duration-500 ease-in-out"
-                                    style={{
-                                        width: isLandscape ? `${pageWidth * 2}px` : `${pageWidth}px`,
-                                        height: `${pageHeight}px`,
-                                        transform: transformStyle
-                                    }}
-                                >
+                            <div 
+                                className="relative w-full min-h-screen flex items-center justify-center transition-transform duration-500 ease-in-out"
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    width: "100%",
+                                    minHeight: "100vh",
+                                    transform: transformStyle
+                                }}
+                            >
                                     <HTMLFlipBook
                                         width={pageWidth}
                                         height={pageHeight}
@@ -434,6 +436,11 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                         flippingTime={1}
                                         usePortrait={!isLandscape}
                                         className="mx-auto shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
+                                        style={{
+                                            margin: "0 auto",
+                                            maxWidth: "100%",
+                                            boxSizing: "border-box"
+                                        }}
                                         key={`${displayMode}-${pageWidth}-${pageHeight}`}
                                         startPage={currentPage}
                                     >
@@ -461,7 +468,6 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                             );
                                         })}
                                     </HTMLFlipBook>
-                                </div>
                             </div>
                         </TransformComponent>
                     </TransformWrapper>
