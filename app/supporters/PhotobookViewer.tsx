@@ -351,12 +351,11 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                 /* Landscape: Double Page Spread (100% Seamless, 0px gap) */
                                 <div 
                                     style={{
-                                        width: "100%",
-                                        maxWidth: "calc(100vh * 4960 / 3508)",
-                                        maxHeight: "100vh",
+                                        width: "min(100vw, calc(100vh * 4960 / 3508))",
+                                        height: "min(100vh, calc(100vw * 3508 / 4960))",
                                         aspectRatio: "4960 / 3508"
                                     }}
-                                    className="relative flex bg-[#0b0e14] overflow-hidden gap-0 border-0 p-0 m-0 mx-auto"
+                                    className="relative flex bg-[#0b0e14] overflow-hidden gap-0 border-0 p-0 m-0"
                                 >
                                     {/* Left Page */}
                                     <div className="w-1/2 h-full relative overflow-hidden">
@@ -391,12 +390,11 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                 /* Portrait (or Landscape Cover/Back Cover): Single Page */
                                 <div 
                                     style={{
-                                        width: "100%",
-                                        maxWidth: "calc(100vh * 2480 / 3508)",
-                                        maxHeight: "100vh",
+                                        width: "min(100vw, calc(100vh * 2480 / 3508))",
+                                        height: "min(100vh, calc(100vw * 3508 / 2480))",
                                         aspectRatio: "2480 / 3508"
                                     }}
-                                    className="relative bg-[#0b0e14] overflow-hidden border-0 p-0 m-0 mx-auto"
+                                    className="relative bg-[#0b0e14] overflow-hidden border-0 p-0 m-0"
                                 >
                                     {preloaded || currentPage < 4 ? (
                                         <img
