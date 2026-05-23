@@ -1,6 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+
+const PhotobookViewer = dynamic(() => import("./PhotobookViewer"), {
+    ssr: false
+});
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -20,7 +25,8 @@ function DriveDownloadCard({
     cardUrl,
     buttonUrl,
     buttonText,
-    customIcon: CustomIcon
+    customIcon: CustomIcon,
+    onCardClick
 }: {
     fileId: string;
     title: string;
@@ -30,6 +36,7 @@ function DriveDownloadCard({
     buttonUrl?: string;
     buttonText?: string;
     customIcon?: React.ElementType;
+    onCardClick?: () => void;
 }) {
     const defaultUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#";
     const finalCardUrl = cardUrl || defaultUrl;
@@ -43,9 +50,10 @@ function DriveDownloadCard({
         <div className={`flex flex-col items-center gap-4 w-full ${!fileId && !cardUrl && !buttonUrl ? "opacity-60 pointer-events-none cursor-not-allowed" : ""}`}>
             {/* Card Link */}
             <a
-                href={finalCardUrl}
-                target={isCardActive ? "_blank" : "_self"}
-                rel={isCardActive ? "noopener noreferrer" : ""}
+                href={onCardClick && isCardActive ? "#" : finalCardUrl}
+                onClick={onCardClick && isCardActive ? (e) => { e.preventDefault(); onCardClick(); } : undefined}
+                target={onCardClick && isCardActive ? "_self" : (isCardActive ? "_blank" : "_self")}
+                rel={onCardClick && isCardActive ? "" : (isCardActive ? "noopener noreferrer" : "")}
                 className={`w-full flex justify-center group ${isCardActive ? "cursor-pointer hover:opacity-80 transition-opacity duration-300" : "pointer-events-none"}`}
             >
                 <div className="w-full max-w-[280px] md:max-w-sm aspect-[3/4] relative rounded-lg overflow-hidden border border-zinc-700 shadow-[0_10px_30px_rgba(0,0,0,0.8)] group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(255,191,0,0.15)] active:translate-y-1 active:shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-300 bg-zinc-950 flex items-center justify-center">
@@ -95,6 +103,7 @@ function DriveDownloadCard({
 
 export default function SupportersPage() {
     const [tier, setTier] = useState<number>(0);
+    const [isViewerOpen, setIsViewerOpen] = useState(false);
     const [passwordInput, setPasswordInput] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [isChecking, setIsChecking] = useState(true);
@@ -350,8 +359,8 @@ export default function SupportersPage() {
                                             title="フォトブック PDF版"
                                             fallbackText="デジタルフォトブック\n（準備中）"
                                             icon={BookOpen}
-                                            cardUrl={PHOTO_BOOK_ID ? `https://drive.google.com/file/d/${PHOTO_BOOK_ID}/view?usp=drive_link` : undefined}
                                             buttonText="フォトブックをダウンロード"
+                                            onCardClick={() => setIsViewerOpen(true)}
                                         />
                                     </div>
                                 </section>
@@ -403,6 +412,7 @@ export default function SupportersPage() {
                     </motion.div>
                 )}
             </AnimatePresence>
+            <PhotobookViewer isOpen={isViewerOpen} onClose={() => setIsViewerOpen(false)} />
         </main>
     );
 }
