@@ -192,15 +192,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                 )}
                             </div>
 
-                            {/* Book Binding Crease Shadow overlay (Stationary in center crease, very subtle) */}
-                            <div
-                                className="absolute top-0 bottom-0 pointer-events-none z-10 w-[30px]"
-                                style={{
-                                    left: "50%",
-                                    transform: "translateX(-50%)",
-                                    background: "linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.2) 100%)"
-                                }}
-                            />
+
                         </div>
                     ) : (
                         /* Portrait (or Landscape Cover/Back Cover): Single Page */
