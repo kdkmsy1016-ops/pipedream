@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react";
 import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
+import HTMLFlipBook from "react-pageflip";
 
 const PAGES = Array.from({ length: 20 }, (_, i) => `/images/photobook/page-${i + 1}.webp`);
 
@@ -19,13 +20,23 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const transformRef = useRef<ReactZoomPanPinchRef>(null);
     const touchStartX = useRef<number | null>(null);
     const isMultiTouch = useRef(false);
+    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const flipBookRef = useRef<any>(null);
 
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [isFullscreenSupported, setIsFullscreenSupported] = useState(false);
     const [showUI, setShowUI] = useState(true);
     const uiTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Sync fullscreen state
+    // Sync fullscreen state & support
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsFullscreenSupported(
+            typeof window !== "undefined" &&
+            !!document.documentElement.requestFullscreen
+        );
+
         const handleFullscreenChange = () => {
             setIsFullscreen(!!document.fullscreenElement);
         };
@@ -34,6 +45,24 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
             document.removeEventListener("fullscreenchange", handleFullscreenChange);
         };
     }, []);
+
+    // Auto-request native fullscreen on mount when isOpen is true
+    useEffect(() => {
+        if (isOpen) {
+            const enterFullscreen = async () => {
+                try {
+                    const docEl = document.documentElement;
+                    if (docEl.requestFullscreen && !document.fullscreenElement) {
+                        await docEl.requestFullscreen();
+                    }
+                } catch (err) {
+                    console.warn("Auto-fullscreen request failed:", err);
+                }
+            };
+            const timer = setTimeout(enterFullscreen, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [isOpen]);
 
     // Timer to auto-hide UI overlays
     const resetUITimer = useCallback(() => {
@@ -87,6 +116,17 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         }
     };
 
+    const handleClose = async () => {
+        try {
+            if (document.fullscreenElement && document.exitFullscreen) {
+                await document.exitFullscreen();
+            }
+        } catch (err) {
+            console.error("Failed to exit fullscreen:", err);
+        }
+        onClose();
+    };
+
     // Track window resize and orientation changes to determine orientation
     useEffect(() => {
         if (!isOpen) return;
@@ -111,40 +151,73 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     }, [isOpen]);
 
     const isLandscape = windowSize.width > windowSize.height;
+    const displayMode = isLandscape ? "double" : "single";
+
+    // Aspect ratio of a single page is 2480 / 3508
+    const pageAspectRatio = 2480 / 3508;
+    let pageWidth = 0;
+    let pageHeight = 0;
+
+    if (isLandscape) {
+        // Landscape: Double page spread (Total book width = pageWidth * 2)
+        const maxTotalWidth = windowSize.width - 160; // Leave margin for navigation arrows
+        const maxTotalHeight = windowSize.height - 120; // Leave margin for header/footer
+
+        pageWidth = maxTotalWidth / 2;
+        pageHeight = pageWidth / pageAspectRatio;
+
+        if (pageHeight > maxTotalHeight) {
+            pageHeight = maxTotalHeight;
+            pageWidth = pageHeight * pageAspectRatio;
+        }
+    } else {
+        // Portrait: Single page (Total book width = pageWidth)
+        const maxTotalWidth = windowSize.width - 40;
+        const maxTotalHeight = windowSize.height - 160;
+
+        pageWidth = maxTotalWidth;
+        pageHeight = pageWidth / pageAspectRatio;
+
+        if (pageHeight > maxTotalHeight) {
+            pageHeight = maxTotalHeight;
+            pageWidth = pageHeight * pageAspectRatio;
+        }
+    }
+
+    pageWidth = Math.round(pageWidth);
+    pageHeight = Math.round(pageHeight);
+
+    // Compute cover & back cover centering translation
+    let transformStyle = "none";
+    if (displayMode === "double") {
+        if (currentPage === 0) {
+            transformStyle = `translateX(-${pageWidth / 2}px)`;
+        } else if (currentPage === PAGES.length - 1) {
+            transformStyle = `translateX(${pageWidth / 2}px)`;
+        }
+    }
 
     const handlePrev = useCallback(() => {
         if (transformRef.current) {
             transformRef.current.resetTransform();
         }
-        if (!isLandscape) {
-            setCurrentPage((prev) => Math.max(prev - 1, 0));
-        } else {
-            if (currentPage === PAGES.length - 1) {
-                setCurrentPage(PAGES.length - 3); // Go back to last spread (18 & 19, indices 17 & 18)
-            } else if (currentPage === 1) {
-                setCurrentPage(0); // Go back to Cover (index 0)
-            } else {
-                setCurrentPage((prev) => Math.max(prev - 2, 0));
-            }
+        if (flipBookRef.current) {
+            flipBookRef.current.pageFlip().flipPrev();
         }
-    }, [isLandscape, currentPage]);
+    }, []);
 
     const handleNext = useCallback(() => {
         if (transformRef.current) {
             transformRef.current.resetTransform();
         }
-        if (!isLandscape) {
-            setCurrentPage((prev) => Math.min(prev + 1, PAGES.length - 1));
-        } else {
-            if (currentPage === 0) {
-                setCurrentPage(1); // Go to first spread (2 & 3, indices 1 & 2)
-            } else if (currentPage === PAGES.length - 3) {
-                setCurrentPage(PAGES.length - 1); // Go to Back Cover (index 19)
-            } else {
-                setCurrentPage((prev) => Math.min(prev + 2, PAGES.length - 1));
-            }
+        if (flipBookRef.current) {
+            flipBookRef.current.pageFlip().flipNext();
         }
-    }, [isLandscape, currentPage]);
+    }, []);
+
+    const onFlip = useCallback((e: { data: number }) => {
+        setCurrentPage(e.data);
+    }, []);
 
     // Keyboard navigation (Arrow keys)
     useEffect(() => {
@@ -160,7 +233,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
 
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [isOpen, currentPage, isLandscape, handleNext, handlePrev]);
+    }, [isOpen, handleNext, handlePrev]);
 
     const handleTouchStart = (e: React.TouchEvent) => {
         if (e.touches.length > 1) {
@@ -210,18 +283,6 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         };
     }, [isOpen]);
 
-    // Adjust page position when orientation changes to align with spreads
-    useEffect(() => {
-        if (isLandscape) {
-            if (currentPage > 0 && currentPage < PAGES.length - 1) {
-                if (currentPage % 2 === 0) {
-                    // eslint-disable-next-line react-hooks/set-state-in-effect
-                    setCurrentPage(currentPage - 1);
-                }
-            }
-        }
-    }, [isLandscape, currentPage]);
-
     // Performance: Preload pages 5 to 20 in the background
     useEffect(() => {
         if (!isOpen) return;
@@ -248,7 +309,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     if (!isOpen) return null;
 
     const getPageIndicator = () => {
-        if (!isLandscape) {
+        if (displayMode === "single") {
             return `${currentPage + 1} / 20`;
         } else {
             if (currentPage === 0) {
@@ -263,8 +324,6 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         }
     };
 
-    const isDoubleSpread = isLandscape && currentPage > 0 && currentPage < PAGES.length - 1;
-
     return (
         <AnimatePresence>
             <motion.div
@@ -272,7 +331,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="fixed inset-0 z-50 bg-[#0b0e14] flex flex-col items-center justify-center select-none"
+                className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center select-none"
             >
                 {/* Header Actions */}
                 <AnimatePresence>
@@ -285,21 +344,23 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                             className="absolute top-6 right-6 z-50 flex items-center gap-4"
                         >
                             {/* Fullscreen Button */}
-                            <button
-                                onClick={toggleFullscreen}
-                                className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
-                            >
-                                <span>{isFullscreen ? "EXIT FULLSCREEN" : "FULLSCREEN"}</span>
-                                {isFullscreen ? (
-                                    <Minimize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
-                                ) : (
-                                    <Maximize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
-                                )}
-                            </button>
+                            {isFullscreenSupported && (
+                                <button
+                                    onClick={toggleFullscreen}
+                                    className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
+                                >
+                                    <span>{isFullscreen ? "EXIT FULLSCREEN" : "FULLSCREEN"}</span>
+                                    {isFullscreen ? (
+                                        <Minimize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
+                                    ) : (
+                                        <Maximize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
+                                    )}
+                                </button>
+                            )}
 
-                            {/* A24 Close Button */}
+                            {/* Close Button */}
                             <button
-                                onClick={onClose}
+                                onClick={handleClose}
                                 className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
                             >
                                 <span>CLOSE</span>
@@ -347,68 +408,86 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                             wrapperClass="!w-full !h-full flex items-center justify-center"
                             contentClass="flex items-center justify-center"
                         >
-                            {isDoubleSpread ? (
-                                /* Landscape: Double Page Spread (100% Seamless, 0px gap) */
+                            {/* Centering Wrapper Container with custom flex centering & slide transform */}
+                            <div className="flex items-center justify-center">
                                 <div 
+                                    className="relative flex items-center justify-center transition-transform duration-500 ease-in-out"
                                     style={{
-                                        width: "min(100vw, calc(100vh * 4960 / 3508))",
-                                        height: "min(100vh, calc(100vw * 3508 / 4960))",
-                                        aspectRatio: "4960 / 3508"
+                                        width: isLandscape ? `${pageWidth * 2}px` : `${pageWidth}px`,
+                                        height: `${pageHeight}px`,
+                                        transform: transformStyle
                                     }}
-                                    className="relative flex bg-[#0b0e14] overflow-hidden gap-0 border-0 p-0 m-0"
                                 >
-                                    {/* Left Page */}
-                                    <div className="w-1/2 h-full relative overflow-hidden">
-                                        {preloaded || currentPage < 4 ? (
-                                            <img
-                                                src={PAGES[currentPage]}
-                                                alt={`Page ${currentPage + 1}`}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
-                                                <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
-                                            </div>
-                                        )}
-                                    </div>
-                                    {/* Right Page */}
-                                    <div className="w-1/2 h-full relative overflow-hidden">
-                                        {preloaded || currentPage + 1 < 4 ? (
-                                            <img
-                                                src={PAGES[currentPage + 1]}
-                                                alt={`Page ${currentPage + 2}`}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
-                                                <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            ) : (
-                                /* Portrait (or Landscape Cover/Back Cover): Single Page */
-                                <div 
-                                    style={{
-                                        width: "min(100vw, calc(100vh * 2480 / 3508))",
-                                        height: "min(100vh, calc(100vw * 3508 / 2480))",
-                                        aspectRatio: "2480 / 3508"
-                                    }}
-                                    className="relative bg-[#0b0e14] overflow-hidden border-0 p-0 m-0"
-                                >
-                                    {preloaded || currentPage < 4 ? (
-                                        <img
-                                            src={PAGES[currentPage]}
-                                            alt={`Page ${currentPage + 1}`}
-                                            className="w-full h-full object-cover"
+                                    <HTMLFlipBook
+                                        width={pageWidth}
+                                        height={pageHeight}
+                                        size="fixed"
+                                        minWidth={pageWidth}
+                                        maxWidth={pageWidth}
+                                        minHeight={pageHeight}
+                                        maxHeight={pageHeight}
+                                        display={displayMode}
+                                        ref={flipBookRef}
+                                        onFlip={onFlip}
+                                        showCover={true}
+                                        drawShadow={true}
+                                        maxShadowOpacity={0.6}
+                                        flippingTime={800}
+                                        usePortrait={!isLandscape}
+                                        className="mx-auto shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
+                                        key={`${displayMode}-${pageWidth}-${pageHeight}`}
+                                        startPage={currentPage}
+                                    >
+                                        {PAGES.map((src, index) => {
+                                            const isLeftPage = index % 2 === 1;
+                                            const showPage = index < 4 || preloaded;
+
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="w-full h-full bg-[#0b0e14] relative overflow-hidden box-border"
+                                                >
+                                                    {showPage ? (
+                                                        <img
+                                                            src={src}
+                                                            alt={`Page ${index + 1}`}
+                                                            className="w-full h-full object-cover"
+                                                            loading={index < 4 ? "eager" : "lazy"}
+                                                        />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
+                                                            <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
+                                                        </div>
+                                                    )}
+
+                                                    {/* 3D Page Crease Shadow Effect (Moves with page) */}
+                                                    {isLandscape && index > 0 && index < 19 && (
+                                                        <div
+                                                            className={`absolute top-0 bottom-0 pointer-events-none w-16 z-20 transition-opacity ${
+                                                                isLeftPage
+                                                                    ? "right-0 bg-gradient-to-l from-black/45 via-black/10 to-transparent"
+                                                                    : "left-0 bg-gradient-to-r from-black/45 via-black/10 to-transparent"
+                                                            }`}
+                                                        />
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </HTMLFlipBook>
+
+                                    {/* Book Binding Crease Shadow overlay (Stationary in 3D center crease) */}
+                                    {isLandscape && currentPage > 0 && currentPage < 19 && (
+                                        <div
+                                            className="absolute top-0 bottom-0 pointer-events-none z-30 w-[40px]"
+                                            style={{
+                                                left: "50%",
+                                                transform: "translateX(-50%)",
+                                                background: "linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.3) 100%)"
+                                            }}
                                         />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
-                                            <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
-                                        </div>
                                     )}
                                 </div>
-                            )}
+                            </div>
                         </TransformComponent>
                     </TransformWrapper>
                 </div>
