@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react";
-import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import HTMLFlipBook from "react-pageflip";
 
 const PAGES = Array.from({ length: 20 }, (_, i) => `/images/photobook/page-${i + 1}.webp`);
@@ -26,7 +26,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [windowSize, setWindowSize] = useState({ width: 1200, height: 800 });
     const [currentPage, setCurrentPage] = useState(0);
     const [preloaded, setPreloaded] = useState(false);
-    const transformRef = useRef<ReactZoomPanPinchRef>(null);
+    const [zoomPageIndex, setZoomPageIndex] = useState<number | null>(null);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const flipBookRef = useRef<any>(null);
@@ -222,18 +222,14 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     }
 
     const handlePrev = useCallback(() => {
-        if (transformRef.current) {
-            transformRef.current.resetTransform();
-        }
+        setZoomPageIndex(null);
         if (flipBookRef.current) {
             flipBookRef.current.pageFlip().flipPrev();
         }
     }, []);
 
     const handleNext = useCallback(() => {
-        if (transformRef.current) {
-            transformRef.current.resetTransform();
-        }
+        setZoomPageIndex(null);
         if (flipBookRef.current) {
             flipBookRef.current.pageFlip().flipNext();
         }
@@ -244,10 +240,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
 
         // UIボタン類を押したときはページ送りしない
         if (target.closest("[data-viewer-ui='true']")) return;
-
-        // ズーム中はページ送りしない
-        const scale = transformRef.current?.state?.scale ?? 1;
-        if (scale > 1.05) return;
+        if (zoomPageIndex !== null) return;
 
         const tapX = e.clientX;
         const screenCenter = window.innerWidth / 2;
@@ -257,7 +250,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         } else {
             handleNext();
         }
-    }, [handlePrev, handleNext]);
+    }, [handlePrev, handleNext, zoomPageIndex]);
 
     // 2. ページがめくられた時にStateを更新
     const onPageChange = useCallback((e: { data: number }) => {
@@ -385,6 +378,16 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                 isActuallyFullscreen ? "top-3" : "top-6",
                             ].join(" ")}
                         >
+                            {/* Zoom Button */}
+                            <button
+                                type="button"
+                                data-viewer-ui="true"
+                                onClick={() => setZoomPageIndex(currentPage)}
+                                className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 tracking-widest text-xs font-serif uppercase cursor-pointer"
+                            >
+                                ZOOM
+                            </button>
+
                             {/* Fullscreen Button */}
                             <button
                                 data-viewer-ui="true"
@@ -436,86 +439,63 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                     className="relative flex items-center justify-center w-full h-full"
                     onClick={handleViewerTap}
                 >
-                    <TransformWrapper
-                        ref={transformRef}
-                        initialScale={1}
-                        minScale={1}
-                        maxScale={4}
-                        centerOnInit={true}
-                        centerZoomedOut={true}
-                        limitToBounds={true}
-                        wheel={{ disabled: false }}
-                        pinch={{ disabled: false }}
-                        doubleClick={{ disabled: false, mode: "reset" }}
-                        panning={{ disabled: false, velocityDisabled: true }}
+                    <div
+                        className="relative origin-center"
+                        style={{
+                            width: `${bookWidth}px`,
+                            height: `${pageHeight}px`,
+                            transform: `translateX(${coverOffsetX}px)`,
+                        }}
                     >
-                        <TransformComponent
-                            wrapperClass="!w-full !h-full touch-none"
-                            contentClass="relative"
-                            contentStyle={{
+                        <HTMLFlipBook
+                            width={pageWidth}
+                            height={pageHeight}
+                            size="fixed"
+                            autoSize={false}
+                            display={displayMode}
+                            ref={flipBookRef}
+                            onFlip={onPageChange}
+                            showCover={true}
+                            drawShadow={false}
+                            flippingTime={300}
+                            usePortrait={!isLandscape}
+                            useMouseEvents={false}
+                            mobileScrollSupport={false}
+                            className="shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
+                            style={{
                                 width: `${bookWidth}px`,
                                 height: `${pageHeight}px`,
+                                margin: 0,
+                                boxSizing: "border-box",
                             }}
+                            key={`${displayMode}-${pageWidth}-${pageHeight}`}
+                            startPage={currentPage}
                         >
-                            <div
-                                className="relative origin-center"
-                                style={{
-                                    width: `${bookWidth}px`,
-                                    height: `${pageHeight}px`,
-                                    transform: `translateX(${coverOffsetX}px)`,
-                                }}
-                            >
-                                <HTMLFlipBook
-                                    width={pageWidth}
-                                    height={pageHeight}
-                                    size="fixed"
-                                    autoSize={false}
-                                    display={displayMode}
-                                    ref={flipBookRef}
-                                    onFlip={onPageChange}
-                                    showCover={true}
-                                    drawShadow={false}
-                                    flippingTime={300}
-                                    usePortrait={!isLandscape}
-                                    useMouseEvents={false}
-                                    mobileScrollSupport={false}
-                                    className="shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
-                                    style={{
-                                        width: `${bookWidth}px`,
-                                        height: `${pageHeight}px`,
-                                        margin: 0,
-                                        boxSizing: "border-box",
-                                    }}
-                                    key={`${displayMode}-${pageWidth}-${pageHeight}`}
-                                    startPage={currentPage}
-                                >
-                                    {PAGES.map((src, index) => {
-                                        const showPage = index < 4 || preloaded;
+                            {PAGES.map((src, index) => {
+                                const showPage = index < 4 || preloaded;
 
-                                        return (
-                                            <div
-                                                key={index}
-                                                className="w-full h-full bg-[#0b0e14] relative overflow-hidden box-border"
-                                            >
-                                                {showPage ? (
-                                                    <img
-                                                        src={src}
-                                                        alt={`Page ${index + 1}`}
-                                                        className="w-full h-full object-cover"
-                                                        loading={index < 4 ? "eager" : "lazy"}
-                                                    />
-                                                ) : (
-                                                    <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
-                                                        <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
-                                                    </div>
-                                                )}
+                                return (
+                                    <div
+                                        key={index}
+                                        className="w-full h-full bg-[#0b0e14] relative overflow-hidden box-border"
+                                    >
+                                        {showPage ? (
+                                            <img
+                                                src={src}
+                                                alt={`Page ${index + 1}`}
+                                                className="w-full h-full object-cover"
+                                                loading={index < 4 ? "eager" : "lazy"}
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
+                                                <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
                                             </div>
-                                        );
-                                    })}
-                                </HTMLFlipBook>
-                            </div>
-                        </TransformComponent>
-                    </TransformWrapper>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </HTMLFlipBook>
+                    </div>
                 </div>
 
                 {/* Right Navigation Arrow */}
@@ -556,6 +536,47 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                         </motion.div>
                     )}
                 </AnimatePresence>
+
+                {zoomPageIndex !== null && (
+                    <div
+                        className="fixed inset-0 z-[100000] bg-black flex items-center justify-center"
+                        data-viewer-ui="true"
+                    >
+                        <button
+                            type="button"
+                            data-viewer-ui="true"
+                            onClick={() => setZoomPageIndex(null)}
+                            className="absolute top-4 right-4 z-50 text-zinc-300 hover:text-[#ffbf00] transition-colors p-3 tracking-widest text-xs font-serif uppercase cursor-pointer"
+                        >
+                            CLOSE
+                        </button>
+
+                        <TransformWrapper
+                            initialScale={1}
+                            minScale={1}
+                            maxScale={4}
+                            centerOnInit={true}
+                            centerZoomedOut={true}
+                            limitToBounds={true}
+                            wheel={{ disabled: false }}
+                            pinch={{ disabled: false }}
+                            panning={{ disabled: false, velocityDisabled: true }}
+                            doubleClick={{ disabled: false, mode: "reset" }}
+                        >
+                            <TransformComponent
+                                wrapperClass="!w-full !h-full"
+                                contentClass="flex items-center justify-center"
+                            >
+                                <img
+                                    src={PAGES[zoomPageIndex]}
+                                    alt={`Page ${zoomPageIndex + 1}`}
+                                    className="max-w-[100vw] max-h-[100dvh] object-contain select-none"
+                                    draggable={false}
+                                />
+                            </TransformComponent>
+                        </TransformWrapper>
+                    </div>
+                )}
             </motion.div>
         </AnimatePresence>
     );
