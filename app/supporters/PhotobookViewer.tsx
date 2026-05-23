@@ -191,12 +191,12 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
 
     // 3. 現在のページに応じてX軸の移動量を計算
     // 表紙(0)は左へ、裏表紙(最後)は右へズラして強制的に中央に持ってくる
-    let transformStyle = 'translateX(0)';
+    let transformStyle = 'translateX(0px)';
     if (displayMode === "double") {
         if (currentPage === 0) {
-            transformStyle = 'translateX(-25%)'; 
+            transformStyle = `translateX(${-pageWidth / 2}px)`; 
         } else if (currentPage >= totalPages - 1) {
-            transformStyle = 'translateX(25%)';
+            transformStyle = `translateX(${pageWidth / 2}px)`;
         }
     }
 
@@ -409,16 +409,17 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                         doubleClick={{ mode: "reset" }}
                     >
                         <TransformComponent
-                            wrapperClass="!w-full !h-full flex items-center justify-center"
-                            contentClass="flex items-center justify-center"
+                            wrapperClass="!w-full !h-full relative"
+                            contentClass="!w-full !h-full relative"
                         >
                             {/* Inner wrapper container with custom translation centering on the book dimensions */}
                             <div 
-                                className="relative flex items-center justify-center transition-transform duration-500 ease-out"
+                                className="absolute top-1/2 left-1/2 transition-transform duration-500 ease-out origin-center"
                                 style={{
                                     width: isLandscape ? `${pageWidth * 2}px` : `${pageWidth}px`,
                                     height: `${pageHeight}px`,
-                                    transform: transformStyle
+                                    // 通常の中央寄せ（-50%, -50%）に加えて、表紙/裏表紙のオフセット（transformStyle）を合算する
+                                    transform: `translate(-50%, -50%) ${transformStyle}`
                                 }}
                             >
                                 <HTMLFlipBook
