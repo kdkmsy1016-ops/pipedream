@@ -206,7 +206,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                             return (
                                 <div
                                     key={index}
-                                    className="w-full h-full bg-[#0d1117] border border-zinc-900/50 relative overflow-hidden box-border"
+                                    className="w-full h-full bg-[#0b0e14] relative overflow-hidden box-border"
                                 >
                                     {showPage ? (
                                         <img
