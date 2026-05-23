@@ -431,7 +431,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                         onFlip={onFlip}
                                         showCover={true}
                                         drawShadow={false}
-                                        flippingTime={0}
+                                        flippingTime={1}
                                         usePortrait={!isLandscape}
                                         className="mx-auto shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
                                         key={`${displayMode}-${pageWidth}-${pageHeight}`}
