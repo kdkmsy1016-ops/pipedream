@@ -18,6 +18,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [preloaded, setPreloaded] = useState(false);
     const transformRef = useRef<ReactZoomPanPinchRef>(null);
     const touchStartX = useRef<number | null>(null);
+    const isMultiTouch = useRef(false);
 
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [showUI, setShowUI] = useState(true);
@@ -163,11 +164,20 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     }, [isOpen, currentPage, isLandscape, handleNext, handlePrev]);
 
     const handleTouchStart = (e: React.TouchEvent) => {
-        touchStartX.current = e.touches[0].clientX;
+        if (e.touches.length > 1) {
+            isMultiTouch.current = true;
+        } else {
+            touchStartX.current = e.touches[0].clientX;
+            isMultiTouch.current = false;
+        }
     };
 
     const handleTouchEnd = (e: React.TouchEvent) => {
-        if (touchStartX.current === null) return;
+        if (touchStartX.current === null || isMultiTouch.current) {
+            touchStartX.current = null;
+            isMultiTouch.current = false;
+            return;
+        }
 
         // Check if zoomed in (scale > 1.05) to avoid conflict with panning
         const scale = transformRef.current?.state?.scale || 1;
@@ -179,9 +189,10 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         const touchEndX = e.changedTouches[0].clientX;
         const diffX = touchStartX.current - touchEndX;
 
-        if (diffX > 50) {
+        // Increase threshold to 120px for longer, intentional swipes
+        if (diffX > 120) {
             handleNext();
-        } else if (diffX < -50) {
+        } else if (diffX < -120) {
             handlePrev();
         }
 
