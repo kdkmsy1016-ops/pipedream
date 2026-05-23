@@ -53,8 +53,10 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     }, []);
 
     const canUseNativeFullscreen = () => {
+        if (typeof document === "undefined") return false;
         if (isIOSDevice()) return false;
-        return typeof document !== "undefined" && !!document.documentElement.requestFullscreen;
+
+        return !!document.documentElement.requestFullscreen;
     };
 
     // Timer to auto-hide UI overlays
