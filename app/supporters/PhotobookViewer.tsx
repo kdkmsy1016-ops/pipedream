@@ -280,6 +280,12 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         // 10px以上動いた場合はタップではなくドラッグ／フリック扱いにする
         if (dx > 10 || dy > 10) return;
 
+        // ズーム倍率が1.05より大きい場合はページ送りしない
+        const scale = transformRef.current?.state?.scale ?? 1;
+        if (scale > 1.05) {
+            return;
+        }
+
         const tapX = e.clientX;
         const screenCenter = window.innerWidth / 2;
 
@@ -408,6 +414,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                     width: "100vw",
                     height: "100dvh",
                     minHeight: "100svh",
+                    overscrollBehavior: "none",
                     paddingTop: isActuallyFullscreen ? "env(safe-area-inset-top)" : undefined,
                     paddingBottom: isActuallyFullscreen ? "env(safe-area-inset-bottom)" : undefined,
                 }}
@@ -468,42 +475,40 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                     )}
                 </AnimatePresence>
 
-                <div
-                    className="absolute inset-0 z-30"
-                    style={{
-                        touchAction: "pan-x pan-y pinch-zoom",
-                    }}
-                    onPointerDown={handleTapPointerDown}
-                    onPointerUp={handleTapPointerUp}
-                    onPointerCancel={handleTapPointerCancel}
-                />
-
                 {/* Main Viewer Wrapper */}
                 <div 
                     className="relative flex items-center justify-center w-full h-full"
+                    onPointerDownCapture={handleTapPointerDown}
+                    onPointerUpCapture={handleTapPointerUp}
+                    onPointerCancelCapture={handleTapPointerCancel}
                 >
                     <TransformWrapper
                         ref={transformRef}
                         initialScale={1}
-                        minScale={0.9}
+                        minScale={1}
                         maxScale={4}
                         centerOnInit={true}
+                        centerZoomedOut={true}
+                        limitToBounds={true}
                         wheel={{ disabled: false }}
                         pinch={{ disabled: false }}
-                        doubleClick={{ mode: "reset" }}
+                        doubleClick={{ disabled: false, mode: "reset" }}
+                        panning={{ disabled: false, velocityDisabled: true }}
                     >
                         <TransformComponent
-                            wrapperClass="!w-full !h-full relative"
-                            contentClass="!w-full !h-full relative"
+                            wrapperClass="!w-full !h-full"
+                            contentClass="relative"
+                            contentStyle={{
+                                width: `${bookWidth}px`,
+                                height: `${pageHeight}px`,
+                            }}
                         >
-                            {/* Inner wrapper container with custom translation centering on the book dimensions */}
-                            <div 
-                                className="absolute top-1/2 left-1/2 transition-transform duration-500 ease-out origin-center"
+                            <div
+                                className="relative origin-center"
                                 style={{
                                     width: `${bookWidth}px`,
                                     height: `${pageHeight}px`,
-                                    // 通常の中央寄せ（-50%, -50%）に加えて、表紙/裏表紙 ofset (coverOffsetX) を合算する
-                                    transform: `translate(-50%, -50%) translateX(${coverOffsetX}px)`
+                                    transform: `translateX(${coverOffsetX}px)`,
                                 }}
                             >
                                 <HTMLFlipBook
@@ -519,7 +524,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                     flippingTime={300}
                                     usePortrait={!isLandscape}
                                     useMouseEvents={false}
-                                    mobileScrollSupport={true}
+                                    mobileScrollSupport={false}
                                     className="shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
                                     style={{
                                         width: `${bookWidth}px`,
