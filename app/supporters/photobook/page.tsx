@@ -17,6 +17,7 @@ export default function PhotobookPage() {
     useEffect(() => {
         const savedTier = sessionStorage.getItem("supporters_tier");
         if (savedTier) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setTier(parseInt(savedTier, 10));
         }
         setIsChecking(false);

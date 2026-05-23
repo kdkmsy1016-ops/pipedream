@@ -32,6 +32,7 @@ declare module 'react-pageflip' {
   }
 
   const HTMLFlipBook: React.ForwardRefExoticComponent<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     PageFlipProps & React.RefAttributes<any>
   >;
 

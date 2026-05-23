@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
 
 const PAGES = Array.from({ length: 20 }, (_, i) => `/images/photobook/page-${i + 1}.webp`);
 
@@ -16,7 +16,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [windowSize, setWindowSize] = useState({ width: 1200, height: 800 });
     const [currentPage, setCurrentPage] = useState(0);
     const [preloaded, setPreloaded] = useState(false);
-    const transformRef = useRef<any>(null);
+    const transformRef = useRef<ReactZoomPanPinchRef>(null);
     const touchStartX = useRef<number | null>(null);
 
     // Keyboard navigation (Arrow keys)
@@ -33,7 +33,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
 
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [isOpen, currentPage, isLandscape]);
+    }, [isOpen, currentPage, isLandscape, handleNext, handlePrev]);
 
     const handleTouchStart = (e: React.TouchEvent) => {
         touchStartX.current = e.touches[0].clientX;
@@ -125,9 +125,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         return () => clearTimeout(timer);
     }, [isOpen]);
 
-    if (!isOpen) return null;
-
-    const handlePrev = () => {
+    const handlePrev = useCallback(() => {
         if (transformRef.current) {
             transformRef.current.resetTransform();
         }
@@ -142,9 +140,9 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 setCurrentPage((prev) => Math.max(prev - 2, 0));
             }
         }
-    };
+    }, [isLandscape, currentPage]);
 
-    const handleNext = () => {
+    const handleNext = useCallback(() => {
         if (transformRef.current) {
             transformRef.current.resetTransform();
         }
@@ -159,7 +157,9 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 setCurrentPage((prev) => Math.min(prev + 2, PAGES.length - 1));
             }
         }
-    };
+    }, [isLandscape, currentPage]);
+
+    if (!isOpen) return null;
 
     const getPageIndicator = () => {
         if (!isLandscape) {
