@@ -27,12 +27,17 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isPseudoFullscreen, setIsPseudoFullscreen] = useState(false);
     const [showUI, setShowUI] = useState(true);
-    const uiTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const uiTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Sync fullscreen state
     useEffect(() => {
         const handleFullscreenChange = () => {
-            setIsFullscreen(!!document.fullscreenElement);
+            const active = !!document.fullscreenElement;
+            setIsFullscreen(active);
+
+            if (active) {
+                setIsPseudoFullscreen(false);
+            }
         };
         document.addEventListener("fullscreenchange", handleFullscreenChange);
         return () => {
@@ -85,6 +90,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
             if (canUseNativeFullscreen()) {
                 if (!document.fullscreenElement) {
                     await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+                    setIsPseudoFullscreen(false);
                 } else {
                     await document.exitFullscreen();
                 }
@@ -114,20 +120,24 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         if (!isOpen) return;
 
         const handleResize = () => {
-            // 100ms delay to let iOS Safari complete viewport settling
-            setTimeout(() => {
-                setWindowSize({
-                    width: window.innerWidth,
-                    height: window.innerHeight
-                });
-            }, 100);
+            const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+            const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+
+            setWindowSize({
+                width: viewportWidth,
+                height: viewportHeight,
+            });
         };
 
         handleResize();
+
         window.addEventListener("resize", handleResize);
+        window.visualViewport?.addEventListener("resize", handleResize);
         window.addEventListener("orientationchange", handleResize);
+
         return () => {
             window.removeEventListener("resize", handleResize);
+            window.visualViewport?.removeEventListener("resize", handleResize);
             window.removeEventListener("orientationchange", handleResize);
         };
     }, [isOpen]);
@@ -322,8 +332,9 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 transition={{ duration: 0.3 }}
                 className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center select-none overflow-hidden"
                 style={{
-                    height: isPseudoFullscreen ? "100dvh" : "100dvh",
                     width: "100vw",
+                    height: "100dvh",
+                    minHeight: "100svh",
                 }}
             >
                 {/* Header Actions */}
@@ -420,11 +431,13 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                     showCover={true}
                                     drawShadow={false}
                                     flippingTime={300}
-                                    usePortrait={!isLandscape}
+                                    usePortrait={false}
                                     className="shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
                                     style={{
-                                        maxWidth: "100%",
-                                        boxSizing: "border-box"
+                                        width: `${bookWidth}px`,
+                                        height: `${pageHeight}px`,
+                                        margin: 0,
+                                        boxSizing: "border-box",
                                     }}
                                     key={`${displayMode}-${pageWidth}-${pageHeight}`}
                                     startPage={currentPage}
