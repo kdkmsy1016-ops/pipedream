@@ -329,7 +329,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
 
                 {/* Main Viewer Wrapper */}
                 <div 
-                    className="relative flex items-center justify-center w-full max-h-screen px-0"
+                    className="relative flex items-center justify-center w-full h-full"
                     onTouchStart={handleTouchStart}
                     onTouchEnd={handleTouchEnd}
                 >

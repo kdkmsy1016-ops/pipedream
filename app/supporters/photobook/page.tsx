@@ -21,25 +21,6 @@ export default function PhotobookPage() {
             setTier(parseInt(savedTier, 10));
         }
         setIsChecking(false);
-
-        // Try to request native fullscreen
-        const requestFS = async () => {
-            try {
-                if (document.documentElement.requestFullscreen) {
-                    await document.documentElement.requestFullscreen();
-                }
-            } catch (err) {
-                console.warn("Auto-fullscreen blocked, click anywhere to enter fullscreen", err);
-            }
-        };
-        requestFS();
-
-        const handleFirstClick = () => {
-            requestFS();
-            window.removeEventListener("click", handleFirstClick);
-        };
-        window.addEventListener("click", handleFirstClick);
-        return () => window.removeEventListener("click", handleFirstClick);
     }, []);
 
     if (isChecking) {
