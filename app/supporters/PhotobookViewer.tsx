@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import HTMLFlipBook from "react-pageflip";
 
 const PAGES = Array.from({ length: 20 }, (_, i) => `/images/photobook/page-${i + 1}.webp`);
 
@@ -16,7 +15,6 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [windowSize, setWindowSize] = useState({ width: 1200, height: 800 });
     const [currentPage, setCurrentPage] = useState(0);
     const [preloaded, setPreloaded] = useState(false);
-    const flipBookRef = useRef<any>(null);
 
     // Lock body scroll when modal is open
     useEffect(() => {
@@ -30,7 +28,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         };
     }, [isOpen]);
 
-    // Track window resize to calculate responsive page dimensions
+    // Track window resize to determine orientation
     useEffect(() => {
         if (!isOpen) return;
 
@@ -45,6 +43,19 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, [isOpen]);
+
+    const isLandscape = windowSize.width > windowSize.height;
+
+    // Adjust page position when orientation changes to align with spreads
+    useEffect(() => {
+        if (isLandscape) {
+            if (currentPage > 0 && currentPage < PAGES.length - 1) {
+                if (currentPage % 2 === 0) {
+                    setCurrentPage(currentPage - 1);
+                }
+            }
+        }
+    }, [isLandscape, currentPage]);
 
     // Performance: Preload pages 5 to 20 in the background
     useEffect(() => {
@@ -71,75 +82,51 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
 
     if (!isOpen) return null;
 
-    const isLandscape = windowSize.width > windowSize.height;
-    const displayMode = isLandscape ? "double" : "single";
-
-    // Calculate dimensions based on aspect ratio 3:4 (width:height)
-    let pageWidth = 0;
-    let pageHeight = 0;
-
-    if (isLandscape) {
-        // Landscape: Double page spread (Total book width = 2 * pageWidth)
-        const maxTotalWidth = windowSize.width - 160; // Leave margin for navigation arrows
-        const maxTotalHeight = windowSize.height - 160;
-
-        // Try fitting based on height
-        pageHeight = maxTotalHeight;
-        pageWidth = pageHeight * (3 / 4);
-
-        // If total width exceeds screen width, scale down based on width
-        if (pageWidth * 2 > maxTotalWidth) {
-            pageWidth = maxTotalWidth / 2;
-            pageHeight = pageWidth * (4 / 3);
-        }
-    } else {
-        // Portrait: Single page (Total book width = pageWidth)
-        const maxTotalWidth = windowSize.width - 40;
-        const maxTotalHeight = windowSize.height - 160;
-
-        pageWidth = maxTotalWidth;
-        pageHeight = pageWidth * (4 / 3);
-
-        if (pageHeight > maxTotalHeight) {
-            pageHeight = maxTotalHeight;
-            pageWidth = pageHeight * (3 / 4);
-        }
-    }
-
-    pageWidth = Math.round(pageWidth);
-    pageHeight = Math.round(pageHeight);
-
     const handlePrev = () => {
-        if (flipBookRef.current) {
-            flipBookRef.current.pageFlip().flipPrev();
+        if (!isLandscape) {
+            setCurrentPage((prev) => Math.max(prev - 1, 0));
+        } else {
+            if (currentPage === PAGES.length - 1) {
+                setCurrentPage(PAGES.length - 3); // Go back to last spread (18 & 19, indices 17 & 18)
+            } else if (currentPage === 1) {
+                setCurrentPage(0); // Go back to Cover (index 0)
+            } else {
+                setCurrentPage((prev) => Math.max(prev - 2, 0));
+            }
         }
     };
 
     const handleNext = () => {
-        if (flipBookRef.current) {
-            flipBookRef.current.pageFlip().flipNext();
+        if (!isLandscape) {
+            setCurrentPage((prev) => Math.min(prev + 1, PAGES.length - 1));
+        } else {
+            if (currentPage === 0) {
+                setCurrentPage(1); // Go to first spread (2 & 3, indices 1 & 2)
+            } else if (currentPage === PAGES.length - 3) {
+                setCurrentPage(PAGES.length - 1); // Go to Back Cover (index 19)
+            } else {
+                setCurrentPage((prev) => Math.min(prev + 2, PAGES.length - 1));
+            }
         }
     };
 
-    const onFlip = (e: any) => {
-        setCurrentPage(e.data);
-    };
-
     const getPageIndicator = () => {
-        if (displayMode === "single") {
+        if (!isLandscape) {
             return `${currentPage + 1} / 20`;
         } else {
             if (currentPage === 0) {
                 return "1 / 20";
             }
-            if (currentPage === 19) {
+            if (currentPage === PAGES.length - 1) {
                 return "20 / 20";
             }
             const leftPageNum = currentPage + 1;
-            const rightPageNum = Math.min(leftPageNum + 1, 20);
+            const rightPageNum = Math.min(leftPageNum + 1, PAGES.length);
             return `${leftPageNum} – ${rightPageNum} / 20`;
         }
     };
+
+    const isDoubleSpread = isLandscape && currentPage > 0 && currentPage < PAGES.length - 1;
 
     return (
         <AnimatePresence>
@@ -147,7 +134,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.3 }}
                 className="fixed inset-0 z-50 bg-[#0b0e14] flex flex-col items-center justify-center select-none"
             >
                 {/* Header / A24 Minimal Close Button */}
@@ -171,81 +158,65 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                     <ChevronLeft className="w-8 h-8 stroke-1" />
                 </button>
 
-                {/* Main Flipbook Wrapper */}
-                <div 
-                    className="relative flex items-center justify-center"
-                    style={{
-                        width: isLandscape ? `${pageWidth * 2}px` : `${pageWidth}px`,
-                        height: `${pageHeight}px`
-                    }}
-                >
-                    <HTMLFlipBook
-                        width={pageWidth}
-                        height={pageHeight}
-                        size="fixed"
-                        minWidth={pageWidth}
-                        maxWidth={pageWidth}
-                        minHeight={pageHeight}
-                        maxHeight={pageHeight}
-                        display={displayMode}
-                        ref={flipBookRef}
-                        onFlip={onFlip}
-                        showCover={isLandscape}
-                        drawShadow={true}
-                        maxShadowOpacity={0.6}
-                        flippingTime={800}
-                        usePortrait={!isLandscape}
-                        className="mx-auto shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
-                        key={`${displayMode}-${pageWidth}-${pageHeight}`}
-                        startPage={currentPage}
-                    >
-                        {PAGES.map((src, index) => {
-                            const isLeftPage = index % 2 === 1;
-                            const showPage = index < 4 || preloaded;
+                {/* Main Viewer Wrapper */}
+                <div className="relative flex items-center justify-center max-w-full max-h-[75vh] px-4">
+                    {isDoubleSpread ? (
+                        /* Landscape: Double Page Spread (100% Seamless, 0px gap) */
+                        <div className="relative aspect-[3/2] w-[85vw] max-w-4xl max-h-[70vh] flex bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden gap-0 border-0 p-0 m-0">
+                            {/* Left Page */}
+                            <div className="w-1/2 h-full relative overflow-hidden">
+                                {preloaded || currentPage < 4 ? (
+                                    <img
+                                        src={PAGES[currentPage]}
+                                        alt={`Page ${currentPage + 1}`}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
+                                        <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
+                                    </div>
+                                )}
+                            </div>
+                            {/* Right Page */}
+                            <div className="w-1/2 h-full relative overflow-hidden">
+                                {preloaded || currentPage + 1 < 4 ? (
+                                    <img
+                                        src={PAGES[currentPage + 1]}
+                                        alt={`Page ${currentPage + 2}`}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
+                                        <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
+                                    </div>
+                                )}
+                            </div>
 
-                            return (
-                                <div
-                                    key={index}
-                                    className="w-full h-full bg-[#0b0e14] relative overflow-hidden box-border"
-                                >
-                                    {showPage ? (
-                                        <img
-                                            src={src}
-                                            alt={`Page ${index + 1}`}
-                                            className="w-full h-full object-cover"
-                                            loading={index < 4 ? "eager" : "lazy"}
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
-                                            <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
-                                        </div>
-                                    )}
-
-                                    {/* 3D Page Crease Shadow Effect (Moves with page) */}
-                                    {isLandscape && index > 0 && index < 19 && (
-                                        <div
-                                            className={`absolute top-0 bottom-0 pointer-events-none w-16 z-20 transition-opacity ${
-                                                isLeftPage
-                                                    ? "right-0 bg-gradient-to-l from-black/45 via-black/10 to-transparent"
-                                                    : "left-0 bg-gradient-to-r from-black/45 via-black/10 to-transparent"
-                                            }`}
-                                        />
-                                    )}
+                            {/* Book Binding Crease Shadow overlay (Stationary in center crease, very subtle) */}
+                            <div
+                                className="absolute top-0 bottom-0 pointer-events-none z-10 w-[30px]"
+                                style={{
+                                    left: "50%",
+                                    transform: "translateX(-50%)",
+                                    background: "linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.2) 100%)"
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        /* Portrait (or Landscape Cover/Back Cover): Single Page */
+                        <div className="relative aspect-[3/4] w-[85vw] max-w-md max-h-[70vh] bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden border-0 p-0 m-0">
+                            {preloaded || currentPage < 4 ? (
+                                <img
+                                    src={PAGES[currentPage]}
+                                    alt={`Page ${currentPage + 1}`}
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
+                                    <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
                                 </div>
-                            );
-                        })}
-                    </HTMLFlipBook>
-
-                    {/* Book Binding Crease Shadow overlay (Stationary in 3D center) */}
-                    {isLandscape && currentPage > 0 && currentPage < 19 && (
-                        <div
-                            className="absolute top-0 bottom-0 pointer-events-none z-30 w-[40px] shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]"
-                            style={{
-                                left: "50%",
-                                transform: "translateX(-50%)",
-                                background: "linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.3) 100%)"
-                            }}
-                        />
+                            )}
+                        </div>
                     )}
                 </div>
 
@@ -259,7 +230,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                     <ChevronRight className="w-8 h-8 stroke-1" />
                 </button>
 
-                {/* Footer Page Number / A24 Minimal design */}
+                {/* Footer Page Number */}
                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40">
                     <p className="text-zinc-500 text-xs tracking-[0.2em] font-serif uppercase">
                         {getPageIndicator()}
