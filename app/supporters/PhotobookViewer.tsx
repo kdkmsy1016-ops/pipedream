@@ -187,13 +187,16 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     pageWidth = Math.round(pageWidth);
     pageHeight = Math.round(pageHeight);
 
-    // Compute cover & back cover centering translation
-    let transformStyle = "translateX(0)";
+    const totalPages = 20;
+
+    // 3. 現在のページに応じてX軸の移動量を計算
+    // 表紙(0)は左へ、裏表紙(最後)は右へズラして強制的に中央に持ってくる
+    let transformStyle = 'translateX(0)';
     if (displayMode === "double") {
         if (currentPage === 0) {
-            transformStyle = "translateX(-25%)";
-        } else if (currentPage === PAGES.length - 1) {
-            transformStyle = "translateX(25%)";
+            transformStyle = 'translateX(-25%)'; 
+        } else if (currentPage >= totalPages - 1) {
+            transformStyle = 'translateX(25%)';
         }
     }
 
@@ -215,7 +218,8 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         }
     }, []);
 
-    const onFlip = useCallback((e: { data: number }) => {
+    // 2. ページがめくられた時にStateを更新
+    const onPageChange = useCallback((e: { data: number }) => {
         setCurrentPage(e.data);
     }, []);
 
@@ -414,19 +418,10 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                             contentClass="flex items-center justify-center"
                         >
                             {/* Parent container filling the viewport with flex centering */}
-                            <div 
-                                className="w-full min-h-screen flex items-center justify-center"
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    width: "100%",
-                                    minHeight: "100vh"
-                                }}
-                            >
+                            <div className="flex justify-center items-center min-h-screen bg-black overflow-hidden w-full">
                                 {/* Inner wrapper container with custom translation centering on the book dimensions */}
                                 <div 
-                                    className="relative flex items-center justify-center transition-transform duration-500 ease-in-out"
+                                    className="relative flex items-center justify-center"
                                     style={{
                                         width: isLandscape ? `${pageWidth * 2}px` : `${pageWidth}px`,
                                         height: `${pageHeight}px`,
@@ -443,7 +438,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                         maxHeight={pageHeight}
                                         display={displayMode}
                                         ref={flipBookRef}
-                                        onFlip={onFlip}
+                                        onFlip={onPageChange}
                                         showCover={true}
                                         drawShadow={false}
                                         flippingTime={1}
