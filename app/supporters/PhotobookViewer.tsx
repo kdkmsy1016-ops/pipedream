@@ -35,12 +35,8 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         };
     }, []);
 
-    // Timer to auto-hide UI in fullscreen mode
+    // Timer to auto-hide UI overlays
     const resetUITimer = useCallback(() => {
-        if (!isFullscreen) {
-            setShowUI(true);
-            return;
-        }
         setShowUI(true);
         if (uiTimeoutRef.current) {
             clearTimeout(uiTimeoutRef.current);
@@ -48,16 +44,11 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         uiTimeoutRef.current = setTimeout(() => {
             setShowUI(false);
         }, 3000); // Auto-hide after 3 seconds of inactivity
-    }, [isFullscreen]);
+    }, []);
 
-    // Track user activity to trigger UI visibility in fullscreen
+    // Track user activity to trigger UI visibility (mouse, touch, click)
     useEffect(() => {
         if (!isOpen) return;
-        if (!isFullscreen) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setShowUI(true);
-            return;
-        }
 
         const handleActivity = () => {
             resetUITimer();
@@ -67,7 +58,8 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         window.addEventListener("touchstart", handleActivity);
         window.addEventListener("click", handleActivity);
 
-        resetUITimer(); // Start initial countdown
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        resetUITimer(); // Start initial countdown on mount
 
         return () => {
             window.removeEventListener("mousemove", handleActivity);
@@ -77,7 +69,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 clearTimeout(uiTimeoutRef.current);
             }
         };
-    }, [isOpen, isFullscreen, resetUITimer]);
+    }, [isOpen, resetUITimer]);
 
     const toggleFullscreen = async () => {
         try {
@@ -330,7 +322,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
 
                 {/* Main Viewer Wrapper */}
                 <div 
-                    className={`relative flex items-center justify-center w-full transition-all duration-300 ${isFullscreen ? "max-h-screen px-0" : "max-h-[75vh] px-4"}`}
+                    className="relative flex items-center justify-center w-full max-h-screen px-0"
                     onTouchStart={handleTouchStart}
                     onTouchEnd={handleTouchEnd}
                 >
@@ -352,12 +344,12 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                 /* Landscape: Double Page Spread (100% Seamless, 0px gap) */
                                 <div 
                                     style={{
-                                        width: isFullscreen ? "100vw" : "85vw",
-                                        maxWidth: isFullscreen ? "calc(100vh * 4960 / 3508)" : "min(896px, calc(70vh * 4960 / 3508))",
-                                        maxHeight: isFullscreen ? "100vh" : "70vh",
+                                        width: "100vw",
+                                        maxWidth: "calc(100vh * 4960 / 3508)",
+                                        maxHeight: "100vh",
                                         aspectRatio: "4960 / 3508"
                                     }}
-                                    className={`relative flex bg-[#0b0e14] overflow-hidden gap-0 border-0 p-0 m-0 transition-all duration-300 ${isFullscreen ? "" : "shadow-[0_30px_70px_rgba(0,0,0,0.8)]"}`}
+                                    className="relative flex bg-[#0b0e14] overflow-hidden gap-0 border-0 p-0 m-0"
                                 >
                                     {/* Left Page */}
                                     <div className="w-1/2 h-full relative overflow-hidden">
@@ -392,12 +384,12 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                 /* Portrait (or Landscape Cover/Back Cover): Single Page */
                                 <div 
                                     style={{
-                                        width: isFullscreen ? "100vw" : "85vw",
-                                        maxWidth: isFullscreen ? "calc(100vh * 2480 / 3508)" : "min(448px, calc(70vh * 2480 / 3508))",
-                                        maxHeight: isFullscreen ? "100vh" : "70vh",
+                                        width: "100vw",
+                                        maxWidth: "calc(100vh * 2480 / 3508)",
+                                        maxHeight: "100vh",
                                         aspectRatio: "2480 / 3508"
                                     }}
-                                    className={`relative bg-[#0b0e14] overflow-hidden border-0 p-0 m-0 transition-all duration-300 ${isFullscreen ? "" : "shadow-[0_30px_70px_rgba(0,0,0,0.8)]"}`}
+                                    className="relative bg-[#0b0e14] overflow-hidden border-0 p-0 m-0"
                                 >
                                     {preloaded || currentPage < 4 ? (
                                         <img
