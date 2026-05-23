@@ -8,6 +8,15 @@ import HTMLFlipBook from "react-pageflip";
 
 const PAGES = Array.from({ length: 20 }, (_, i) => `/images/photobook/page-${i + 1}.webp`);
 
+const isIOSDevice = () => {
+    if (typeof window === "undefined") return false;
+
+    return (
+        /iP(ad|hone|od)/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+    );
+};
+
 interface PhotobookViewerProps {
     isOpen: boolean;
     onClose: () => void;
@@ -44,6 +53,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     }, []);
 
     const canUseNativeFullscreen = () => {
+        if (isIOSDevice()) return false;
         return typeof document !== "undefined" && !!document.documentElement.requestFullscreen;
     };
 
