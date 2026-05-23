@@ -430,16 +430,14 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                         ref={flipBookRef}
                                         onFlip={onFlip}
                                         showCover={true}
-                                        drawShadow={true}
-                                        maxShadowOpacity={0.6}
-                                        flippingTime={800}
+                                        drawShadow={false}
+                                        flippingTime={0}
                                         usePortrait={!isLandscape}
                                         className="mx-auto shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
                                         key={`${displayMode}-${pageWidth}-${pageHeight}`}
                                         startPage={currentPage}
                                     >
                                         {PAGES.map((src, index) => {
-                                            const isLeftPage = index % 2 === 1;
                                             const showPage = index < 4 || preloaded;
 
                                             return (
@@ -459,33 +457,10 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                                             <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
                                                         </div>
                                                     )}
-
-                                                    {/* 3D Page Crease Shadow Effect (Moves with page) */}
-                                                    {isLandscape && index > 0 && index < 19 && (
-                                                        <div
-                                                            className={`absolute top-0 bottom-0 pointer-events-none w-16 z-20 transition-opacity ${
-                                                                isLeftPage
-                                                                    ? "right-0 bg-gradient-to-l from-black/45 via-black/10 to-transparent"
-                                                                    : "left-0 bg-gradient-to-r from-black/45 via-black/10 to-transparent"
-                                                            }`}
-                                                        />
-                                                    )}
                                                 </div>
                                             );
                                         })}
                                     </HTMLFlipBook>
-
-                                    {/* Book Binding Crease Shadow overlay (Stationary in 3D center crease) */}
-                                    {isLandscape && currentPage > 0 && currentPage < 19 && (
-                                        <div
-                                            className="absolute top-0 bottom-0 pointer-events-none z-30 w-[40px]"
-                                            style={{
-                                                left: "50%",
-                                                transform: "translateX(-50%)",
-                                                background: "linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.3) 100%)"
-                                            }}
-                                        />
-                                    )}
                                 </div>
                             </div>
                         </TransformComponent>
