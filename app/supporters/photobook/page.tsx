@@ -1,8 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
+const PhotobookViewer = dynamic(() => import("../PhotobookViewer"), {
+    ssr: false
+});
+
 import { useEffect, useState } from "react";
 import { Lock } from "lucide-react";
-import PhotobookViewer from "../PhotobookViewer";
+
 
 export default function PhotobookPage() {
     const [tier, setTier] = useState<number>(0);
