@@ -87,20 +87,27 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         }
     };
 
-    // Track window resize to determine orientation
+    // Track window resize and orientation changes to determine orientation
     useEffect(() => {
         if (!isOpen) return;
 
         const handleResize = () => {
-            setWindowSize({
-                width: window.innerWidth,
-                height: window.innerHeight
-            });
+            // 100ms delay to let iOS Safari complete viewport settling
+            setTimeout(() => {
+                setWindowSize({
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                });
+            }, 100);
         };
 
         handleResize();
         window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
+        window.addEventListener("orientationchange", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("orientationchange", handleResize);
+        };
     }, [isOpen]);
 
     const isLandscape = windowSize.width > windowSize.height;
@@ -344,12 +351,12 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                 /* Landscape: Double Page Spread (100% Seamless, 0px gap) */
                                 <div 
                                     style={{
-                                        width: "100vw",
+                                        width: "100%",
                                         maxWidth: "calc(100vh * 4960 / 3508)",
                                         maxHeight: "100vh",
                                         aspectRatio: "4960 / 3508"
                                     }}
-                                    className="relative flex bg-[#0b0e14] overflow-hidden gap-0 border-0 p-0 m-0"
+                                    className="relative flex bg-[#0b0e14] overflow-hidden gap-0 border-0 p-0 m-0 mx-auto"
                                 >
                                     {/* Left Page */}
                                     <div className="w-1/2 h-full relative overflow-hidden">
@@ -384,12 +391,12 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                 /* Portrait (or Landscape Cover/Back Cover): Single Page */
                                 <div 
                                     style={{
-                                        width: "100vw",
+                                        width: "100%",
                                         maxWidth: "calc(100vh * 2480 / 3508)",
                                         maxHeight: "100vh",
                                         aspectRatio: "2480 / 3508"
                                     }}
-                                    className="relative bg-[#0b0e14] overflow-hidden border-0 p-0 m-0"
+                                    className="relative bg-[#0b0e14] overflow-hidden border-0 p-0 m-0 mx-auto"
                                 >
                                     {preloaded || currentPage < 4 ? (
                                         <img
