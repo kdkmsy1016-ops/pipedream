@@ -337,11 +337,6 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 transition={{ duration: 0.3 }}
                 className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center select-none"
             >
-                <style>{`
-                    .stf__wrapper {
-                        margin: 0 auto !important;
-                    }
-                `}</style>
                 {/* Header Actions */}
                 <AnimatePresence>
                     {showUI && (
@@ -417,66 +412,63 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                             wrapperClass="!w-full !h-full flex items-center justify-center"
                             contentClass="flex items-center justify-center"
                         >
-                            {/* Parent container filling the viewport with flex centering */}
-                            <div className="flex justify-center items-center min-h-screen bg-black overflow-hidden w-full">
-                                {/* Inner wrapper container with custom translation centering on the book dimensions */}
-                                <div 
-                                    className="relative flex items-center justify-center"
+                            {/* Inner wrapper container with custom translation centering on the book dimensions */}
+                            <div 
+                                className="relative flex items-center justify-center transition-transform duration-500 ease-out"
+                                style={{
+                                    width: isLandscape ? `${pageWidth * 2}px` : `${pageWidth}px`,
+                                    height: `${pageHeight}px`,
+                                    transform: transformStyle
+                                }}
+                            >
+                                <HTMLFlipBook
+                                    width={pageWidth}
+                                    height={pageHeight}
+                                    size="stretch"
+                                    minWidth={pageWidth}
+                                    maxWidth={pageWidth}
+                                    minHeight={pageHeight}
+                                    maxHeight={pageHeight}
+                                    display={displayMode}
+                                    ref={flipBookRef}
+                                    onFlip={onPageChange}
+                                    showCover={true}
+                                    drawShadow={false}
+                                    flippingTime={1}
+                                    usePortrait={!isLandscape}
+                                    className="mx-auto shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
                                     style={{
-                                        width: isLandscape ? `${pageWidth * 2}px` : `${pageWidth}px`,
-                                        height: `${pageHeight}px`,
-                                        transform: transformStyle
+                                        margin: "0 auto",
+                                        maxWidth: "100%",
+                                        boxSizing: "border-box"
                                     }}
+                                    key={`${displayMode}-${pageWidth}-${pageHeight}`}
+                                    startPage={currentPage}
                                 >
-                                    <HTMLFlipBook
-                                        width={pageWidth}
-                                        height={pageHeight}
-                                        size="fixed"
-                                        minWidth={pageWidth}
-                                        maxWidth={pageWidth}
-                                        minHeight={pageHeight}
-                                        maxHeight={pageHeight}
-                                        display={displayMode}
-                                        ref={flipBookRef}
-                                        onFlip={onPageChange}
-                                        showCover={true}
-                                        drawShadow={false}
-                                        flippingTime={1}
-                                        usePortrait={!isLandscape}
-                                        className="mx-auto shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
-                                        style={{
-                                            margin: "0 auto",
-                                            maxWidth: "100%",
-                                            boxSizing: "border-box"
-                                        }}
-                                        key={`${displayMode}-${pageWidth}-${pageHeight}`}
-                                        startPage={currentPage}
-                                    >
-                                        {PAGES.map((src, index) => {
-                                            const showPage = index < 4 || preloaded;
+                                    {PAGES.map((src, index) => {
+                                        const showPage = index < 4 || preloaded;
 
-                                            return (
-                                                <div
-                                                    key={index}
-                                                    className="w-full h-full bg-[#0b0e14] relative overflow-hidden box-border"
-                                                >
-                                                    {showPage ? (
-                                                        <img
-                                                            src={src}
-                                                            alt={`Page ${index + 1}`}
-                                                            className="w-full h-full object-cover"
-                                                            loading={index < 4 ? "eager" : "lazy"}
-                                                        />
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
-                                                            <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </HTMLFlipBook>
-                                </div>
+                                        return (
+                                            <div
+                                                key={index}
+                                                className="w-full h-full bg-[#0b0e14] relative overflow-hidden box-border"
+                                            >
+                                                {showPage ? (
+                                                    <img
+                                                        src={src}
+                                                        alt={`Page ${index + 1}`}
+                                                        className="w-full h-full object-cover"
+                                                        loading={index < 4 ? "eager" : "lazy"}
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
+                                                        <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </HTMLFlipBook>
                             </div>
                         </TransformComponent>
                     </TransformWrapper>
