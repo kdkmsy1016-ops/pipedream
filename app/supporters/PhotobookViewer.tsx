@@ -232,7 +232,15 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                         >
                             {isDoubleSpread ? (
                                 /* Landscape: Double Page Spread (100% Seamless, 0px gap) */
-                                <div className="relative aspect-[3/2] w-[85vw] max-w-4xl max-h-[70vh] flex bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden gap-0 border-0 p-0 m-0">
+                                <div 
+                                    style={{
+                                        width: "85vw",
+                                        maxWidth: "min(896px, calc(70vh * 4960 / 3508))",
+                                        maxHeight: "70vh",
+                                        aspectRatio: "4960 / 3508"
+                                    }}
+                                    className="relative flex bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden gap-0 border-0 p-0 m-0"
+                                >
                                     {/* Left Page */}
                                     <div className="w-1/2 h-full relative overflow-hidden">
                                         {preloaded || currentPage < 4 ? (
@@ -264,7 +272,15 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                 </div>
                             ) : (
                                 /* Portrait (or Landscape Cover/Back Cover): Single Page */
-                                <div className="relative aspect-[3/4] w-[85vw] max-w-md max-h-[70vh] bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden border-0 p-0 m-0">
+                                <div 
+                                    style={{
+                                        width: "85vw",
+                                        maxWidth: "min(448px, calc(70vh * 2480 / 3508))",
+                                        maxHeight: "70vh",
+                                        aspectRatio: "2480 / 3508"
+                                    }}
+                                    className="relative bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden border-0 p-0 m-0"
+                                >
                                     {preloaded || currentPage < 4 ? (
                                         <img
                                             src={PAGES[currentPage]}
