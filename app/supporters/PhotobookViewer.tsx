@@ -20,7 +20,10 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const touchStartX = useRef<number | null>(null);
 
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [showUI, setShowUI] = useState(true);
+    const uiTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+    // Sync fullscreen state
     useEffect(() => {
         const handleFullscreenChange = () => {
             setIsFullscreen(!!document.fullscreenElement);
@@ -30,6 +33,50 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
             document.removeEventListener("fullscreenchange", handleFullscreenChange);
         };
     }, []);
+
+    // Timer to auto-hide UI in fullscreen mode
+    const resetUITimer = useCallback(() => {
+        if (!isFullscreen) {
+            setShowUI(true);
+            return;
+        }
+        setShowUI(true);
+        if (uiTimeoutRef.current) {
+            clearTimeout(uiTimeoutRef.current);
+        }
+        uiTimeoutRef.current = setTimeout(() => {
+            setShowUI(false);
+        }, 3000); // Auto-hide after 3 seconds of inactivity
+    }, [isFullscreen]);
+
+    // Track user activity to trigger UI visibility in fullscreen
+    useEffect(() => {
+        if (!isOpen) return;
+        if (!isFullscreen) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setShowUI(true);
+            return;
+        }
+
+        const handleActivity = () => {
+            resetUITimer();
+        };
+
+        window.addEventListener("mousemove", handleActivity);
+        window.addEventListener("touchstart", handleActivity);
+        window.addEventListener("click", handleActivity);
+
+        resetUITimer(); // Start initial countdown
+
+        return () => {
+            window.removeEventListener("mousemove", handleActivity);
+            window.removeEventListener("touchstart", handleActivity);
+            window.removeEventListener("click", handleActivity);
+            if (uiTimeoutRef.current) {
+                clearTimeout(uiTimeoutRef.current);
+            }
+        };
+    }, [isOpen, isFullscreen, resetUITimer]);
 
     const toggleFullscreen = async () => {
         try {
@@ -218,43 +265,61 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 className="fixed inset-0 z-50 bg-[#0b0e14] flex flex-col items-center justify-center select-none"
             >
                 {/* Header Actions */}
-                <div className="absolute top-6 right-6 z-50 flex items-center gap-4">
-                    {/* Fullscreen Button */}
-                    <button
-                        onClick={toggleFullscreen}
-                        className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
-                    >
-                        <span>{isFullscreen ? "EXIT FULLSCREEN" : "FULLSCREEN"}</span>
-                        {isFullscreen ? (
-                            <Minimize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
-                        ) : (
-                            <Maximize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
-                        )}
-                    </button>
+                <AnimatePresence>
+                    {showUI && (
+                        <motion.div 
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute top-6 right-6 z-50 flex items-center gap-4"
+                        >
+                            {/* Fullscreen Button */}
+                            <button
+                                onClick={toggleFullscreen}
+                                className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
+                            >
+                                <span>{isFullscreen ? "EXIT FULLSCREEN" : "FULLSCREEN"}</span>
+                                {isFullscreen ? (
+                                    <Minimize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
+                                ) : (
+                                    <Maximize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
+                                )}
+                            </button>
 
-                    {/* A24 Minimal Close Button */}
-                    <button
-                        onClick={onClose}
-                        className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
-                    >
-                        <span>CLOSE</span>
-                        <X className="w-4 h-4 stroke-1 group-hover:rotate-90 transition-transform duration-300" />
-                    </button>
-                </div>
+                            {/* A24 Close Button */}
+                            <button
+                                onClick={onClose}
+                                className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
+                            >
+                                <span>CLOSE</span>
+                                <X className="w-4 h-4 stroke-1 group-hover:rotate-90 transition-transform duration-300" />
+                            </button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 {/* Left Navigation Arrow */}
-                <button
-                    onClick={handlePrev}
-                    disabled={currentPage === 0}
-                    className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-[#ffbf00] disabled:opacity-20 disabled:pointer-events-none transition-colors p-4 z-40 cursor-pointer"
-                    aria-label="Previous Page"
-                >
-                    <ChevronLeft className="w-8 h-8 stroke-1" />
-                </button>
+                <AnimatePresence>
+                    {showUI && (
+                        <motion.button
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            onClick={handlePrev}
+                            disabled={currentPage === 0}
+                            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-[#ffbf00] disabled:opacity-20 disabled:pointer-events-none transition-colors p-4 z-40 cursor-pointer"
+                            aria-label="Previous Page"
+                        >
+                            <ChevronLeft className="w-8 h-8 stroke-1" />
+                        </motion.button>
+                    )}
+                </AnimatePresence>
 
                 {/* Main Viewer Wrapper */}
                 <div 
-                    className="relative flex items-center justify-center max-w-full max-h-[75vh] px-4"
+                    className={`relative flex items-center justify-center w-full transition-all duration-300 ${isFullscreen ? "max-h-screen px-0" : "max-h-[75vh] px-4"}`}
                     onTouchStart={handleTouchStart}
                     onTouchEnd={handleTouchEnd}
                 >
@@ -276,12 +341,12 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                 /* Landscape: Double Page Spread (100% Seamless, 0px gap) */
                                 <div 
                                     style={{
-                                        width: "85vw",
-                                        maxWidth: "min(896px, calc(70vh * 4960 / 3508))",
-                                        maxHeight: "70vh",
+                                        width: isFullscreen ? "100vw" : "85vw",
+                                        maxWidth: isFullscreen ? "calc(100vh * 4960 / 3508)" : "min(896px, calc(70vh * 4960 / 3508))",
+                                        maxHeight: isFullscreen ? "100vh" : "70vh",
                                         aspectRatio: "4960 / 3508"
                                     }}
-                                    className="relative flex bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden gap-0 border-0 p-0 m-0"
+                                    className={`relative flex bg-[#0b0e14] overflow-hidden gap-0 border-0 p-0 m-0 transition-all duration-300 ${isFullscreen ? "" : "shadow-[0_30px_70px_rgba(0,0,0,0.8)]"}`}
                                 >
                                     {/* Left Page */}
                                     <div className="w-1/2 h-full relative overflow-hidden">
@@ -316,12 +381,12 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                 /* Portrait (or Landscape Cover/Back Cover): Single Page */
                                 <div 
                                     style={{
-                                        width: "85vw",
-                                        maxWidth: "min(448px, calc(70vh * 2480 / 3508))",
-                                        maxHeight: "70vh",
+                                        width: isFullscreen ? "100vw" : "85vw",
+                                        maxWidth: isFullscreen ? "calc(100vh * 2480 / 3508)" : "min(448px, calc(70vh * 2480 / 3508))",
+                                        maxHeight: isFullscreen ? "100vh" : "70vh",
                                         aspectRatio: "2480 / 3508"
                                     }}
-                                    className="relative bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden border-0 p-0 m-0"
+                                    className={`relative bg-[#0b0e14] overflow-hidden border-0 p-0 m-0 transition-all duration-300 ${isFullscreen ? "" : "shadow-[0_30px_70px_rgba(0,0,0,0.8)]"}`}
                                 >
                                     {preloaded || currentPage < 4 ? (
                                         <img
@@ -341,21 +406,39 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 </div>
 
                 {/* Right Navigation Arrow */}
-                <button
-                    onClick={handleNext}
-                    disabled={currentPage >= PAGES.length - 1}
-                    className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-[#ffbf00] disabled:opacity-20 disabled:pointer-events-none transition-colors p-4 z-40 cursor-pointer"
-                    aria-label="Next Page"
-                >
-                    <ChevronRight className="w-8 h-8 stroke-1" />
-                </button>
+                <AnimatePresence>
+                    {showUI && (
+                        <motion.button
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            onClick={handleNext}
+                            disabled={currentPage >= PAGES.length - 1}
+                            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-[#ffbf00] disabled:opacity-20 disabled:pointer-events-none transition-colors p-4 z-40 cursor-pointer"
+                            aria-label="Next Page"
+                        >
+                            <ChevronRight className="w-8 h-8 stroke-1" />
+                        </motion.button>
+                    )}
+                </AnimatePresence>
 
                 {/* Footer Page Number */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40">
-                    <p className="text-zinc-500 text-xs tracking-[0.2em] font-serif uppercase">
-                        {getPageIndicator()}
-                    </p>
-                </div>
+                <AnimatePresence>
+                    {showUI && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40"
+                        >
+                            <p className="text-zinc-500 text-xs tracking-[0.2em] font-serif uppercase">
+                                {getPageIndicator()}
+                            </p>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </motion.div>
         </AnimatePresence>
     );
