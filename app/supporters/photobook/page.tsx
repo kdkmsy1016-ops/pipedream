@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-const PhotobookViewer = dynamic(() => import("../PhotobookViewer"), {
+const PhotobookViewer = dynamic(() => import("../PhotobookViewerV2"), {
     ssr: false
 });
 
