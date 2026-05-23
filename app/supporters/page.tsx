@@ -130,6 +130,13 @@ export default function SupportersPage() {
 
         if (popup) {
             popup.focus();
+            try {
+                if (popup.document && popup.document.documentElement && popup.document.documentElement.requestFullscreen) {
+                    popup.document.documentElement.requestFullscreen();
+                }
+            } catch (err) {
+                console.warn("Auto-fullscreen request on popup failed:", err);
+            }
         }
     };
 
