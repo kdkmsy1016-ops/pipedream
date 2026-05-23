@@ -27,9 +27,6 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [currentPage, setCurrentPage] = useState(0);
     const [preloaded, setPreloaded] = useState(false);
     const transformRef = useRef<ReactZoomPanPinchRef>(null);
-    const tapStartRef = useRef<{ x: number; y: number; pointerId: number } | null>(null);
-    const activePointersRef = useRef<Set<number>>(new Set());
-    const isPinchingRef = useRef(false);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const flipBookRef = useRef<any>(null);
@@ -242,49 +239,15 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         }
     }, []);
 
-    const handleTapPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-        activePointersRef.current.add(e.pointerId);
+    const handleViewerTap = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        const target = e.target as HTMLElement;
 
-        if (activePointersRef.current.size > 1) {
-            isPinchingRef.current = true;
-            tapStartRef.current = null;
-            return;
-        }
+        // UIボタン類を押したときはページ送りしない
+        if (target.closest("[data-viewer-ui='true']")) return;
 
-        tapStartRef.current = {
-            x: e.clientX,
-            y: e.clientY,
-            pointerId: e.pointerId,
-        };
-    }, []);
-
-    const handleTapPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-        activePointersRef.current.delete(e.pointerId);
-
-        if (isPinchingRef.current) {
-            if (activePointersRef.current.size === 0) {
-                isPinchingRef.current = false;
-            }
-            tapStartRef.current = null;
-            return;
-        }
-
-        if (!tapStartRef.current) return;
-        if (tapStartRef.current.pointerId !== e.pointerId) return;
-
-        const dx = Math.abs(e.clientX - tapStartRef.current.x);
-        const dy = Math.abs(e.clientY - tapStartRef.current.y);
-
-        tapStartRef.current = null;
-
-        // 10px以上動いた場合はタップではなくドラッグ／フリック扱いにする
-        if (dx > 10 || dy > 10) return;
-
-        // ズーム倍率が1.05より大きい場合はページ送りしない
+        // ズーム中はページ送りしない
         const scale = transformRef.current?.state?.scale ?? 1;
-        if (scale > 1.05) {
-            return;
-        }
+        if (scale > 1.05) return;
 
         const tapX = e.clientX;
         const screenCenter = window.innerWidth / 2;
@@ -295,16 +258,6 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
             handleNext();
         }
     }, [handlePrev, handleNext]);
-
-    const handleTapPointerCancel = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-        activePointersRef.current.delete(e.pointerId);
-
-        if (activePointersRef.current.size === 0) {
-            isPinchingRef.current = false;
-        }
-
-        tapStartRef.current = null;
-    }, []);
 
     // 2. ページがめくられた時にStateを更新
     const onPageChange = useCallback((e: { data: number }) => {
@@ -434,6 +387,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                         >
                             {/* Fullscreen Button */}
                             <button
+                                data-viewer-ui="true"
                                 onClick={toggleFullscreen}
                                 className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
                             >
@@ -447,6 +401,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
 
                             {/* Close Button */}
                             <button
+                                data-viewer-ui="true"
                                 onClick={handleClose}
                                 className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
                             >
@@ -461,6 +416,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 <AnimatePresence>
                     {showUI && (
                         <motion.button
+                            data-viewer-ui="true"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
@@ -478,9 +434,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 {/* Main Viewer Wrapper */}
                 <div 
                     className="relative flex items-center justify-center w-full h-full"
-                    onPointerDownCapture={handleTapPointerDown}
-                    onPointerUpCapture={handleTapPointerUp}
-                    onPointerCancelCapture={handleTapPointerCancel}
+                    onClick={handleViewerTap}
                 >
                     <TransformWrapper
                         ref={transformRef}
@@ -496,7 +450,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                         panning={{ disabled: false, velocityDisabled: true }}
                     >
                         <TransformComponent
-                            wrapperClass="!w-full !h-full"
+                            wrapperClass="!w-full !h-full touch-none"
                             contentClass="relative"
                             contentStyle={{
                                 width: `${bookWidth}px`,
@@ -568,6 +522,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 <AnimatePresence>
                     {showUI && (
                         <motion.button
+                            data-viewer-ui="true"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
