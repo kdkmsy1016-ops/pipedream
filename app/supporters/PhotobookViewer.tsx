@@ -18,9 +18,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [currentPage, setCurrentPage] = useState(0);
     const [preloaded, setPreloaded] = useState(false);
     const transformRef = useRef<ReactZoomPanPinchRef>(null);
-    const touchStartX = useRef<number | null>(null);
-    const isMultiTouch = useRef(false);
-    
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const flipBookRef = useRef<any>(null);
 
@@ -230,41 +228,7 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [isOpen, handleNext, handlePrev]);
 
-    const handleTouchStart = (e: React.TouchEvent) => {
-        if (e.touches.length > 1) {
-            isMultiTouch.current = true;
-        } else {
-            touchStartX.current = e.touches[0].clientX;
-            isMultiTouch.current = false;
-        }
-    };
 
-    const handleTouchEnd = (e: React.TouchEvent) => {
-        if (touchStartX.current === null || isMultiTouch.current) {
-            touchStartX.current = null;
-            isMultiTouch.current = false;
-            return;
-        }
-
-        // Check if zoomed in (scale > 1.05) to avoid conflict with panning
-        const scale = transformRef.current?.state?.scale || 1;
-        if (scale > 1.05) {
-            touchStartX.current = null;
-            return;
-        }
-
-        const touchEndX = e.changedTouches[0].clientX;
-        const diffX = touchStartX.current - touchEndX;
-
-        // Increase threshold to 120px for longer, intentional swipes
-        if (diffX > 120) {
-            handleNext();
-        } else if (diffX < -120) {
-            handlePrev();
-        }
-
-        touchStartX.current = null;
-    };
 
     // Lock body and html scroll when modal is open or pseudo-fullscreen is active
     useEffect(() => {
@@ -393,8 +357,6 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 {/* Main Viewer Wrapper */}
                 <div 
                     className="relative flex items-center justify-center w-full h-full"
-                    onTouchStart={handleTouchStart}
-                    onTouchEnd={handleTouchEnd}
                 >
                     <TransformWrapper
                         ref={transformRef}
@@ -431,7 +393,10 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                                     showCover={true}
                                     drawShadow={false}
                                     flippingTime={300}
-                                    usePortrait={false}
+                                    usePortrait={!isLandscape}
+                                    useMouseEvents={true}
+                                    swipeDistance={30}
+                                    mobileScrollSupport={true}
                                     className="shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
                                     style={{
                                         width: `${bookWidth}px`,
