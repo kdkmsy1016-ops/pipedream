@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 const PAGES = Array.from({ length: 20 }, (_, i) => `/images/photobook/page-${i + 1}.webp`);
 
@@ -15,6 +16,50 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [windowSize, setWindowSize] = useState({ width: 1200, height: 800 });
     const [currentPage, setCurrentPage] = useState(0);
     const [preloaded, setPreloaded] = useState(false);
+    const transformRef = useRef<any>(null);
+    const touchStartX = useRef<number | null>(null);
+
+    // Keyboard navigation (Arrow keys)
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "ArrowRight") {
+                handleNext();
+            } else if (e.key === "ArrowLeft") {
+                handlePrev();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [isOpen, currentPage, isLandscape]);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX;
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchStartX.current === null) return;
+
+        // Check if zoomed in (scale > 1.05) to avoid conflict with panning
+        const scale = transformRef.current?.state?.scale || 1;
+        if (scale > 1.05) {
+            touchStartX.current = null;
+            return;
+        }
+
+        const touchEndX = e.changedTouches[0].clientX;
+        const diffX = touchStartX.current - touchEndX;
+
+        if (diffX > 50) {
+            handleNext();
+        } else if (diffX < -50) {
+            handlePrev();
+        }
+
+        touchStartX.current = null;
+    };
 
     // Lock body scroll when modal is open
     useEffect(() => {
@@ -83,6 +128,9 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     if (!isOpen) return null;
 
     const handlePrev = () => {
+        if (transformRef.current) {
+            transformRef.current.resetTransform();
+        }
         if (!isLandscape) {
             setCurrentPage((prev) => Math.max(prev - 1, 0));
         } else {
@@ -97,6 +145,9 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     };
 
     const handleNext = () => {
+        if (transformRef.current) {
+            transformRef.current.resetTransform();
+        }
         if (!isLandscape) {
             setCurrentPage((prev) => Math.min(prev + 1, PAGES.length - 1));
         } else {
@@ -159,57 +210,75 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 </button>
 
                 {/* Main Viewer Wrapper */}
-                <div className="relative flex items-center justify-center max-w-full max-h-[75vh] px-4">
-                    {isDoubleSpread ? (
-                        /* Landscape: Double Page Spread (100% Seamless, 0px gap) */
-                        <div className="relative aspect-[3/2] w-[85vw] max-w-4xl max-h-[70vh] flex bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden gap-0 border-0 p-0 m-0">
-                            {/* Left Page */}
-                            <div className="w-1/2 h-full relative overflow-hidden">
-                                {preloaded || currentPage < 4 ? (
-                                    <img
-                                        src={PAGES[currentPage]}
-                                        alt={`Page ${currentPage + 1}`}
-                                        className="w-full h-full object-cover"
-                                    />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
-                                        <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
+                <div 
+                    className="relative flex items-center justify-center max-w-full max-h-[75vh] px-4"
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                >
+                    <TransformWrapper
+                        ref={transformRef}
+                        initialScale={1}
+                        minScale={0.9}
+                        maxScale={4}
+                        centerOnInit={true}
+                        wheel={{ disabled: false }}
+                        pinch={{ disabled: false }}
+                        doubleClick={{ mode: "reset" }}
+                    >
+                        <TransformComponent
+                            wrapperClass="!w-full !h-full flex items-center justify-center"
+                            contentClass="flex items-center justify-center"
+                        >
+                            {isDoubleSpread ? (
+                                /* Landscape: Double Page Spread (100% Seamless, 0px gap) */
+                                <div className="relative aspect-[3/2] w-[85vw] max-w-4xl max-h-[70vh] flex bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden gap-0 border-0 p-0 m-0">
+                                    {/* Left Page */}
+                                    <div className="w-1/2 h-full relative overflow-hidden">
+                                        {preloaded || currentPage < 4 ? (
+                                            <img
+                                                src={PAGES[currentPage]}
+                                                alt={`Page ${currentPage + 1}`}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
+                                                <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
-                            {/* Right Page */}
-                            <div className="w-1/2 h-full relative overflow-hidden">
-                                {preloaded || currentPage + 1 < 4 ? (
-                                    <img
-                                        src={PAGES[currentPage + 1]}
-                                        alt={`Page ${currentPage + 2}`}
-                                        className="w-full h-full object-cover"
-                                    />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
-                                        <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
+                                    {/* Right Page */}
+                                    <div className="w-1/2 h-full relative overflow-hidden">
+                                        {preloaded || currentPage + 1 < 4 ? (
+                                            <img
+                                                src={PAGES[currentPage + 1]}
+                                                alt={`Page ${currentPage + 2}`}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
+                                                <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
-
-
-                        </div>
-                    ) : (
-                        /* Portrait (or Landscape Cover/Back Cover): Single Page */
-                        <div className="relative aspect-[3/4] w-[85vw] max-w-md max-h-[70vh] bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden border-0 p-0 m-0">
-                            {preloaded || currentPage < 4 ? (
-                                <img
-                                    src={PAGES[currentPage]}
-                                    alt={`Page ${currentPage + 1}`}
-                                    className="w-full h-full object-cover"
-                                />
+                                </div>
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
-                                    <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
+                                /* Portrait (or Landscape Cover/Back Cover): Single Page */
+                                <div className="relative aspect-[3/4] w-[85vw] max-w-md max-h-[70vh] bg-[#0b0e14] shadow-[0_30px_70px_rgba(0,0,0,0.8)] overflow-hidden border-0 p-0 m-0">
+                                    {preloaded || currentPage < 4 ? (
+                                        <img
+                                            src={PAGES[currentPage]}
+                                            alt={`Page ${currentPage + 1}`}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-[#0b0e14]">
+                                            <div className="w-6 h-6 border-2 border-zinc-700 border-t-[#ffbf00] rounded-full animate-spin" />
+                                        </div>
+                                    )}
                                 </div>
                             )}
-                        </div>
-                    )}
+                        </TransformComponent>
+                    </TransformWrapper>
                 </div>
 
                 {/* Right Navigation Arrow */}
