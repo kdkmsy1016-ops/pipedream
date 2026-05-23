@@ -1,11 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 
-const PhotobookViewer = dynamic(() => import("./PhotobookViewer"), {
-    ssr: false
-});
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -107,7 +103,6 @@ function DriveDownloadCard({
 
 export default function SupportersPage() {
     const [tier, setTier] = useState<number>(0);
-    const [isViewerOpen, setIsViewerOpen] = useState(false);
     const [passwordInput, setPasswordInput] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [isChecking, setIsChecking] = useState(true);
@@ -120,6 +115,23 @@ export default function SupportersPage() {
         }
         setIsChecking(false);
     }, []);
+
+    const handleOpenPhotobook = () => {
+        const w = window.screen.availWidth || window.screen.width;
+        const h = window.screen.availHeight || window.screen.height;
+        const left = 0;
+        const top = 0;
+
+        const popup = window.open(
+            "/supporters/photobook",
+            "photobook_viewer",
+            `width=${w},height=${h},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
+        );
+
+        if (popup) {
+            popup.focus();
+        }
+    };
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -364,7 +376,7 @@ export default function SupportersPage() {
                                             fallbackText="デジタルフォトブック\n（準備中）"
                                             icon={BookOpen}
                                             buttonText="フォトブックをダウンロード"
-                                            onCardClick={() => setIsViewerOpen(true)}
+                                            onCardClick={handleOpenPhotobook}
                                             customThumbnail="/images/photobook/page-1.webp"
                                         />
                                     </div>
@@ -417,7 +429,6 @@ export default function SupportersPage() {
                     </motion.div>
                 )}
             </AnimatePresence>
-            <PhotobookViewer isOpen={isViewerOpen} onClose={() => setIsViewerOpen(false)} />
         </main>
     );
 }
