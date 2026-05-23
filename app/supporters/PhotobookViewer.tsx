@@ -36,6 +36,8 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     const [showUI, setShowUI] = useState(true);
     const uiTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+    const isActuallyFullscreen = isFullscreen || isPseudoFullscreen;
+
     // Sync fullscreen state
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -96,6 +98,12 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
     }, [isOpen, resetUITimer]);
 
     const toggleFullscreen = async () => {
+        // iOS / iPhone Chrome ではネイティブFullscreenを試さず、即座に疑似Fullscreenへ切り替える
+        if (isIOSDevice()) {
+            setIsPseudoFullscreen((prev) => !prev);
+            return;
+        }
+
         try {
             if (canUseNativeFullscreen()) {
                 if (!document.fullscreenElement) {
@@ -247,13 +255,23 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
         if (isOpen || isPseudoFullscreen) {
             document.body.style.overflow = "hidden";
             document.documentElement.style.overflow = "hidden";
+            document.body.style.position = "fixed";
+            document.body.style.width = "100%";
+            document.body.style.touchAction = "none";
         } else {
             document.body.style.overflow = "";
             document.documentElement.style.overflow = "";
+            document.body.style.position = "";
+            document.body.style.width = "";
+            document.body.style.touchAction = "";
         }
+
         return () => {
             document.body.style.overflow = "";
             document.documentElement.style.overflow = "";
+            document.body.style.position = "";
+            document.body.style.width = "";
+            document.body.style.touchAction = "";
         };
     }, [isOpen, isPseudoFullscreen]);
 
@@ -306,11 +324,16 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center select-none overflow-hidden"
+                className={[
+                    "fixed inset-0 bg-black flex flex-col items-center justify-center select-none overflow-hidden",
+                    isActuallyFullscreen ? "z-[99999]" : "z-[9999]",
+                ].join(" ")}
                 style={{
                     width: "100vw",
                     height: "100dvh",
                     minHeight: "100svh",
+                    paddingTop: isActuallyFullscreen ? "env(safe-area-inset-top)" : undefined,
+                    paddingBottom: isActuallyFullscreen ? "env(safe-area-inset-bottom)" : undefined,
                 }}
             >
                 {/* Header Actions */}
@@ -321,15 +344,18 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2 }}
-                            className="absolute top-6 right-6 z-50 flex items-center gap-4"
+                            className={[
+                                "absolute right-4 z-50 flex items-center gap-3",
+                                isActuallyFullscreen ? "top-3" : "top-6",
+                            ].join(" ")}
                         >
                             {/* Fullscreen Button */}
                             <button
                                 onClick={toggleFullscreen}
                                 className="text-zinc-500 hover:text-[#ffbf00] transition-colors p-3 flex items-center gap-2 group tracking-widest text-xs font-serif uppercase cursor-pointer"
                             >
-                                <span>{isFullscreen || isPseudoFullscreen ? "EXIT FULLSCREEN" : "FULLSCREEN"}</span>
-                                {isFullscreen || isPseudoFullscreen ? (
+                                <span>{isActuallyFullscreen ? "EXIT FULLSCREEN" : "FULLSCREEN"}</span>
+                                {isActuallyFullscreen ? (
                                     <Minimize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
                                 ) : (
                                     <Maximize2 className="w-4 h-4 stroke-1 group-hover:scale-110 transition-transform duration-300" />
@@ -474,7 +500,10 @@ export default function PhotobookViewer({ isOpen, onClose }: PhotobookViewerProp
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 10 }}
                             transition={{ duration: 0.2 }}
-                            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40"
+                            className={[
+                                "absolute left-1/2 -translate-x-1/2 z-40",
+                                isActuallyFullscreen ? "bottom-4" : "bottom-8",
+                            ].join(" ")}
                         >
                             <p className="text-zinc-500 text-xs tracking-[0.2em] font-serif uppercase">
                                 {getPageIndicator()}
