@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-const PhotobookViewerV2 = dynamic(() => import("../PhotobookViewerV2"), {
+const SimplePhotobookViewer = dynamic(() => import("../SimplePhotobookViewer"), {
     ssr: false
 });
 
@@ -47,7 +47,7 @@ export default function PhotobookPage() {
 
     return (
         <main className="min-h-screen bg-[#0b0e14]">
-            <PhotobookViewerV2 isOpen={true} onClose={() => window.close()} />
+            <SimplePhotobookViewer isOpen={true} onClose={() => window.close()} />
         </main>
     );
 }
