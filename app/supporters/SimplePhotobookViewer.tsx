@@ -219,29 +219,33 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
     };
 
     const viewerPadding = 16;
-    const pageGap = pagesPerView === 2 ? 8 : 0;
     const reservedHeight = 80;
 
-    const pageSlotStyle: React.CSSProperties =
-        pagesPerView === 2
-            ? {
-                width: `calc((100vw - ${viewerPadding * 2 + pageGap}px) / 2)`,
+    const getPageSlotStyle = (position: number): React.CSSProperties => {
+        if (pagesPerView === 2) {
+            return {
+                width: `calc((100vw - ${viewerPadding * 2}px) / 2)`,
                 height: `calc(100dvh - ${reservedHeight}px)`,
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: position === 0 ? "flex-end" : "flex-start",
                 flexShrink: 0,
                 boxSizing: "border-box",
-            }
-            : {
-                width: `calc(100vw - ${viewerPadding * 2}px)`,
-                height: `calc(100dvh - ${reservedHeight}px)`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-                boxSizing: "border-box",
+                overflow: "hidden",
             };
+        }
+
+        return {
+            width: `calc(100vw - ${viewerPadding * 2}px)`,
+            height: `calc(100dvh - ${reservedHeight}px)`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+            boxSizing: "border-box",
+            overflow: "hidden",
+        };
+    };
 
     return (
         <div
@@ -282,19 +286,20 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
                         contentClass="w-full h-full flex items-center justify-center"
                     >
                         <div
-                            className="flex items-center justify-center w-full h-full"
+                            className="flex items-center justify-center h-full shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
                             style={{
-                                gap: `${pageGap}px`,
+                                gap: 0,
                                 padding: `${viewerPadding}px`,
                                 boxSizing: "border-box",
+                                width: "100vw",
                             }}
                         >
-                            {visiblePages.map((pageIndex) => (
-                                <div key={pageIndex} style={pageSlotStyle}>
+                            {visiblePages.map((pageIndex, position) => (
+                                <div key={pageIndex} style={getPageSlotStyle(position)}>
                                     <img
                                         src={PAGES[pageIndex]}
                                         alt={`Page ${pageIndex + 1}`}
-                                        className="max-w-full max-h-full object-contain select-none shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
+                                        className="max-w-full max-h-full object-contain select-none"
                                         draggable={false}
                                     />
                                 </div>
