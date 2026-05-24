@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -51,12 +51,13 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
     const shouldShowSinglePage = isPortrait || isCoverPage || isBackCoverPage;
     const pagesPerView = shouldShowSinglePage ? 1 : 2;
 
-    const visiblePages =
-        pagesPerView === 1
+    const visiblePages = useMemo(() => {
+        return pagesPerView === 1
             ? [currentPage]
             : [currentPage, currentPage + 1].filter(
                 (index) => index > 0 && index < lastPageIndex
             );
+    }, [currentPage, pagesPerView, lastPageIndex]);
 
     // Alignment when transitioning to landscape mode
     useEffect(() => {
@@ -195,6 +196,29 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
         };
     }, [isOpen]);
 
+    // Preload adjacent pages
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const preloadIndexes = new Set<number>();
+
+        visiblePages.forEach((index) => preloadIndexes.add(index));
+
+        const step = pagesPerView === 1 ? 1 : 2;
+
+        for (let i = 1; i <= 2; i++) {
+            preloadIndexes.add(currentPage + step * i);
+            preloadIndexes.add(currentPage - step * i);
+        }
+
+        preloadIndexes.forEach((index) => {
+            if (index < 0 || index >= PAGES.length) return;
+
+            const img = new Image();
+            img.src = PAGES[index];
+        });
+    }, [isOpen, currentPage, pagesPerView, visiblePages]);
+
     if (!isOpen) return null;
 
     const getPageIndicator = () => {
@@ -301,6 +325,8 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
                                         alt={`Page ${pageIndex + 1}`}
                                         className="max-w-full max-h-full object-contain select-none"
                                         draggable={false}
+                                        loading="eager"
+                                        decoding="async"
                                     />
                                 </div>
                             ))}
