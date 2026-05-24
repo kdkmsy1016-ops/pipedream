@@ -45,26 +45,90 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
     }, [isOpen]);
 
     const isPortrait = windowSize.height >= windowSize.width;
-    const pagesPerView = isPortrait ? 1 : 2;
+    const lastPageIndex = PAGES.length - 1;
+    const isCoverPage = currentPage === 0;
+    const isBackCoverPage = currentPage === lastPageIndex;
+    const shouldShowSinglePage = isPortrait || isCoverPage || isBackCoverPage;
+    const pagesPerView = shouldShowSinglePage ? 1 : 2;
 
     const visiblePages =
         pagesPerView === 1
             ? [currentPage]
-            : [currentPage, currentPage + 1].filter((index) => index < PAGES.length);
+            : [currentPage, currentPage + 1].filter(
+                (index) => index > 0 && index < lastPageIndex
+            );
+
+    // Alignment when transitioning to landscape mode
+    useEffect(() => {
+        if (!isOpen) return;
+        if (isPortrait) return;
+
+        const timer = setTimeout(() => {
+            setCurrentPage((prev) => {
+                if (prev === 0 || prev === lastPageIndex) return prev;
+
+                const lastInnerPageIndex = lastPageIndex - 1;
+                const lastSpreadStart =
+                    lastInnerPageIndex % 2 === 0
+                        ? lastInnerPageIndex - 1
+                        : lastInnerPageIndex;
+
+                if (prev >= lastPageIndex) return lastPageIndex;
+                if (prev > lastSpreadStart) return lastSpreadStart;
+
+                if (prev % 2 === 0) {
+                    return Math.max(1, prev - 1);
+                }
+
+                return prev;
+            });
+        }, 0);
+
+        return () => clearTimeout(timer);
+    }, [isOpen, isPortrait, lastPageIndex]);
+
+    const getLastSpreadStart = useCallback(() => {
+        const lastInnerPageIndex = lastPageIndex - 1;
+        return Math.max(
+            1,
+            lastInnerPageIndex % 2 === 0
+                ? lastInnerPageIndex - 1
+                : lastInnerPageIndex
+        );
+    }, [lastPageIndex]);
 
     const goNext = useCallback(() => {
         setCurrentPage((prev) => {
-            const step = pagesPerView === 1 ? 1 : 2;
-            return Math.min(prev + step, PAGES.length - 1);
+            if (isPortrait) {
+                return Math.min(prev + 1, lastPageIndex);
+            }
+
+            if (prev === 0) return 1;
+
+            const lastSpreadStart = getLastSpreadStart();
+            if (prev >= lastSpreadStart) {
+                return lastPageIndex;
+            }
+
+            return Math.min(prev + 2, lastPageIndex);
         });
-    }, [pagesPerView]);
+    }, [isPortrait, lastPageIndex, getLastSpreadStart]);
 
     const goPrev = useCallback(() => {
         setCurrentPage((prev) => {
-            const step = pagesPerView === 1 ? 1 : 2;
-            return Math.max(prev - step, 0);
+            if (isPortrait) {
+                return Math.max(prev - 1, 0);
+            }
+
+            if (prev === lastPageIndex) {
+                return getLastSpreadStart();
+            }
+
+            if (prev <= 1) return 0;
+
+            return Math.max(prev - 2, 0);
         });
-    }, [pagesPerView]);
+    }, [isPortrait, lastPageIndex, getLastSpreadStart]);
 
     // Keyboard handlers
     useEffect(() => {
@@ -134,20 +198,50 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
     if (!isOpen) return null;
 
     const getPageIndicator = () => {
+        const lastPageIndex = PAGES.length - 1;
+
+        if (currentPage === 0) {
+            return `1 / ${PAGES.length}`;
+        }
+
+        if (currentPage === lastPageIndex) {
+            return `${PAGES.length} / ${PAGES.length}`;
+        }
+
         if (pagesPerView === 1) {
             return `${currentPage + 1} / ${PAGES.length}`;
-        } else {
-            if (currentPage === 0) {
-                return `1 / ${PAGES.length}`;
-            }
-            if (currentPage === PAGES.length - 1) {
-                return `${PAGES.length} / ${PAGES.length}`;
-            }
-            const leftPageNum = currentPage + 1;
-            const rightPageNum = Math.min(leftPageNum + 1, PAGES.length);
-            return `${leftPageNum} – ${rightPageNum} / ${PAGES.length}`;
         }
+
+        const leftPageNum = currentPage + 1;
+        const rightPageNum = Math.min(currentPage + 2, PAGES.length - 1);
+
+        return `${leftPageNum} – ${rightPageNum} / ${PAGES.length}`;
     };
+
+    const viewerPadding = 16;
+    const pageGap = pagesPerView === 2 ? 8 : 0;
+    const reservedHeight = 80;
+
+    const pageSlotStyle: React.CSSProperties =
+        pagesPerView === 2
+            ? {
+                width: `calc((100vw - ${viewerPadding * 2 + pageGap}px) / 2)`,
+                height: `calc(100dvh - ${reservedHeight}px)`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                boxSizing: "border-box",
+            }
+            : {
+                width: `calc(100vw - ${viewerPadding * 2}px)`,
+                height: `calc(100dvh - ${reservedHeight}px)`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                boxSizing: "border-box",
+            };
 
     return (
         <div
@@ -187,15 +281,23 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
                         wrapperClass="!w-full !h-full"
                         contentClass="w-full h-full flex items-center justify-center"
                     >
-                        <div className="flex items-center justify-center gap-2 w-full h-full p-4">
+                        <div
+                            className="flex items-center justify-center w-full h-full"
+                            style={{
+                                gap: `${pageGap}px`,
+                                padding: `${viewerPadding}px`,
+                                boxSizing: "border-box",
+                            }}
+                        >
                             {visiblePages.map((pageIndex) => (
-                                <img
-                                    key={pageIndex}
-                                    src={PAGES[pageIndex]}
-                                    alt={`Page ${pageIndex + 1}`}
-                                    className="max-h-[calc(100dvh-80px)] max-w-full object-contain select-none shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
-                                    draggable={false}
-                                />
+                                <div key={pageIndex} style={pageSlotStyle}>
+                                    <img
+                                        src={PAGES[pageIndex]}
+                                        alt={`Page ${pageIndex + 1}`}
+                                        className="max-w-full max-h-full object-contain select-none shadow-[0_30px_70px_rgba(0,0,0,0.8)]"
+                                        draggable={false}
+                                    />
+                                </div>
                             ))}
                         </div>
                     </TransformComponent>
