@@ -10,7 +10,7 @@ import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star, Imag
 // Google Drive File IDs
 const MOVIE_KV_ID = "1SPZleKgUnS3OG277P4KorTrvPGrxRJo3";
 const STAGE_KV_ID = "15jjVBQ4LBGC2Va7CxXrxzpMwwrjh2mIq";
-const SCRIPT_PDF_ID = ""; // To be filled later
+const SCRIPT_PDF_ID = "1jN5-4hr1JdrbLuz7CTZi1smWjmB916Lo";
 const PHOTO_BOOK_ID = "1g6NfX27qDBMgAcnE3NbxRkZp0AzDUAQe";
 
 function DriveDownloadCard({
@@ -373,6 +373,8 @@ export default function SupportersPage() {
                                             title="脚本 PDF版"
                                             fallbackText="脚本 PDFデータ\n（準備中）"
                                             icon={FileText}
+                                            cardUrl="https://drive.google.com/file/d/1jN5-4hr1JdrbLuz7CTZi1smWjmB916Lo/view?usp=drive_link"
+                                            buttonText="PDFをダウンロード"
                                         />
                                                                                 <DriveDownloadCard
                                             fileId={PHOTO_BOOK_ID}
