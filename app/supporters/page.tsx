@@ -117,27 +117,23 @@ export default function SupportersPage() {
     }, []);
 
     const handleOpenPhotobook = () => {
+        const isMobile = window.matchMedia("(max-width: 767px)").matches;
+
+        if (isMobile) {
+            window.location.href = "/supporters/photobook";
+            return;
+        }
+
         const w = window.screen.availWidth || window.screen.width;
         const h = window.screen.availHeight || window.screen.height;
-        const left = 0;
-        const top = 0;
 
         const popup = window.open(
             "/supporters/photobook",
             "photobook_viewer",
-            `width=${w},height=${h},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
+            `width=${w},height=${h},left=0,top=0,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
         );
 
-        if (popup) {
-            popup.focus();
-            try {
-                if (popup.document && popup.document.documentElement && popup.document.documentElement.requestFullscreen) {
-                    popup.document.documentElement.requestFullscreen();
-                }
-            } catch (err) {
-                console.warn("Auto-fullscreen request on popup failed:", err);
-            }
-        }
+        popup?.focus();
     };
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -243,9 +239,10 @@ export default function SupportersPage() {
                                         type="email"
                                         value={passwordInput}
                                         onChange={(e) => setPasswordInput(e.target.value)}
-                                        className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-sm md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
+                                        className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
                                         placeholder="your@email.com"
-                                        autoFocus
+                                        inputMode="email"
+                                        autoComplete="email"
                                         required
                                     />
                                 </div>
