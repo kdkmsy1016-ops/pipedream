@@ -1,18 +1,18 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Lock } from "lucide-react";
 
 const SimplePhotobookViewer = dynamic(() => import("../SimplePhotobookViewer"), {
     ssr: false
 });
 
-import { useEffect, useState } from "react";
-import { Lock } from "lucide-react";
-
-
 export default function PhotobookPage() {
     const [tier, setTier] = useState<number>(0);
     const [isChecking, setIsChecking] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
         const savedTier = sessionStorage.getItem("supporters_tier");
@@ -22,6 +22,22 @@ export default function PhotobookPage() {
         }
         setIsChecking(false);
     }, []);
+
+    const handleClose = () => {
+        const canCloseWindow = window.opener && !window.opener.closed;
+
+        if (canCloseWindow) {
+            window.close();
+            return;
+        }
+
+        if (window.history.length > 1) {
+            router.back();
+            return;
+        }
+
+        router.push("/supporters");
+    };
 
     if (isChecking) {
         return <div className="min-h-screen bg-[#0b0e14]" />;
@@ -36,7 +52,7 @@ export default function PhotobookPage() {
                     サポーター用エントランスから入店してください。
                 </p>
                 <button
-                    onClick={() => window.close()}
+                    onClick={handleClose}
                     className="px-6 py-2 border border-zinc-700 hover:border-white transition-colors text-xs tracking-widest cursor-pointer"
                 >
                     閉じる
@@ -47,7 +63,7 @@ export default function PhotobookPage() {
 
     return (
         <main className="min-h-screen bg-[#0b0e14]">
-            <SimplePhotobookViewer isOpen={true} onClose={() => window.close()} />
+            <SimplePhotobookViewer isOpen={true} onClose={handleClose} />
         </main>
     );
 }
