@@ -108,6 +108,9 @@ export default function SupportersPage() {
     const [isChecking, setIsChecking] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
 
+    // Toggle this to true to release the main play archive video
+    const SHOW_ARCHIVE_VIDEO = false;
+
     useEffect(() => {
         const savedTier = sessionStorage.getItem("supporters_tier");
         if (savedTier) {
@@ -351,15 +354,22 @@ export default function SupportersPage() {
                                     <p className="w-full text-zinc-300 text-xs md:text-sm leading-relaxed md:leading-loose break-words whitespace-pre-line text-left">
                                         上演された舞台映像のアーカイブ視聴リンクです。
                                     </p>
-                                    <div className="w-full max-w-full aspect-video bg-black border border-zinc-800 rounded-sm relative overflow-hidden box-border">
-                                        <iframe
-                                            src="https://www.youtube.com/embed/YQdyi4ufs-A"
-                                            title="舞台『場末のパイプドリーム』本編アーカイブ"
-                                            className="absolute inset-0 w-full h-full border-0"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                            allowFullScreen
-                                        />
-                                    </div>
+                                    {SHOW_ARCHIVE_VIDEO ? (
+                                        <div className="w-full max-w-full aspect-video bg-black border border-zinc-800 rounded-sm relative overflow-hidden box-border">
+                                            <iframe
+                                                src="https://www.youtube.com/embed/YQdyi4ufs-A"
+                                                title="舞台『場末のパイプドリーム』本編アーカイブ"
+                                                className="absolute inset-0 w-full h-full border-0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                allowFullScreen
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="w-full max-w-full aspect-video bg-black flex items-center justify-center border border-zinc-800 rounded-sm relative group overflow-hidden box-border">
+                                            <PlayCircle className="w-10 h-10 md:w-12 md:h-12 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+                                            <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-[10px] md:text-xs tracking-widest text-zinc-500 text-right whitespace-pre-line break-words max-w-[80%]">※上演後アップデート</span>
+                                        </div>
+                                    )}
                                 </section>
                             )}
 
