@@ -40,7 +40,7 @@ export default function PhotobookPage() {
 
     if (tier < 2) {
         return (
-            <div className="min-h-screen bg-[#0b0e14] flex flex-col items-center justify-center text-white font-serif p-6">
+            <div className="min-h-[100dvh] bg-[#0b0e14] flex flex-col items-center justify-center text-white font-serif p-6 w-full">
                 <Lock className="w-8 h-8 text-[#ffbf00] opacity-80 mb-4" />
                 <p className="text-sm tracking-widest text-zinc-400 mb-6 text-center">
                     認証されていないか、アクセス権限がありません。<br />
@@ -57,7 +57,7 @@ export default function PhotobookPage() {
     }
 
     return (
-        <main className="min-h-screen bg-[#0b0e14] flex flex-col items-center justify-center text-white font-serif p-6">
+        <main className="min-h-[100dvh] bg-[#0b0e14] flex flex-col items-center justify-center text-white font-serif p-6 w-full">
             <p className="text-sm tracking-[0.3em] text-zinc-300 mb-4 text-center uppercase">
                 Digital Photobook
             </p>
