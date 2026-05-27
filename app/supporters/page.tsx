@@ -49,6 +49,7 @@ export default function SupportersPage() {
                 setTier(Number(data.tier));
                 setPhoneInput("");
                 setPasswordInput("");
+                window.scrollTo({ top: 0, behavior: "instant" });
             } else {
                 setError(data.message || "認証に失敗しました。");
             }
@@ -188,7 +189,7 @@ export default function SupportersPage() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.8, ease: "circOut" }}
-                        className="w-full max-w-md mx-auto space-y-12 relative z-10 px-4 mt-8 md:mt-20 box-border text-center"
+                        className="w-full max-w-md mx-auto space-y-12 relative z-10 px-4 box-border text-center min-h-[80dvh] flex flex-col justify-center items-center"
                     >
                         <div className="space-y-6">
                             <p className="text-sm tracking-[0.3em] text-zinc-300 uppercase">
