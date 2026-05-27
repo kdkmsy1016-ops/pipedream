@@ -57,7 +57,7 @@ export default function PhotobookPage() {
     }
 
     return (
-        <main className="min-h-[100dvh] bg-[#0b0e14] flex flex-col items-center justify-center text-white font-serif p-6 w-full">
+        <main className="fixed inset-0 z-50 bg-[#0b0e14] flex flex-col items-center justify-center text-white font-serif p-6">
             <p className="text-sm tracking-[0.3em] text-zinc-300 mb-4 text-center uppercase">
                 Digital Photobook
             </p>
