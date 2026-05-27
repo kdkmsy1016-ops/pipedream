@@ -1,81 +1,116 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star, ImageIcon, Mail } from "lucide-react";
+import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star, ImageIcon, Phone } from "lucide-react";
 
 // Google Drive File IDs
 const MOVIE_KV_ID = "1SPZleKgUnS3OG277P4KorTrvPGrxRJo3";
 const STAGE_KV_ID = "15jjVBQ4LBGC2Va7CxXrxzpMwwrjh2mIq";
-const SCRIPT_PDF_ID = ""; // To be filled later
-const PHOTO_BOOK_ID = ""; // To be filled later
+const SCRIPT_PDF_ID = "1jN5-4hr1JdrbLuz7CTZi1smWjmB916Lo";
+const PHOTO_BOOK_ID = "1g6NfX27qDBMgAcnE3NbxRkZp0AzDUAQe";
 
 function DriveDownloadCard({
     fileId,
     title,
     fallbackText,
-    icon: Icon
+    icon: Icon,
+    cardUrl,
+    buttonUrl,
+    buttonText,
+    customIcon: CustomIcon,
+    onCardClick,
+    customThumbnail
 }: {
     fileId: string;
     title: string;
     fallbackText: string;
     icon?: React.ElementType;
+    cardUrl?: string;
+    buttonUrl?: string;
+    buttonText?: string;
+    customIcon?: React.ElementType;
+    onCardClick?: () => void;
+    customThumbnail?: string;
 }) {
-    const downloadUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#";
-    const thumbnailUrl = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200&v=20260520` : "";
+    const defaultUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#";
+    const finalCardUrl = cardUrl || defaultUrl;
+    const finalButtonUrl = buttonUrl || defaultUrl;
+    const defaultThumbnailUrl = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200&v=20260520` : "";
+    const thumbnailUrl = customThumbnail || defaultThumbnailUrl;
+    const DisplayIcon = CustomIcon || Download;
+    const isCardActive = !!(fileId || cardUrl);
+    const isButtonActive = !!(fileId || buttonUrl);
+    const hasThumbnail = !!thumbnailUrl;
 
     return (
-        <a
-            href={downloadUrl}
-            target={fileId ? "_blank" : "_self"}
-            rel={fileId ? "noopener noreferrer" : ""}
-            className={`flex flex-col items-center gap-4 w-full group ${!fileId && "opacity-60 pointer-events-none cursor-not-allowed"}`}
-        >
-            <div className="w-full max-w-[280px] md:max-w-sm aspect-[3/4] relative rounded-lg overflow-hidden border border-zinc-700 shadow-[0_10px_30px_rgba(0,0,0,0.8)] group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(255,191,0,0.15)] active:translate-y-1 active:shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-300 bg-zinc-950 flex items-center justify-center">
+        <div className={`flex flex-col items-center gap-4 w-full ${!fileId && !cardUrl && !buttonUrl ? "opacity-60 pointer-events-none cursor-not-allowed" : ""}`}>
+            {/* Card Link */}
+            <a
+                href={onCardClick && isCardActive ? "#" : finalCardUrl}
+                onClick={onCardClick && isCardActive ? (e) => { e.preventDefault(); onCardClick(); } : undefined}
+                target={onCardClick && isCardActive ? "_self" : (isCardActive ? "_blank" : "_self")}
+                rel={onCardClick && isCardActive ? "" : (isCardActive ? "noopener noreferrer" : "")}
+                className={`w-full flex justify-center group ${isCardActive ? "cursor-pointer hover:opacity-80 transition-opacity duration-300" : "pointer-events-none"}`}
+            >
+                <div className="w-full max-w-[280px] md:max-w-sm aspect-[3/4] relative rounded-lg overflow-hidden border border-zinc-700 shadow-[0_10px_30px_rgba(0,0,0,0.8)] group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(255,191,0,0.15)] active:translate-y-1 active:shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-300 bg-zinc-950 flex items-center justify-center">
 
-                {/* Fallback Placeholder (Always behind the image) */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-0 bg-zinc-900">
-                    {Icon && <Icon className="w-8 h-8 md:w-10 md:h-10 text-zinc-700 mb-4" />}
-                    <span className="text-zinc-500 text-xs md:text-sm tracking-widest leading-loose whitespace-pre-line box-border">
-                        {fallbackText}
-                    </span>
+                    {/* Fallback Placeholder */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-0 bg-zinc-900">
+                        {Icon && <Icon className="w-8 h-8 md:w-10 md:h-10 text-zinc-700 mb-4" />}
+                        <span className="text-zinc-500 text-xs md:text-sm tracking-widest leading-loose whitespace-pre-line box-border">
+                            {fallbackText}
+                        </span>
+                    </div>
+
+                    {/* Drive Thumbnail Image */}
+                    {hasThumbnail && (
+                        <Image
+                            src={thumbnailUrl}
+                            alt={title}
+                            fill
+                            className="object-cover relative z-10 group-hover:scale-105 group-hover:brightness-110 transition-all duration-500 pointer-events-auto"
+                            unoptimized
+                        />
+                    )}
+
+                    {/* Gradient Overlay for Text Readability */}
+                    {hasThumbnail && (
+                        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none z-20" />
+                    )}
                 </div>
+            </a>
 
-                {/* Drive Thumbnail Image */}
-                {fileId && (
-                    <Image
-                        src={thumbnailUrl}
-                        alt={title}
-                        fill
-                        className="object-cover relative z-10 group-hover:scale-105 group-hover:brightness-110 transition-all duration-500 pointer-events-auto"
-                        unoptimized
-                    />
-                )}
-
-                {/* Gradient Overlay for Text Readability */}
-                {fileId && (
-                    <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none z-20" />
-                )}
-            </div>
-
-            {/* Download Button (below the card) */}
-            <div className="flex items-center justify-center gap-2 px-6 py-3 border border-zinc-600 text-zinc-300 group-hover:bg-white group-hover:text-black group-hover:border-white transition-colors text-xs tracking-widest rounded-sm w-full max-w-[280px]">
-                <Download className="w-4 h-4 flex-shrink-0" />
-                <span className="whitespace-nowrap">{fileId ? "ダウンロード" : "準備中"}</span>
-            </div>
-        </a>
+            {/* Button Link */}
+            <a
+                href={finalButtonUrl}
+                target={isButtonActive ? "_blank" : "_self"}
+                rel={isButtonActive ? "noopener noreferrer" : ""}
+                className={`w-full max-w-[280px] group ${isButtonActive ? "cursor-pointer hover:opacity-80 transition-opacity duration-300" : "pointer-events-none"}`}
+            >
+                <div className="flex items-center justify-center gap-2 px-6 py-3 border border-zinc-600 text-zinc-300 group-hover:bg-white group-hover:text-black group-hover:border-white transition-all duration-300 text-xs tracking-widest rounded-sm w-full">
+                    <DisplayIcon className="w-4 h-4 flex-shrink-0" />
+                    <span className="whitespace-nowrap">{isButtonActive ? (buttonText || "ダウンロード") : "準備中"}</span>
+                </div>
+            </a>
+        </div>
     );
 }
 
 
 export default function SupportersPage() {
     const [tier, setTier] = useState<number>(0);
+    const [phoneInput, setPhoneInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [isChecking, setIsChecking] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+
+    // Toggle this to true to release the main play archive video
+    const SHOW_ARCHIVE_VIDEO = false;
 
     useEffect(() => {
         const savedTier = sessionStorage.getItem("supporters_tier");
@@ -84,6 +119,26 @@ export default function SupportersPage() {
         }
         setIsChecking(false);
     }, []);
+
+    const handleOpenPhotobook = () => {
+        const isMobile = window.matchMedia("(max-width: 767px)").matches;
+
+        if (isMobile) {
+            window.location.href = "/supporters/photobook";
+            return;
+        }
+
+        const w = window.screen.availWidth || window.screen.width;
+        const h = window.screen.availHeight || window.screen.height;
+
+        const popup = window.open(
+            "/supporters/photobook",
+            "photobook_viewer",
+            `width=${w},height=${h},left=0,top=0,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
+        );
+
+        popup?.focus();
+    };
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -101,7 +156,7 @@ export default function SupportersPage() {
                     'Content-Type': 'application/json',
                     'Cache-Control': 'no-cache, no-store, must-revalidate'
                 },
-                body: JSON.stringify({ email: passwordInput })
+                body: JSON.stringify({ phone: phoneInput, password: passwordInput })
             });
 
             const data = await res.json();
@@ -110,6 +165,7 @@ export default function SupportersPage() {
                 // 2. Set new verified tier
                 sessionStorage.setItem("supporters_tier", String(data.tier));
                 setTier(Number(data.tier));
+                setPhoneInput("");
                 setPasswordInput("");
             } else {
                 setError(data.message || "認証に失敗しました。");
@@ -126,6 +182,7 @@ export default function SupportersPage() {
         sessionStorage.removeItem("supporters_tier");
         localStorage.removeItem("supporters_tier");
         setTier(0);
+        setPhoneInput("");
         setPasswordInput("");
         setError(null);
     };
@@ -176,39 +233,61 @@ export default function SupportersPage() {
                             </p>
                         </div>
 
-                        <form onSubmit={handleLogin} className="space-y-8 w-full box-border">
-                            <div className="space-y-2 group w-full box-border relative">
-                                <label htmlFor="email" className="block text-xs text-zinc-500 tracking-widest group-focus-within:text-[#ffbf00] transition-colors text-center">
-                                    メールアドレスを入力してください
-                                </label>
-                                <div className="relative flex items-center justify-center">
-                                    <Mail className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-[#ffbf00] transition-colors" />
-                                    <input
-                                        id="email"
-                                        type="email"
-                                        value={passwordInput}
-                                        onChange={(e) => setPasswordInput(e.target.value)}
-                                        className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-sm md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
-                                        placeholder="your@email.com"
-                                        autoFocus
-                                        required
-                                    />
+                        <form onSubmit={handleLogin} className="space-y-6 w-full box-border">
+                            <div className="space-y-4 w-full box-border">
+                                <div className="space-y-2 group w-full box-border relative">
+                                    <label htmlFor="phone" className="block text-xs text-zinc-500 tracking-widest group-focus-within:text-[#ffbf00] transition-colors text-center">
+                                        電話番号を入力してください
+                                    </label>
+                                    <div className="relative flex items-center justify-center">
+                                        <Phone className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-[#ffbf00] transition-colors" />
+                                        <input
+                                            id="phone"
+                                            type="tel"
+                                            value={phoneInput}
+                                            onChange={(e) => setPhoneInput(e.target.value)}
+                                            className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
+                                            placeholder="090-1234-5678"
+                                            inputMode="tel"
+                                            autoComplete="tel"
+                                            required
+                                        />
+                                    </div>
                                 </div>
-                                {error && (
-                                    <motion.p
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        className="text-red-500/90 text-xs md:text-sm text-center mt-4 tracking-widest bg-red-500/10 p-3 rounded"
-                                    >
-                                        {error}
-                                    </motion.p>
-                                )}
+
+                                <div className="space-y-2 group w-full box-border relative">
+                                    <label htmlFor="password" className="block text-xs text-zinc-500 tracking-widest group-focus-within:text-[#ffbf00] transition-colors text-center">
+                                        共通アクセスキーを入力してください
+                                    </label>
+                                    <div className="relative flex items-center justify-center">
+                                        <Lock className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-[#ffbf00] transition-colors" />
+                                        <input
+                                            id="password"
+                                            type="password"
+                                            value={passwordInput}
+                                            onChange={(e) => setPasswordInput(e.target.value)}
+                                            className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
+                                            placeholder="共通アクセスキー"
+                                            required
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className="text-center w-full box-border">
+                            {error && (
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="text-red-500/90 text-xs md:text-sm text-center mt-4 tracking-widest bg-red-500/10 p-3 rounded"
+                                >
+                                    {error}
+                                </motion.p>
+                            )}
+
+                            <div className="text-center w-full box-border pt-4">
                                 <button
                                     type="submit"
-                                    disabled={isLoading || !passwordInput}
+                                    disabled={isLoading || !phoneInput || !passwordInput}
                                     className="w-full sm:w-auto px-12 py-3 text-sm tracking-[0.2em] text-zinc-950 bg-[#ffbf00] hover:bg-white hover:text-zinc-950 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 shadow-[0_0_15px_rgba(255,191,0,0.3)] font-bold rounded-sm box-border flex items-center justify-center gap-2 mx-auto"
                                 >
                                     {isLoading ? (
@@ -241,7 +320,7 @@ export default function SupportersPage() {
                                     支援者様、ご来店ありがとうございます。
                                 </p>
                                 <p className="text-zinc-400 text-sm leading-relaxed md:leading-loose tracking-wide w-full max-w-full mx-auto whitespace-pre-line break-words">
-                                    『盈虚とパイプドリーム』『場末のパイプドリーム』を<br className="md:hidden block" />ご支援いただき、心より感謝申し上げます。<br />
+                                    この度は映画『盈虚とパイプドリーム』を<br className="md:hidden block" />ご支援いただき、心より感謝申し上げます。<br />
                                     限定コンテンツをゆっくりとお愉しみください。
                                 </p>
                             </div>
@@ -262,7 +341,7 @@ export default function SupportersPage() {
                                     </p>
                                     <div className="w-full max-w-full aspect-video bg-black flex items-center justify-center border border-zinc-800 rounded-sm relative group overflow-hidden box-border">
                                         <PlayCircle className="w-10 h-10 md:w-12 md:h-12 text-zinc-600 group-hover:text-[#ffbf00] transition-colors" />
-                                        <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-[10px] md:text-xs tracking-widest text-zinc-500 text-right whitespace-pre-line break-words max-w-[80%]">※動画準備中（後日URL紐付け）</span>
+                                        <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-[10px] md:text-xs tracking-widest text-zinc-500 text-right whitespace-pre-line break-words max-w-[80%]">※動画準備中</span>
                                     </div>
                                 </section>
                             )}
@@ -299,10 +378,22 @@ export default function SupportersPage() {
                                     <p className="w-full text-zinc-300 text-xs md:text-sm leading-relaxed md:leading-loose break-words whitespace-pre-line text-left">
                                         上演された舞台映像のアーカイブ視聴リンクです。
                                     </p>
-                                    <div className="w-full max-w-full aspect-video bg-black flex items-center justify-center border border-zinc-800 rounded-sm relative group overflow-hidden box-border">
-                                        <PlayCircle className="w-10 h-10 md:w-12 md:h-12 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
-                                        <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-[10px] md:text-xs tracking-widest text-zinc-500 text-right whitespace-pre-line break-words max-w-[80%]">※上演後アップデート</span>
-                                    </div>
+                                    {SHOW_ARCHIVE_VIDEO ? (
+                                        <div className="w-full max-w-full aspect-video bg-black border border-zinc-800 rounded-sm relative overflow-hidden box-border">
+                                            <iframe
+                                                src="https://www.youtube.com/embed/YQdyi4ufs-A"
+                                                title="舞台『場末のパイプドリーム』本編アーカイブ"
+                                                className="absolute inset-0 w-full h-full border-0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                allowFullScreen
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="w-full max-w-full aspect-video bg-black flex items-center justify-center border border-zinc-800 rounded-sm relative group overflow-hidden box-border">
+                                            <PlayCircle className="w-10 h-10 md:w-12 md:h-12 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+                                            <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-[10px] md:text-xs tracking-widest text-zinc-500 text-right whitespace-pre-line break-words max-w-[80%]">※動画準備中</span>
+                                        </div>
+                                    )}
                                 </section>
                             )}
 
@@ -321,12 +412,17 @@ export default function SupportersPage() {
                                             title="脚本 PDF版"
                                             fallbackText="脚本 PDFデータ\n（準備中）"
                                             icon={FileText}
+                                            cardUrl="https://drive.google.com/file/d/1jN5-4hr1JdrbLuz7CTZi1smWjmB916Lo/view?usp=drive_link"
+                                            buttonText="PDFをダウンロード"
                                         />
                                         <DriveDownloadCard
                                             fileId={PHOTO_BOOK_ID}
                                             title="フォトブック PDF版"
                                             fallbackText="デジタルフォトブック\n（準備中）"
                                             icon={BookOpen}
+                                            buttonText="フォトブックをダウンロード"
+                                            onCardClick={handleOpenPhotobook}
+                                            customThumbnail="/images/photobook/page-1.webp"
                                         />
                                     </div>
                                 </section>
