@@ -104,6 +104,7 @@ function DriveDownloadCard({
 export default function SupportersPage() {
     const [tier, setTier] = useState<number>(0);
     const [phoneInput, setPhoneInput] = useState("");
+    const [passwordInput, setPasswordInput] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [isChecking, setIsChecking] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
@@ -155,7 +156,7 @@ export default function SupportersPage() {
                     'Content-Type': 'application/json',
                     'Cache-Control': 'no-cache, no-store, must-revalidate'
                 },
-                body: JSON.stringify({ phone: phoneInput })
+                body: JSON.stringify({ phone: phoneInput, password: passwordInput })
             });
 
             const data = await res.json();
@@ -165,6 +166,7 @@ export default function SupportersPage() {
                 sessionStorage.setItem("supporters_tier", String(data.tier));
                 setTier(Number(data.tier));
                 setPhoneInput("");
+                setPasswordInput("");
             } else {
                 setError(data.message || "認証に失敗しました。");
             }
@@ -181,6 +183,7 @@ export default function SupportersPage() {
         localStorage.removeItem("supporters_tier");
         setTier(0);
         setPhoneInput("");
+        setPasswordInput("");
         setError(null);
     };
 
@@ -230,40 +233,61 @@ export default function SupportersPage() {
                             </p>
                         </div>
 
-                        <form onSubmit={handleLogin} className="space-y-8 w-full box-border">
-                            <div className="space-y-2 group w-full box-border relative">
-                                <label htmlFor="phone" className="block text-xs text-zinc-500 tracking-widest group-focus-within:text-[#ffbf00] transition-colors text-center">
-                                    電話番号を入力してください
-                                </label>
-                                <div className="relative flex items-center justify-center">
-                                    <Phone className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-[#ffbf00] transition-colors" />
-                                    <input
-                                        id="phone"
-                                        type="tel"
-                                        value={phoneInput}
-                                        onChange={(e) => setPhoneInput(e.target.value)}
-                                        className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
-                                        placeholder="090-1234-5678"
-                                        inputMode="tel"
-                                        autoComplete="tel"
-                                        required
-                                    />
+                        <form onSubmit={handleLogin} className="space-y-6 w-full box-border">
+                            <div className="space-y-4 w-full box-border">
+                                <div className="space-y-2 group w-full box-border relative">
+                                    <label htmlFor="phone" className="block text-xs text-zinc-500 tracking-widest group-focus-within:text-[#ffbf00] transition-colors text-center">
+                                        電話番号を入力してください
+                                    </label>
+                                    <div className="relative flex items-center justify-center">
+                                        <Phone className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-[#ffbf00] transition-colors" />
+                                        <input
+                                            id="phone"
+                                            type="tel"
+                                            value={phoneInput}
+                                            onChange={(e) => setPhoneInput(e.target.value)}
+                                            className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
+                                            placeholder="090-1234-5678"
+                                            inputMode="tel"
+                                            autoComplete="tel"
+                                            required
+                                        />
+                                    </div>
                                 </div>
-                                {error && (
-                                    <motion.p
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        className="text-red-500/90 text-xs md:text-sm text-center mt-4 tracking-widest bg-red-500/10 p-3 rounded"
-                                    >
-                                        {error}
-                                    </motion.p>
-                                )}
+
+                                <div className="space-y-2 group w-full box-border relative">
+                                    <label htmlFor="password" className="block text-xs text-zinc-500 tracking-widest group-focus-within:text-[#ffbf00] transition-colors text-center">
+                                        共通アクセスキーを入力してください
+                                    </label>
+                                    <div className="relative flex items-center justify-center">
+                                        <Lock className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-[#ffbf00] transition-colors" />
+                                        <input
+                                            id="password"
+                                            type="password"
+                                            value={passwordInput}
+                                            onChange={(e) => setPasswordInput(e.target.value)}
+                                            className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
+                                            placeholder="共通アクセスキー"
+                                            required
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className="text-center w-full box-border">
+                            {error && (
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="text-red-500/90 text-xs md:text-sm text-center mt-4 tracking-widest bg-red-500/10 p-3 rounded"
+                                >
+                                    {error}
+                                </motion.p>
+                            )}
+
+                            <div className="text-center w-full box-border pt-4">
                                 <button
                                     type="submit"
-                                    disabled={isLoading || !phoneInput}
+                                    disabled={isLoading || !phoneInput || !passwordInput}
                                     className="w-full sm:w-auto px-12 py-3 text-sm tracking-[0.2em] text-zinc-950 bg-[#ffbf00] hover:bg-white hover:text-zinc-950 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 shadow-[0_0_15px_rgba(255,191,0,0.3)] font-bold rounded-sm box-border flex items-center justify-center gap-2 mx-auto"
                                 >
                                     {isLoading ? (

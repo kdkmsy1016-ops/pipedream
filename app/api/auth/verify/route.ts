@@ -47,6 +47,7 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
         const rawPhone = body.phone || body.email;
+        const password = body.password;
 
         if (!rawPhone || typeof rawPhone !== 'string') {
             return NextResponse.json(
@@ -64,6 +65,15 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: true, tier: 5 });
         }
 
+        // Verify password
+        const commonPassword = process.env.COMMON_SUPPORTER_PASSWORD;
+        if (!commonPassword || password !== commonPassword) {
+            return NextResponse.json(
+                { success: false, message: "認証情報が正しくありません。" },
+                { status: 401 }
+            );
+        }
+
         const allowedPhones = getAllowedPhones();
         const tier = allowedPhones[normalizedPhone];
 
@@ -71,7 +81,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: true, tier });
         } else {
             return NextResponse.json(
-                { success: false, message: "この電話番号は登録されていません。ご支援時と同じ番号かご確認ください" },
+                { success: false, message: "認証情報が正しくありません。" },
                 { status: 401 }
             );
         }
