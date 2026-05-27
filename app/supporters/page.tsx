@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star, ImageIcon, Mail } from "lucide-react";
+import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star, ImageIcon, Phone } from "lucide-react";
 
 // Google Drive File IDs
 const MOVIE_KV_ID = "1SPZleKgUnS3OG277P4KorTrvPGrxRJo3";
@@ -103,7 +103,7 @@ function DriveDownloadCard({
 
 export default function SupportersPage() {
     const [tier, setTier] = useState<number>(0);
-    const [passwordInput, setPasswordInput] = useState("");
+    const [phoneInput, setPhoneInput] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [isChecking, setIsChecking] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
@@ -155,7 +155,7 @@ export default function SupportersPage() {
                     'Content-Type': 'application/json',
                     'Cache-Control': 'no-cache, no-store, must-revalidate'
                 },
-                body: JSON.stringify({ email: passwordInput })
+                body: JSON.stringify({ phone: phoneInput })
             });
 
             const data = await res.json();
@@ -164,7 +164,7 @@ export default function SupportersPage() {
                 // 2. Set new verified tier
                 sessionStorage.setItem("supporters_tier", String(data.tier));
                 setTier(Number(data.tier));
-                setPasswordInput("");
+                setPhoneInput("");
             } else {
                 setError(data.message || "認証に失敗しました。");
             }
@@ -180,7 +180,7 @@ export default function SupportersPage() {
         sessionStorage.removeItem("supporters_tier");
         localStorage.removeItem("supporters_tier");
         setTier(0);
-        setPasswordInput("");
+        setPhoneInput("");
         setError(null);
     };
 
@@ -232,20 +232,20 @@ export default function SupportersPage() {
 
                         <form onSubmit={handleLogin} className="space-y-8 w-full box-border">
                             <div className="space-y-2 group w-full box-border relative">
-                                <label htmlFor="email" className="block text-xs text-zinc-500 tracking-widest group-focus-within:text-[#ffbf00] transition-colors text-center">
-                                    メールアドレスを入力してください
+                                <label htmlFor="phone" className="block text-xs text-zinc-500 tracking-widest group-focus-within:text-[#ffbf00] transition-colors text-center">
+                                    電話番号を入力してください
                                 </label>
                                 <div className="relative flex items-center justify-center">
-                                    <Mail className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-[#ffbf00] transition-colors" />
+                                    <Phone className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-[#ffbf00] transition-colors" />
                                     <input
-                                        id="email"
-                                        type="email"
-                                        value={passwordInput}
-                                        onChange={(e) => setPasswordInput(e.target.value)}
+                                        id="phone"
+                                        type="tel"
+                                        value={phoneInput}
+                                        onChange={(e) => setPhoneInput(e.target.value)}
                                         className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
-                                        placeholder="your@email.com"
-                                        inputMode="email"
-                                        autoComplete="email"
+                                        placeholder="090-1234-5678"
+                                        inputMode="tel"
+                                        autoComplete="tel"
                                         required
                                     />
                                 </div>
@@ -263,7 +263,7 @@ export default function SupportersPage() {
                             <div className="text-center w-full box-border">
                                 <button
                                     type="submit"
-                                    disabled={isLoading || !passwordInput}
+                                    disabled={isLoading || !phoneInput}
                                     className="w-full sm:w-auto px-12 py-3 text-sm tracking-[0.2em] text-zinc-950 bg-[#ffbf00] hover:bg-white hover:text-zinc-950 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 shadow-[0_0_15px_rgba(255,191,0,0.3)] font-bold rounded-sm box-border flex items-center justify-center gap-2 mx-auto"
                                 >
                                     {isLoading ? (
@@ -296,7 +296,7 @@ export default function SupportersPage() {
                                     支援者様、ご来店ありがとうございます。
                                 </p>
                                 <p className="text-zinc-400 text-sm leading-relaxed md:leading-loose tracking-wide w-full max-w-full mx-auto whitespace-pre-line break-words">
-                                    『盈虚とパイプドリーム』『場末のパイプドリーム』を<br className="md:hidden block" />ご支援いただき、心より感謝申し上げます。<br />
+                                    この度は映画『盈虚とパイプドリーム』を<br className="md:hidden block" />ご支援いただき、心より感謝申し上げます。<br />
                                     限定コンテンツをゆっくりとお愉しみください。
                                 </p>
                             </div>
@@ -317,7 +317,7 @@ export default function SupportersPage() {
                                     </p>
                                     <div className="w-full max-w-full aspect-video bg-black flex items-center justify-center border border-zinc-800 rounded-sm relative group overflow-hidden box-border">
                                         <PlayCircle className="w-10 h-10 md:w-12 md:h-12 text-zinc-600 group-hover:text-[#ffbf00] transition-colors" />
-                                        <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-[10px] md:text-xs tracking-widest text-zinc-500 text-right whitespace-pre-line break-words max-w-[80%]">※動画準備中（後日URL紐付け）</span>
+                                        <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-[10px] md:text-xs tracking-widest text-zinc-500 text-right whitespace-pre-line break-words max-w-[80%]">※動画準備中</span>
                                     </div>
                                 </section>
                             )}
@@ -367,7 +367,7 @@ export default function SupportersPage() {
                                     ) : (
                                         <div className="w-full max-w-full aspect-video bg-black flex items-center justify-center border border-zinc-800 rounded-sm relative group overflow-hidden box-border">
                                             <PlayCircle className="w-10 h-10 md:w-12 md:h-12 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
-                                            <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-[10px] md:text-xs tracking-widest text-zinc-500 text-right whitespace-pre-line break-words max-w-[80%]">※上演後アップデート</span>
+                                            <span className="absolute bottom-2 right-2 md:bottom-4 md:right-4 text-[10px] md:text-xs tracking-widest text-zinc-500 text-right whitespace-pre-line break-words max-w-[80%]">※動画準備中</span>
                                         </div>
                                     )}
                                 </section>
@@ -391,7 +391,7 @@ export default function SupportersPage() {
                                             cardUrl="https://drive.google.com/file/d/1jN5-4hr1JdrbLuz7CTZi1smWjmB916Lo/view?usp=drive_link"
                                             buttonText="PDFをダウンロード"
                                         />
-                                                                                <DriveDownloadCard
+                                        <DriveDownloadCard
                                             fileId={PHOTO_BOOK_ID}
                                             title="フォトブック PDF版"
                                             fallbackText="デジタルフォトブック\n（準備中）"
