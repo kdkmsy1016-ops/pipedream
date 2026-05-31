@@ -17,47 +17,59 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export const metadata: Metadata = {
-  title: {
-    template: '%s | 映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』',
-    default: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』公式サイト',
-  },
-  description: '稲城市に実在するスナック『さくらみち』を舞台に製作される映画『盈虚とパイプドリーム』と、それに連動した舞台『場末のパイプドリーム』の公式サイト。最新の公演情報やチケット予約、映画の最新情報をお届けします。',
-  keywords: [
-    'さくらみち',
-    '映画',
-    '盈虚とパイプドリーム',
-    '場末のパイプドリーム',
-    '演劇',
-    'チケット',
-  ],
-  metadataBase: new URL('https://eikyo-to-pipedream.com'),
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    title: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』公式サイト',
+export const revalidate = 60; // 60秒ごとにサーバー側で最新の状態を評価する
+
+export function generateMetadata(): Metadata {
+  const now = new Date();
+  const endDate = new Date("2026-06-02T00:00:00+09:00");
+  const isEnded = now >= endDate;
+
+  const ogImageUrl = isEnded 
+    ? 'https://eikyo-to-pipedream.com/ogp-ended.png' 
+    : 'https://eikyo-to-pipedream.com/ogp-image.png';
+
+  return {
+    title: {
+      template: '%s | 映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』',
+      default: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』公式サイト',
+    },
     description: '稲城市に実在するスナック『さくらみち』を舞台に製作される映画『盈虚とパイプドリーム』と、それに連動した舞台『場末のパイプドリーム』の公式サイト。最新の公演情報やチケット予約、映画の最新情報をお届けします。',
-    url: 'https://eikyo-to-pipedream.com',
-    siteName: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』',
-    images: [
-      {
-        url: 'https://eikyo-to-pipedream.com/ogp-image.png',
-        width: 1200,
-        height: 630,
-        alt: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』',
-      },
+    keywords: [
+      'さくらみち',
+      '映画',
+      '盈虚とパイプドリーム',
+      '場末のパイプドリーム',
+      '演劇',
+      'チケット',
     ],
-    locale: 'ja_JP',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』公式サイト',
-    description: '稲城市に実在するスナック『さくらみち』を舞台に製作される映画『盈虚とパイプドリーム』と、それに連動した舞台『場末のパイプドリーム』の公式サイト。最新の公演情報やチケット予約、映画の最新情報をお届けします。',
-    images: ['https://eikyo-to-pipedream.com/ogp-image.png'],
-  },
-};
+    metadataBase: new URL('https://eikyo-to-pipedream.com'),
+    alternates: {
+      canonical: '/',
+    },
+    openGraph: {
+      title: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』公式サイト',
+      description: '稲城市に実在するスナック『さくらみち』を舞台に製作される映画『盈虚とパイプドリーム』と、それに連動した舞台『場末のパイプドリーム』の公式サイト。最新の公演情報やチケット予約、映画の最新情報をお届けします。',
+      url: 'https://eikyo-to-pipedream.com',
+      siteName: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』',
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』',
+        },
+      ],
+      locale: 'ja_JP',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: '映画『盈虚とパイプドリーム』× 舞台『場末のパイプドリーム』公式サイト',
+      description: '稲城市に実在するスナック『さくらみち』を舞台に製作される映画『盈虚とパイプドリーム』と、それに連動した舞台『場末のパイプドリーム』の公式サイト。最新の公演情報やチケット予約、映画の最新情報をお届けします。',
+      images: [ogImageUrl],
+    },
+  };
+}
 
 export default function RootLayout({
   children,
