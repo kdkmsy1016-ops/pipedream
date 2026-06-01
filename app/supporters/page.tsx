@@ -110,7 +110,7 @@ export default function SupportersPage() {
     const [isLoading, setIsLoading] = useState(false);
 
     // Toggle this to true to release the main play archive video
-    const SHOW_ARCHIVE_VIDEO = false;
+    const SHOW_ARCHIVE_VIDEO = true;
 
     useEffect(() => {
         const savedTier = sessionStorage.getItem("supporters_tier");
