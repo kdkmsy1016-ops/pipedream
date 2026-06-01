@@ -10,6 +10,7 @@ const SimplePhotobookViewer = dynamic(() => import("../SimplePhotobookViewer"), 
 });
 
 export default function PhotobookPage() {
+    const isProduction = process.env.NEXT_PUBLIC_VERCEL_ENV === "production";
     const [tier, setTier] = useState<number>(0);
     const [isChecking, setIsChecking] = useState(true);
     const router = useRouter();
@@ -65,7 +66,7 @@ export default function PhotobookPage() {
         );
     }
 
-    if (tier >= 2 && tier < 99) {
+    if (tier >= 2 && tier < 99 && isProduction) {
         return (
             <main className="fixed inset-0 z-50 bg-[#0b0e14] flex flex-col items-center justify-center text-white font-serif p-6">
                 <p className="text-sm tracking-[0.3em] text-zinc-300 mb-4 text-center uppercase">Digital Photobook</p>
