@@ -6,8 +6,15 @@ import { useEffect, useState } from "react";
 export default function FloatingStageLink() {
     const [isVisible, setIsVisible] = useState(false);
     const [percent, setPercent] = useState<number | null>(null);
+    const [isEnded, setIsEnded] = useState(false);
 
     useEffect(() => {
+        // Check if deadline is reached
+        const targetDate = new Date("2026-06-02T00:00:00+09:00").getTime();
+        if (Date.now() >= targetDate) {
+            setIsEnded(true);
+        }
+
         // Fetch stats
         const fetchStats = async () => {
             try {
@@ -34,6 +41,8 @@ export default function FloatingStageLink() {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    if (isEnded) return null;
 
     return (
         <AnimatePresence>
