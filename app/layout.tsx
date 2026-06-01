@@ -9,6 +9,7 @@ const notoSerifJP = Noto_Serif_JP({
   variable: "--font-noto-serif-jp",
   subsets: ["latin"],
   weight: ["200", "400", "700", "900"],
+  display: "swap",
 });
 
 export const viewport: Viewport = {

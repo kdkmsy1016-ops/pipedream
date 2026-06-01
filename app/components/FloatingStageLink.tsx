@@ -9,25 +9,12 @@ export default function FloatingStageLink() {
     const [isEnded, setIsEnded] = useState(false);
 
     useEffect(() => {
-        const targetDate = new Date("2026-06-02T00:00:00+09:00");
-        
-        const checkStatus = () => {
-            const now = new Date();
-            if (now >= targetDate) {
-                setIsEnded(true);
-            }
-        };
+        // Check if deadline is reached
+        const targetDate = new Date("2026-06-02T00:00:00+09:00").getTime();
+        if (Date.now() >= targetDate) {
+            setIsEnded(true);
+        }
 
-        // Initial check
-        checkStatus();
-
-        // 1-minute interval checks
-        const interval = setInterval(checkStatus, 60000);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    useEffect(() => {
         // Fetch stats
         const fetchStats = async () => {
             try {
@@ -55,6 +42,8 @@ export default function FloatingStageLink() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    if (isEnded) return null;
+
     return (
         <AnimatePresence>
             {isVisible && (
@@ -65,68 +54,45 @@ export default function FloatingStageLink() {
                     exit={{ opacity: 0, y: 50 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                    {isEnded ? (
+                    <a href="https://motion-gallery.net/projects/eikyo-to-pipedream" target="_blank" rel="noopener noreferrer" className="block">
                         <motion.div
-                            className="group flex items-center gap-5 bg-black/80 backdrop-blur-lg px-10 py-5 rounded-full border border-[#ffbf00] shadow-[0_0_20px_rgba(255,191,0,0.4)]"
+                            className="group flex items-center gap-5 bg-black/80 backdrop-blur-lg px-10 py-5 rounded-full border border-[#ffbf00] cursor-pointer shadow-[0_0_20px_rgba(255,191,0,0.4)]"
                             animate={{
                                 y: [0, -8, 0],
                                 scale: [1, 1, 1.05, 1]
                             }}
+                            whileHover={{
+                                y: -5,
+                                scale: 1.02,
+                                boxShadow: "0 0 30px rgba(255,191,0,0.7)"
+                            }}
                             transition={{
                                 y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
                                 scale: { duration: 5, repeat: Infinity, times: [0, 0.9, 0.95, 1], ease: "easeInOut" },
+                                default: { duration: 0.3 }
                             }}
                         >
-                            <div className="text-center space-y-1">
-                                <p className="text-xs md:text-sm font-bold tracking-wider text-[#ffbf00]">
-                                    クラウドファンディングは終了しました
-                                </p>
-                                <p className="text-[10px] md:text-xs text-zinc-300 tracking-widest">
-                                    ご支援・応援ありがとうございました
-                                </p>
+                            <div className="flex flex-col">
+                                <span className="text-white/60 text-xs tracking-widest font-sans uppercase mb-1">
+                                    クラウドファンディング実施中
+                                </span>
+                                <span className="text-white text-sm md:text-base font-serif tracking-wide group-hover:text-accent transition-colors duration-300">
+                                    現在：
+                                    <span className="text-accent font-bold text-lg md:text-xl mx-1">
+                                        {percent !== null ? percent : "--"}%
+                                    </span>
+                                    達成 支援受付中
+                                </span>
                             </div>
-                        </motion.div>
-                    ) : (
-                        <a href="https://motion-gallery.net/projects/eikyo-to-pipedream" target="_blank" rel="noopener noreferrer" className="block">
                             <motion.div
-                                className="group flex items-center gap-5 bg-black/80 backdrop-blur-lg px-10 py-5 rounded-full border border-[#ffbf00] cursor-pointer shadow-[0_0_20px_rgba(255,191,0,0.4)]"
-                                animate={{
-                                    y: [0, -8, 0],
-                                    scale: [1, 1, 1.05, 1]
-                                }}
-                                whileHover={{
-                                    y: -5,
-                                    scale: 1.02,
-                                    boxShadow: "0 0 30px rgba(255,191,0,0.7)"
-                                }}
-                                transition={{
-                                    y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-                                    scale: { duration: 5, repeat: Infinity, times: [0, 0.9, 0.95, 1], ease: "easeInOut" },
-                                    default: { duration: 0.3 }
-                                }}
+                                initial={{ x: 0 }}
+                                whileHover={{ x: 3 }}
+                                transition={{ duration: 0.3 }}
                             >
-                                <div className="flex flex-col">
-                                    <span className="text-white/60 text-xs tracking-widest font-sans uppercase mb-1">
-                                        クラウドファンディング実施中
-                                    </span>
-                                    <span className="text-white text-sm md:text-base font-serif tracking-wide group-hover:text-accent transition-colors duration-300">
-                                        現在：
-                                        <span className="text-accent font-bold text-lg md:text-xl mx-1">
-                                            {percent !== null ? percent : "--"}%
-                                        </span>
-                                        達成 支援受付中
-                                    </span>
-                                </div>
-                                <motion.div
-                                    initial={{ x: 0 }}
-                                    whileHover={{ x: 3 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <ArrowRight className="w-5 h-5 text-accent/80" />
-                                </motion.div>
+                                <ArrowRight className="w-5 h-5 text-accent/80" />
                             </motion.div>
-                        </a>
-                    )}
+                        </motion.div>
+                    </a>
                 </motion.div>
             )}
         </AnimatePresence>
