@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ExternalLink, Clock, FileText } from "lucide-react";
@@ -9,6 +10,14 @@ import CrowdfundingMatrix from "./CrowdfundingMatrix";
 
 export default function CrowdfundingSection() {
     const isStarted = useCrowdfundingStatus();
+    const [isEnded, setIsEnded] = useState(false);
+
+    useEffect(() => {
+        const targetDate = new Date("2026-06-02T00:00:00+09:00").getTime();
+        if (Date.now() >= targetDate) {
+            setIsEnded(true);
+        }
+    }, []);
 
     const handleDisabledClick = (e: React.MouseEvent) => {
         if (!isStarted) {
@@ -92,7 +101,14 @@ export default function CrowdfundingSection() {
 
                             {/* Action Button */}
                             <div className="mt-auto">
-                                {isStarted ? (
+                                {isEnded ? (
+                                    <button
+                                        disabled
+                                        className="w-full flex items-center justify-center gap-2 px-4 py-4 bg-zinc-800 text-zinc-500 transition-colors text-sm font-bold tracking-widest rounded cursor-not-allowed"
+                                    >
+                                        終了しました
+                                    </button>
+                                ) : isStarted ? (
                                     <a
                                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                         href={(tier as any).url || MOTION_GALLERY_URL}
