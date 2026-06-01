@@ -40,7 +40,11 @@ export default function PhotobookPage() {
     };
 
     if (isChecking) {
-        return <div className="min-h-screen bg-[#0b0e14]" />;
+        return (
+            <div className="min-h-screen bg-[#0b0e14] flex flex-col items-center justify-center text-white font-serif p-6">
+                <div className="w-6 h-6 border border-[#ffbf00]/30 border-t-[#ffbf00] rounded-full animate-spin opacity-60" />
+            </div>
+        );
     }
 
     if (tier < 2) {

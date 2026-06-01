@@ -187,10 +187,6 @@ export default function SupportersPage() {
         setError(null);
     };
 
-    if (isChecking) {
-        return <div className="min-h-screen bg-zinc-950" />;
-    }
-
     return (
         <main className="min-h-screen bg-zinc-950 text-white font-serif relative overflow-x-hidden w-full max-w-full box-border pb-24">
 
@@ -246,7 +242,8 @@ export default function SupportersPage() {
                                             type="tel"
                                             value={phoneInput}
                                             onChange={(e) => setPhoneInput(e.target.value)}
-                                            className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
+                                            disabled={isLoading || isChecking}
+                                            className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm disabled:opacity-50 disabled:cursor-not-allowed"
                                             placeholder="090-1234-5678"
                                             inputMode="tel"
                                             autoComplete="tel"
@@ -266,7 +263,8 @@ export default function SupportersPage() {
                                             type="password"
                                             value={passwordInput}
                                             onChange={(e) => setPasswordInput(e.target.value)}
-                                            className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm"
+                                            disabled={isLoading || isChecking}
+                                            className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm disabled:opacity-50 disabled:cursor-not-allowed"
                                             placeholder="共通アクセスキー"
                                             required
                                         />
@@ -287,7 +285,7 @@ export default function SupportersPage() {
                             <div className="text-center w-full box-border pt-4">
                                 <button
                                     type="submit"
-                                    disabled={isLoading || !phoneInput || !passwordInput}
+                                    disabled={isLoading || isChecking || !phoneInput || !passwordInput}
                                     className="w-full sm:w-auto px-12 py-3 text-sm tracking-[0.2em] text-zinc-950 bg-[#ffbf00] hover:bg-white hover:text-zinc-950 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 shadow-[0_0_15px_rgba(255,191,0,0.3)] font-bold rounded-sm box-border flex items-center justify-center gap-2 mx-auto"
                                 >
                                     {isLoading ? (
