@@ -299,7 +299,7 @@ export default function SupportersPage() {
                             </div>
                         </form>
                     </motion.div>
-                ) : (
+                ) : tier === 99 ? (
                     <motion.div
                         key="content"
                         initial={{ opacity: 0, y: 20 }}
@@ -464,6 +464,33 @@ export default function SupportersPage() {
                         <div className="w-1/2 h-[1px] bg-gradient-to-r from-transparent via-[#ffbf00]/30 to-transparent mx-auto mt-20 md:mt-32 max-w-full box-border overflow-hidden" />
 
                         <div className="w-full max-w-full text-center pt-8 pb-12 box-border overflow-hidden">
+                            <button
+                                onClick={handleLogout}
+                                className="text-zinc-600 hover:text-zinc-400 text-xs md:text-sm tracking-widest transition-colors underline underline-offset-4 p-4 inline-block"
+                            >
+                                ログアウト
+                            </button>
+                        </div>
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="coming-soon"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.8, ease: "circOut" }}
+                        className="w-full max-w-md mx-auto space-y-12 relative z-10 px-4 mt-8 md:mt-20 box-border text-center min-h-[60dvh] flex flex-col justify-center items-center"
+                    >
+                        <div className="space-y-4">
+                            <p className="text-sm tracking-[0.3em] text-[#ffbf00] mb-4 uppercase">Supporters Content</p>
+                            <p className="text-xs tracking-widest text-zinc-500 uppercase mb-8">— Coming Soon —</p>
+                            <p className="text-xs tracking-wider text-zinc-400 leading-relaxed">
+                                サポーター限定コンテンツの公開まで、今しばらくお待ちください。<br />
+                                配信が開始されましたら、こちらの画面からご覧いただけるようになります。
+                            </p>
+                        </div>
+
+                        <div className="pt-8">
                             <button
                                 onClick={handleLogout}
                                 className="text-zinc-600 hover:text-zinc-400 text-xs md:text-sm tracking-widest transition-colors underline underline-offset-4 p-4 inline-block"
