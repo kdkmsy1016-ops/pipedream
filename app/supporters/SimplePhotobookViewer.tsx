@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import Image from "next/image";
 import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -200,24 +201,27 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
     useEffect(() => {
         if (!isOpen) return;
 
+        const maxVisible = Math.max(...visiblePages);
         const preloadIndexes = new Set<number>();
 
-        visiblePages.forEach((index) => preloadIndexes.add(index));
+        // Preload next 4 pages
+        for (let i = 1; i <= 4; i++) {
+            preloadIndexes.add(maxVisible + i);
+        }
 
-        const step = pagesPerView === 1 ? 1 : 2;
-
+        // Preload previous 2 pages
+        const minVisible = Math.min(...visiblePages);
         for (let i = 1; i <= 2; i++) {
-            preloadIndexes.add(currentPage + step * i);
-            preloadIndexes.add(currentPage - step * i);
+            preloadIndexes.add(minVisible - i);
         }
 
         preloadIndexes.forEach((index) => {
             if (index < 0 || index >= PAGES.length) return;
 
-            const img = new Image();
+            const img = new window.Image();
             img.src = PAGES[index];
         });
-    }, [isOpen, currentPage, pagesPerView, visiblePages]);
+    }, [isOpen, visiblePages]);
 
     if (!isOpen) return null;
 
@@ -256,6 +260,7 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
                 flexShrink: 0,
                 boxSizing: "border-box",
                 overflow: "hidden",
+                position: "relative",
             };
         }
 
@@ -268,6 +273,7 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
             flexShrink: 0,
             boxSizing: "border-box",
             overflow: "hidden",
+            position: "relative",
         };
     };
 
@@ -320,13 +326,15 @@ export default function SimplePhotobookViewer({ isOpen, onClose, initialPage }: 
                         >
                             {visiblePages.map((pageIndex, position) => (
                                 <div key={pageIndex} style={getPageSlotStyle(position)}>
-                                    <img
+                                    <Image
                                         src={PAGES[pageIndex]}
                                         alt={`Page ${pageIndex + 1}`}
-                                        className="max-w-full max-h-full object-contain select-none"
+                                        fill
+                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                        quality={80}
+                                        priority={pageIndex <= 2}
+                                        className="object-contain select-none"
                                         draggable={false}
-                                        loading="eager"
-                                        decoding="async"
                                     />
                                 </div>
                             ))}
