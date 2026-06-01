@@ -344,25 +344,7 @@ export default function SupportersPage() {
                                 </section>
                             )}
 
-                            {/* Tier 4 Content */}
-                            {tier >= 4 && (
-                                <section className="w-full max-w-full box-border bg-zinc-900 border border-zinc-800 p-5 md:p-8 rounded-sm space-y-4 md:space-y-6 overflow-hidden">
-                                    <div className="w-full flex items-center gap-3 border-b border-zinc-800 pb-3 md:pb-4 overflow-hidden">
-                                        <FileText className="w-4 h-4 md:w-5 md:h-5 text-zinc-400 flex-shrink-0" />
-                                        <h2 className="text-base md:text-xl text-zinc-200 tracking-widest break-words whitespace-pre-line">
-                                            Special Thanks お名前掲載確認
-                                        </h2>
-                                    </div>
-                                    <div className="w-full max-w-full p-4 md:p-6 bg-zinc-950 border border-zinc-800 text-center rounded-sm box-border overflow-hidden">
-                                        <p className="w-full max-w-full text-zinc-400 text-xs md:text-sm leading-relaxed md:leading-loose mb-4 break-words whitespace-pre-line">
-                                            映画のエンドロールおよびパンフレットに掲載される<br className="md:hidden block" />皆様のお名前（確定版）はこちらからご確認ください。
-                                        </p>
-                                        <button className="text-[#ffbf00] text-xs md:text-sm tracking-widest underline underline-offset-4 hover:text-white transition-colors break-words max-w-full">
-                                            掲載名リストを確認する
-                                        </button>
-                                    </div>
-                                </section>
-                            )}
+
 
                             {/* Tier 3 Content */}
                             {tier >= 3 && (
