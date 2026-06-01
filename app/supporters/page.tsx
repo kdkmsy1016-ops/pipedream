@@ -102,6 +102,7 @@ function DriveDownloadCard({
 
 
 export default function SupportersPage() {
+    const isProduction = process.env.NEXT_PUBLIC_VERCEL_ENV === "production";
     const [tier, setTier] = useState<number>(0);
     const [phoneInput, setPhoneInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
@@ -297,7 +298,7 @@ export default function SupportersPage() {
                             </div>
                         </form>
                     </motion.div>
-                ) : tier === 99 ? (
+                ) : (tier === 99 || !isProduction) ? (
                     <motion.div
                         key="content"
                         initial={{ opacity: 0, y: 20 }}

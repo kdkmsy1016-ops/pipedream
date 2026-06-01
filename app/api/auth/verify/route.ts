@@ -27,12 +27,13 @@ function getAllowedPhones(): Record<string, number> {
         const parsed = JSON.parse(envVal);
         const result: Record<string, number> = {};
         
-        // Normalize keys for robust matching
+        // Normalize keys for robust matching, accepting both string and number tiers
         for (const [key, value] of Object.entries(parsed)) {
-            if (typeof value === 'number') {
+            const numValue = typeof value === 'number' ? value : (typeof value === 'string' ? parseInt(value, 10) : NaN);
+            if (!isNaN(numValue)) {
                 const normalizedKey = normalizePhoneNumber(key);
                 if (normalizedKey) {
-                    result[normalizedKey] = value;
+                    result[normalizedKey] = numValue;
                 }
             }
         }
@@ -49,10 +50,11 @@ export async function POST(request: Request) {
         const rawPhone = body.phone || body.email;
         const password = body.password;
 
-        // Admin Bypass Check
+        // Admin Bypass Check (Tier 99)
         const adminPassword = process.env.ADMIN_PASSWORD;
         if (adminPassword && password === adminPassword) {
             console.log("Admin Logged In via ADMIN_PASSWORD");
+            console.log("Verified Tier:", 99);
             return NextResponse.json({ success: true, tier: 99 });
         }
 
@@ -65,33 +67,34 @@ export async function POST(request: Request) {
 
         const normalizedPhone = normalizePhoneNumber(rawPhone);
         
-        // Check if they input the admin key from env to allow developers/admin bypass
+        // 1. Verify password first
+        const commonPassword = process.env.COMMON_SUPPORTER_PASSWORD;
+        const isCommonPasswordCorrect = commonPassword && password === commonPassword;
+
+        // 2. Query ALLOWED_PHONES_JSON list first
+        const allowedPhones = getAllowedPhones();
+        const rawTier = allowedPhones[normalizedPhone];
+
+        if (rawTier !== undefined && isCommonPasswordCorrect) {
+            const tier = Number(rawTier);
+            console.log("Verified Tier:", tier);
+            return NextResponse.json({ success: true, tier });
+        }
+
+        // 3. Fall back to NEXT_PUBLIC_ADMIN_KEY bypass only if phone is NOT in ALLOWED_PHONES_JSON
         const adminKey = process.env.NEXT_PUBLIC_ADMIN_KEY?.trim();
         if (adminKey && (rawPhone.trim() === adminKey || normalizedPhone === normalizePhoneNumber(adminKey))) {
-            console.log("Admin Logged In via API");
+            console.log("Admin Logged In via API (NEXT_PUBLIC_ADMIN_KEY bypass)");
+            console.log("Verified Tier:", 5);
             return NextResponse.json({ success: true, tier: 5 });
         }
 
-        // Verify password
-        const commonPassword = process.env.COMMON_SUPPORTER_PASSWORD;
-        if (!commonPassword || password !== commonPassword) {
-            return NextResponse.json(
-                { success: false, message: "認証情報が正しくありません。" },
-                { status: 401 }
-            );
-        }
-
-        const allowedPhones = getAllowedPhones();
-        const tier = allowedPhones[normalizedPhone];
-
-        if (tier !== undefined) {
-            return NextResponse.json({ success: true, tier });
-        } else {
-            return NextResponse.json(
-                { success: false, message: "認証情報が正しくありません。" },
-                { status: 401 }
-            );
-        }
+        // 4. Return error if neither matched (defaulting safely to tier 0)
+        console.log("Verified Tier:", 0);
+        return NextResponse.json(
+            { success: false, message: "認証情報が正しくありません。" },
+            { status: 401 }
+        );
 
     } catch (error) {
         console.error("Auth API Error:", error);
