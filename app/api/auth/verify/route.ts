@@ -49,6 +49,13 @@ export async function POST(request: Request) {
         const rawPhone = body.phone || body.email;
         const password = body.password;
 
+        // Admin Bypass Check
+        const adminPassword = process.env.ADMIN_PASSWORD;
+        if (adminPassword && password === adminPassword) {
+            console.log("Admin Logged In via ADMIN_PASSWORD");
+            return NextResponse.json({ success: true, tier: 99 });
+        }
+
         if (!rawPhone || typeof rawPhone !== 'string') {
             return NextResponse.json(
                 { success: false, message: "電話番号を正しく入力してください" },
