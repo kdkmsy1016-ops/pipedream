@@ -61,6 +61,19 @@ export default function PhotobookPage() {
         );
     }
 
+    if (tier >= 2 && tier < 99) {
+        return (
+            <main className="fixed inset-0 z-50 bg-[#0b0e14] flex flex-col items-center justify-center text-white font-serif p-6">
+                <p className="text-sm tracking-[0.3em] text-zinc-300 mb-4 text-center uppercase">Digital Photobook</p>
+                <p className="text-xs tracking-widest text-zinc-500 text-center uppercase mb-8">— Coming Soon —</p>
+                <p className="text-xs tracking-wider text-zinc-400 text-center leading-relaxed">
+                    サポーター限定コンテンツの公開まで、今しばらくお待ちください。<br />
+                    配信が開始されましたら、こちらの画面からご覧いただけるようになります。
+                </p>
+            </main>
+        );
+    }
+
     return (
         <main className="min-h-screen bg-[#0b0e14]">
             <SimplePhotobookViewer isOpen={true} onClose={handleClose} />
