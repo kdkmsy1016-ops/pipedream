@@ -51,7 +51,8 @@ export async function POST(request: Request) {
         }
 
         // Fetch ALLOWED_PHONE_JSON safely
-        const rawJson = process.env.ALLOWED_PHONE_JSON;
+        const { ALLOWED_PHONE_JSON } = process.env;
+        const rawJson = ALLOWED_PHONE_JSON;
         if (!rawJson) {
             console.error("ALLOWED_PHONE_JSON is missing");
             return NextResponse.json(
