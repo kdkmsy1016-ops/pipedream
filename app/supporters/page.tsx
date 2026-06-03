@@ -36,9 +36,10 @@ function DriveDownloadCard({
     onCardClick?: () => void;
     customThumbnail?: string;
 }) {
-    const defaultUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#";
-    const finalCardUrl = cardUrl || defaultUrl;
-    const finalButtonUrl = buttonUrl || defaultUrl;
+    const defaultViewUrl = fileId ? `https://drive.google.com/file/d/${fileId}/view` : "#";
+    const defaultDownloadUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "#";
+    const finalCardUrl = cardUrl || defaultViewUrl;
+    const finalButtonUrl = buttonUrl || defaultDownloadUrl;
     const defaultThumbnailUrl = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200&v=20260520` : "";
     const thumbnailUrl = customThumbnail || defaultThumbnailUrl;
     const DisplayIcon = CustomIcon || Download;
