@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star, ImageIcon, Phone } from "lucide-react";
+import { ChevronLeft, Lock, Download, FileText, PlayCircle, BookOpen, Star, ImageIcon, Phone, Eye, EyeOff } from "lucide-react";
 
 // Google Drive File IDs
 const MOVIE_KV_ID = "1SPZleKgUnS3OG277P4KorTrvPGrxRJo3";
@@ -111,6 +111,7 @@ export default function SupportersPage() {
     const [isChecking, setIsChecking] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [hasAgreedTerms, setHasAgreedTerms] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
 
     // Toggle this to true to release the main play archive video
     const SHOW_ARCHIVE_VIDEO = true;
@@ -274,14 +275,23 @@ export default function SupportersPage() {
                                         <Lock className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-[#ffbf00] transition-colors" />
                                         <input
                                             id="password"
-                                            type="password"
+                                            type={showPassword ? "text" : "password"}
                                             value={passwordInput}
                                             onChange={(e) => setPasswordInput(e.target.value)}
                                             disabled={isLoading || isChecking}
-                                            className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-4 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="w-full bg-zinc-900 border-b border-[#ffbf00]/30 py-4 pl-12 pr-12 text-center text-base md:text-lg focus:outline-none focus:border-[#ffbf00] focus:shadow-[0_10px_15px_-3px_rgba(255,191,0,0.1)] transition-all duration-300 placeholder-white/20 tracking-widest rounded-t-sm disabled:opacity-50 disabled:cursor-not-allowed"
                                             placeholder="共通アクセスキー"
                                             required
                                         />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            disabled={isLoading || isChecking}
+                                            className="absolute right-4 w-5 h-5 text-zinc-500 hover:text-[#ffbf00] transition-colors focus:outline-none flex items-center justify-center disabled:opacity-50"
+                                            aria-label={showPassword ? "アクセスキーを非表示にする" : "アクセスキーを表示する"}
+                                        >
+                                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
