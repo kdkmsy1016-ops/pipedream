@@ -109,6 +109,7 @@ export default function SupportersPage() {
     const [error, setError] = useState<string | null>(null);
     const [isChecking, setIsChecking] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [hasAgreedTerms, setHasAgreedTerms] = useState(true);
 
     // Toggle this to true to release the main play archive video
     const SHOW_ARCHIVE_VIDEO = true;
@@ -119,6 +120,12 @@ export default function SupportersPage() {
             setTier(parseInt(savedTier, 10));
         }
         setIsChecking(false);
+
+        // Check if terms are agreed on mount
+        const agreed = localStorage.getItem("agreed_terms");
+        if (agreed !== "true") {
+            setHasAgreedTerms(false);
+        }
     }, []);
 
     const handleOpenPhotobook = () => {
@@ -186,6 +193,11 @@ export default function SupportersPage() {
         setPhoneInput("");
         setPasswordInput("");
         setError(null);
+    };
+
+    const handleAgreeTerms = () => {
+        localStorage.setItem("agreed_terms", "true");
+        setHasAgreedTerms(true);
     };
 
     return (
@@ -362,7 +374,7 @@ export default function SupportersPage() {
                                     {SHOW_ARCHIVE_VIDEO ? (
                                         <div className="w-full max-w-full aspect-video bg-black border border-zinc-800 rounded-sm relative overflow-hidden box-border">
                                             <iframe
-                                                src="https://www.youtube.com/embed/jh1TOMpww8I?modestbranding=1&rel=0"
+                                                src="https://www.youtube.com/embed/5eI_gzVj9XM?modestbranding=1&rel=0"
                                                 title="舞台『場末のパイプドリーム』本編アーカイブ"
                                                 className="absolute inset-0 w-full h-full border-0"
                                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -479,6 +491,53 @@ export default function SupportersPage() {
                                 ログアウト
                             </button>
                         </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Terms of Service Popup Modal */}
+            <AnimatePresence>
+                {tier > 0 && !hasAgreedTerms && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 box-border"
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-zinc-950 border border-[#ffbf00]/30 p-6 md:p-8 rounded-lg max-w-lg w-full max-h-[85dvh] flex flex-col gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+                        >
+                            <h2 className="text-xl text-[#ffbf00] tracking-widest text-center font-bold">
+                                利用規約
+                            </h2>
+                            <div className="flex-1 overflow-y-auto border border-zinc-800 bg-zinc-900/50 p-4 rounded text-zinc-400 text-xs md:text-sm leading-relaxed space-y-4 font-serif">
+                                <p className="text-zinc-300 font-bold text-center">【限定コンテンツに関する重要なお願い】</p>
+                                <p>
+                                    本サポーター限定ページで提供されるすべてのコンテンツ（動画、画像、脚本、その他ダウンロード素材）の権利は、映画『盈虚とパイプドリーム』製作委員会に帰属します。
+                                </p>
+                                <p className="text-red-500 font-bold">
+                                    ・限定コンテンツの無断転載、複製、第三者への配布、およびSNS等（X、Instagram、TikTok、YouTube等）への共有は固く禁止いたします。
+                                </p>
+                                <p>
+                                    ・本サービスを利用して知り得た非公開情報について、インターネット上に漏洩させる行為は行わないでください。
+                                </p>
+                                <p>
+                                    ・規約に違反した場合、アカウントおよびアクセスの停止、ならびに法的措置をとらせていただく場合がございます。
+                                </p>
+                                <p>
+                                    サポーターの皆様に安心してお愉しみいただくため、何卒ご理解とご協力をお願い申し上げます。
+                                </p>
+                            </div>
+                            <button
+                                onClick={handleAgreeTerms}
+                                className="w-full py-3 bg-[#ffbf00] text-zinc-950 hover:bg-white transition-colors duration-300 font-bold tracking-widest text-sm rounded shadow-[0_0_15px_rgba(255,191,0,0.3)] cursor-pointer"
+                            >
+                                同意して進む
+                            </button>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
