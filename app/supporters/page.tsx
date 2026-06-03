@@ -374,7 +374,7 @@ export default function SupportersPage() {
                                     {SHOW_ARCHIVE_VIDEO ? (
                                         <div className="w-full max-w-full aspect-video bg-black border border-zinc-800 rounded-sm relative overflow-hidden box-border">
                                             <iframe
-                                                src="https://www.youtube.com/embed/jh1TOMpww8I?modestbranding=1&rel=0"
+                                                src="https://www.youtube.com/embed/5eI_gzVj9XM?modestbranding=1&rel=0"
                                                 title="舞台『場末のパイプドリーム』本編アーカイブ"
                                                 className="absolute inset-0 w-full h-full border-0"
                                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
