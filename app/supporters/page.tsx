@@ -321,7 +321,7 @@ export default function SupportersPage() {
                             </div>
                         </form>
                     </motion.div>
-                ) : (tier === 99 || !isProduction) ? (
+                ) : tier > 0 ? (
                     <motion.div
                         key="content"
                         initial={{ opacity: 0, y: 20 }}
