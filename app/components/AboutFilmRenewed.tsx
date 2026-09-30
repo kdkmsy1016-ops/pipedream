@@ -71,13 +71,13 @@ export default function AboutFilmRenewed() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 text-center font-serif border-t border-white/5 text-xs md:text-sm text-foreground/70">
           <div className="p-4 bg-zinc-900/30 rounded border border-white/5 space-y-1">
             <span className="text-accent/60 block text-[11px] tracking-widest">STAFF</span>
-            <p className="text-foreground/90 font-medium">監督・脚本・編集：久高 将也</p>
-            <p className="text-foreground/70">脚本：福井 将真</p>
+            <p className="text-foreground/90 font-medium">監督・脚本・編集</p>
+            <p className="text-foreground/70">久高 将也</p>
           </div>
           <div className="p-4 bg-zinc-900/30 rounded border border-white/5 space-y-1">
             <span className="text-accent/60 block text-[11px] tracking-widest">LOCATION</span>
             <p className="text-foreground/90 font-medium">東京都稲城市</p>
-            <p className="text-foreground/70">スナック「さくらみち」</p>
+            <p className="text-foreground/70">スナック「さくらみち」 / 呑処「こまち」</p>
           </div>
           <div className="p-4 bg-zinc-900/30 rounded border border-white/5 space-y-1">
             <span className="text-accent/60 block text-[11px] tracking-widest">FORMAT</span>

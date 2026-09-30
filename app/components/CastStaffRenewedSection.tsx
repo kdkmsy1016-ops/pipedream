@@ -9,12 +9,6 @@ const FILM_STAFF_CAST = [
     name: "久高 将也",
     image: "/prof/kudaka.jpg",
     bio: "15年以上にわたり映画・映像制作の現場に携わる。映画『盈虚とパイプドリーム』にて長編映画初監督。"
-  },
-  {
-    role: "脚本",
-    name: "福井 将真",
-    image: "/gallery/gallery-2.png",
-    bio: "スナック「さくらみち」の空気を知る劇作家。日常の揺らぎと夢の切なさをリアルな対話で描く。"
   }
 ];
 
@@ -27,7 +21,7 @@ const CAST_MEMBERS = [
 export default function CastStaffRenewedSection() {
   return (
     <section id="cast-staff" className="bg-zinc-950 py-24 md:py-36 px-6 border-t border-white/5 relative overflow-hidden">
-      <div className="max-w-5xl w-full mx-auto space-y-16">
+      <div className="max-w-4xl w-full mx-auto space-y-16">
 
         {/* Section Header */}
         <div className="text-center space-y-4">
@@ -42,8 +36,8 @@ export default function CastStaffRenewedSection() {
           </p>
         </div>
 
-        {/* Key Staff Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        {/* Key Staff */}
+        <div className="max-w-xl mx-auto w-full">
           {FILM_STAFF_CAST.map((member, idx) => (
             <motion.div
               key={member.name}
@@ -51,7 +45,7 @@ export default function CastStaffRenewedSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="bg-zinc-900/40 border border-white/5 p-6 rounded-lg flex flex-col sm:flex-row items-center sm:items-start gap-6 font-serif"
+              className="bg-zinc-900/40 border border-white/5 p-6 md:p-8 rounded-lg flex flex-col sm:flex-row items-center sm:items-start gap-6 font-serif"
             >
               <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border border-zinc-700 flex-shrink-0 shadow-md">
                 <Image

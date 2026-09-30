@@ -17,7 +17,7 @@ const CURRENT_PRODUCTION_PHASES = [
     label: "ロケーション・美術準備",
     status: "実在店舗の採寸・照明テスト完了",
     image: "/gallery/gallery-3.png",
-    detail: "物語の主舞台となる実在スナックにて、2021年の空気感を再現する小道具の選定や、狭小空間を活かしたキャメラワークの検証を進めています。"
+    detail: "物語の主舞台となる実在店舗スナック「さくらみち」および呑処「こまち」にて、2021年の空気感を再現する小道具の選定や、狭小空間を活かしたキャメラワークの検証を進めています。"
   },
   {
     category: "CASTING & REHEARSAL",
@@ -87,7 +87,7 @@ export default function NowMakingSection() {
               </h3>
             </div>
             <div className="text-xs font-serif text-foreground/60 tracking-wider">
-              東京都稲城市 スナック「さくらみち」実測中
+              東京都稲城市 スナック「さくらみち」 / 呑処「こまち」実測中
             </div>
           </div>
 
