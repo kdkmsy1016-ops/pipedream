@@ -5,32 +5,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Heart } from "lucide-react";
 
 export default function FloatingSupportButton() {
-  const [isVisible, setIsVisible] = useState(() => {
-    if (typeof window !== "undefined") {
-      return window.innerWidth < 768 || window.scrollY > 200;
-    }
-    return false;
-  });
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const updateVisibility = () => {
-      const isMobile = window.innerWidth < 768;
-      if (isMobile) {
-        // Always visible on smartphone (including Hero screen)
+    const handleScroll = () => {
+      // Show floating button after scrolling past hero (~200px)
+      if (window.scrollY > 200) {
         setIsVisible(true);
       } else {
-        // On desktop, show after scrolling past hero (~200px)
-        setIsVisible(window.scrollY > 200);
+        setIsVisible(false);
       }
     };
 
-    updateVisibility();
-    window.addEventListener("scroll", updateVisibility, { passive: true });
-    window.addEventListener("resize", updateVisibility, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", updateVisibility);
-      window.removeEventListener("resize", updateVisibility);
-    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
