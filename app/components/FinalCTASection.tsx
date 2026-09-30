@@ -68,7 +68,7 @@ export default function FinalCTASection() {
 
           <a
             href="#support"
-            className="w-full sm:w-auto px-8 py-3.5 bg-black/60 hover:bg-zinc-900 text-foreground/75 hover:text-foreground transition-all duration-200 rounded-sm text-xs md:text-sm tracking-[0.2em] text-center border border-white/10"
+            className="w-full sm:w-auto px-8 py-3.5 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded-sm text-xs md:text-sm tracking-[0.2em] text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,191,0,0.4)]"
           >
             この映画を支援する
           </a>

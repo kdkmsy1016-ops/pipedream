@@ -88,7 +88,7 @@ export default function HeroRenewed() {
           </a>
           <a
             href="#support"
-            className="w-full sm:w-auto px-8 py-3.5 bg-transparent hover:bg-white/5 text-foreground/70 hover:text-foreground border border-white/10 hover:border-white/25 transition-all duration-300 text-xs md:text-sm font-serif tracking-[0.2em] rounded-sm text-center"
+            className="w-full sm:w-auto px-8 py-3.5 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 text-xs md:text-sm font-serif tracking-[0.2em] rounded-sm text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,191,0,0.4)]"
           >
             制作を支援する
           </a>

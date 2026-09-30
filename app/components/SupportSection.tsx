@@ -68,12 +68,12 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
                 href={opt.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-center justify-center py-4 px-3 bg-black/40 hover:bg-zinc-800/80 border border-white/10 hover:border-white/20 text-foreground transition-all duration-200 rounded text-center active:scale-[0.98]"
+                className="group flex flex-col items-center justify-center py-4 px-3 bg-black/50 hover:bg-[#ffbf00]/10 border border-white/10 hover:border-[#ffbf00]/50 text-foreground hover:text-[#ffbf00] transition-all duration-200 rounded text-center active:scale-[0.98]"
               >
                 <span className="text-base md:text-lg font-bold tracking-wider">
                   {opt.label}
                 </span>
-                <span className="text-[11px] text-foreground/60 group-hover:text-foreground/90 tracking-widest mt-1">
+                <span className="text-[11px] text-foreground/60 group-hover:text-[#ffbf00]/90 tracking-widest mt-1">
                   この金額で支援する
                 </span>
               </a>
@@ -86,7 +86,7 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
               href={STRIPE_PAYMENT_LINKS.custom}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center py-3.5 px-4 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-white/20 text-foreground/90 hover:text-white transition-all duration-200 rounded text-xs md:text-sm tracking-[0.2em] text-center"
+              className="w-full flex items-center justify-center py-4 px-4 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded text-xs md:text-sm tracking-[0.2em] text-center shadow-[0_0_15px_rgba(255,191,0,0.25)]"
             >
               自由な金額で支援する
             </a>
