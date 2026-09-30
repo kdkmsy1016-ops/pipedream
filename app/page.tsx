@@ -32,11 +32,11 @@ export default function Home() {
         {/* 04 / DIRECTOR'S MESSAGE */}
         <DirectorsMessageSection />
 
-        {/* 05 / SUPPORT */}
-        <SupportSection />
-
-        {/* 06 / ROAD TO COMPLETION */}
+        {/* 05 / ROAD TO COMPLETION */}
         <RoadmapSection />
+
+        {/* 06 / SUPPORT */}
+        <SupportSection />
 
         {/* 07 / YOUR SUPPORT */}
         <YourSupportSection />

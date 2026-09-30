@@ -1,100 +1,105 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, Heart } from "lucide-react";
-import { STRIPE_PAYMENT_LINKS, SUPPORT_NOTES } from "../config/supportConfig";
+import { STRIPE_PAYMENT_LINKS } from "../config/supportConfig";
 
 interface SupportSectionProps {
   id?: string;
-  isCompactView?: boolean;
 }
 
 export default function SupportSection({ id = "support" }: SupportSectionProps) {
   const fixedOptions = [
-    { label: "¥1,000", amount: "1,000円で支援", url: STRIPE_PAYMENT_LINKS.yen1000 },
-    { label: "¥3,000", amount: "3,000円で支援", url: STRIPE_PAYMENT_LINKS.yen3000 },
-    { label: "¥5,000", amount: "5,000円で支援", url: STRIPE_PAYMENT_LINKS.yen5000 },
-    { label: "¥10,000", amount: "10,000円で支援", url: STRIPE_PAYMENT_LINKS.yen10000 },
+    { label: "¥1,000", url: STRIPE_PAYMENT_LINKS.yen1000 },
+    { label: "¥3,000", url: STRIPE_PAYMENT_LINKS.yen3000 },
+    { label: "¥5,000", url: STRIPE_PAYMENT_LINKS.yen5000 },
+    { label: "¥10,000", url: STRIPE_PAYMENT_LINKS.yen10000 },
+  ];
+
+  const footnotes = [
+    "一回限りの支援です",
+    "アカウント登録は不要です",
+    "匿名での支援も可能です",
+    "オンライン決済にはStripeを利用しています"
   ];
 
   return (
-    <section id={id} className="bg-zinc-950 py-24 md:py-36 px-6 border-t border-accent/20 relative overflow-hidden">
-      
-      {/* Background ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-3xl w-full mx-auto space-y-12 relative z-10">
+    <section id={id} className="bg-background py-24 md:py-36 px-6 border-t border-white/5 relative overflow-hidden font-serif">
+      <div className="max-w-2xl w-full mx-auto space-y-12">
 
         {/* Section Header */}
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 border border-accent/30 rounded-full text-accent text-xs font-serif tracking-widest uppercase mb-2">
-            <Heart className="w-3.5 h-3.5 fill-accent" />
-            Support
-          </div>
-          <h2 className="text-2xl md:text-4xl font-bold tracking-[0.15em] font-serif text-foreground">
-            この映画を支援する
-          </h2>
-          <p className="text-sm md:text-base text-foreground/80 font-serif tracking-wide leading-relaxed max-w-2xl mx-auto pt-2">
-            もっと気軽に、この映画を応援していただけるように。<br />
-            映画『盈虚とパイプドリーム』では、完成までの制作支援を随時受け付けています。
+        <div className="text-center space-y-3">
+          <p className="text-xs md:text-sm tracking-[0.2em] text-accent/80 uppercase">
+            Support The Film
           </p>
-          <p className="text-xs md:text-sm text-foreground/60 font-serif tracking-widest max-w-xl mx-auto">
-            物品等のリターンは設けず、いただいたご支援を映画の制作・完成のために大切に活用します。
+          <h2 className="text-2xl md:text-3xl font-bold tracking-[0.15em] text-foreground">
+            この映画の完成を支える
+          </h2>
+        </div>
+
+        {/* Explanation Text First */}
+        <div className="space-y-4 text-foreground/80 leading-relaxed text-sm md:text-base tracking-wide text-justify md:text-left">
+          <p>
+            『盈虚とパイプドリーム』は、現在も制作を続けています。
+          </p>
+          <p>
+            制作は自己資金を中心に進めていますが、この映画に共感してくださった方が、制作に参加できる方法のひとつとして、常設の支援窓口を設けています。
+          </p>
+          <p>
+            ご支援は1,000円から、または自由な金額でお選びいただけます。金額によるリターンの違いはありません。
+          </p>
+          <p>
+            ご希望の方のお名前を、完成作品のエンドクレジットにSpecial Thanksとして掲載します。匿名でのご支援も可能です。
           </p>
         </div>
 
-        {/* Payment Buttons Area */}
+        {/* Minimal Amount Selection UI */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="bg-black/60 border border-white/10 rounded-lg p-6 md:p-10 space-y-8 shadow-2xl backdrop-blur-sm"
+          transition={{ duration: 0.6 }}
+          className="bg-zinc-900/30 border border-white/5 rounded-lg p-6 md:p-8 space-y-6"
         >
-          {/* 4 Fixed Amount Buttons Grid (2 columns on mobile, 4 on desktop) */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
+          {/* 4 Fixed Amount Buttons */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {fixedOptions.map((opt) => (
               <a
                 key={opt.label}
                 href={opt.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex flex-col items-center justify-center py-5 px-4 bg-zinc-900/90 hover:bg-accent border border-white/10 hover:border-accent text-foreground hover:text-zinc-950 transition-all duration-300 rounded text-center shadow-md active:scale-[0.98]"
+                className="group flex flex-col items-center justify-center py-4 px-3 bg-black/40 hover:bg-zinc-800/80 border border-white/10 hover:border-white/20 text-foreground transition-all duration-200 rounded text-center active:scale-[0.98]"
               >
-                <span className="text-lg md:text-xl font-bold font-serif tracking-wider group-hover:scale-105 transition-transform duration-300">
+                <span className="text-base md:text-lg font-bold tracking-wider">
                   {opt.label}
                 </span>
-                <span className="text-[10px] md:text-xs opacity-75 group-hover:opacity-100 font-serif tracking-widest mt-1">
-                  支援する
+                <span className="text-[11px] text-foreground/60 group-hover:text-foreground/90 tracking-widest mt-1">
+                  この金額で支援する
                 </span>
               </a>
             ))}
           </div>
 
-          {/* Custom Amount Button (Full Width Below) */}
-          <div className="pt-2">
+          {/* Custom Amount Button */}
+          <div>
             <a
               href={STRIPE_PAYMENT_LINKS.custom}
               target="_blank"
               rel="noopener noreferrer"
-              className="group w-full flex items-center justify-center py-4 px-6 bg-accent/90 hover:bg-white text-zinc-950 transition-all duration-300 rounded font-bold font-serif text-sm md:text-base tracking-[0.2em] shadow-[0_0_20px_rgba(255,191,0,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] active:scale-[0.99]"
+              className="w-full flex items-center justify-center py-3.5 px-4 bg-zinc-900 hover:bg-zinc-800 border border-white/10 hover:border-white/20 text-foreground/90 hover:text-white transition-all duration-200 rounded text-xs md:text-sm tracking-[0.2em] text-center"
             >
-              <span className="group-hover:scale-[1.02] transition-transform duration-300">
-                金額を自由に決めて支援する
-              </span>
+              自由な金額で支援する
             </a>
           </div>
 
-          {/* UX Feature Checks */}
-          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 pt-4 border-t border-white/5 text-xs text-foreground/60 font-serif tracking-wider">
-            {SUPPORT_NOTES.map((note) => (
-              <div key={note} className="flex items-center gap-1.5">
-                <Check className="w-3.5 h-3.5 text-accent flex-shrink-0" />
-                <span>{note}</span>
-              </div>
-            ))}
+          {/* Small Discreet Footnotes */}
+          <div className="pt-4 border-t border-white/5 space-y-1.5">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[11px] text-foreground/50 tracking-wider">
+              {footnotes.map((fn) => (
+                <span key={fn}>・{fn}</span>
+              ))}
+            </div>
           </div>
-
         </motion.div>
 
       </div>

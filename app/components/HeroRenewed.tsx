@@ -79,16 +79,16 @@ export default function HeroRenewed() {
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 pt-2">
           <a
             href="#about"
-            className="w-full sm:w-auto px-8 py-3.5 bg-zinc-900/80 hover:bg-zinc-800 text-foreground border border-white/10 hover:border-white/20 transition-all duration-300 text-xs md:text-sm font-serif tracking-[0.2em] rounded-sm text-center"
+            className="w-full sm:w-auto px-8 py-3.5 bg-zinc-900/90 hover:bg-zinc-800 text-foreground border border-white/20 hover:border-white/30 transition-all duration-300 text-xs md:text-sm font-serif tracking-[0.2em] rounded-sm text-center"
           >
             作品について
           </a>
           <a
             href="#support"
-            className="w-full sm:w-auto px-8 py-3.5 bg-accent/90 hover:bg-accent text-zinc-950 font-bold transition-all duration-300 text-xs md:text-sm font-serif tracking-[0.2em] rounded-sm text-center shadow-[0_0_20px_rgba(255,191,0,0.15)] hover:shadow-[0_0_25px_rgba(255,191,0,0.3)]"
+            className="w-full sm:w-auto px-8 py-3.5 bg-transparent hover:bg-white/5 text-foreground/70 hover:text-foreground border border-white/10 hover:border-white/25 transition-all duration-300 text-xs md:text-sm font-serif tracking-[0.2em] rounded-sm text-center"
           >
             制作を支援する
           </a>

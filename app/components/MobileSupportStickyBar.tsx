@@ -33,10 +33,9 @@ export default function MobileSupportStickyBar() {
         >
           <a
             href="#support"
-            className="flex items-center justify-center gap-2.5 py-3 px-5 bg-black/80 backdrop-blur-md border border-accent/40 text-foreground text-xs font-serif tracking-[0.2em] rounded-full shadow-[0_8px_25px_rgba(0,0,0,0.8)] active:scale-[0.98] transition-transform"
+            className="flex items-center justify-center gap-2 py-2.5 px-4 bg-zinc-950/85 backdrop-blur-md border border-white/15 text-foreground/75 hover:text-foreground text-[11px] font-serif tracking-[0.2em] rounded-full shadow-lg active:scale-[0.98] transition-transform"
           >
-            <Heart className="w-3.5 h-3.5 fill-accent text-accent" />
-            <span>制作を支援する</span>
+            <span>制作支援窓口</span>
           </a>
         </motion.div>
       )}
