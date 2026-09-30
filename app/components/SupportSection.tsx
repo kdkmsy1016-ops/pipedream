@@ -23,21 +23,21 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
   ];
 
   return (
-    <section id={id} className="bg-background py-24 md:py-36 px-6 border-t border-white/5 relative overflow-hidden font-serif">
-      <div className="max-w-2xl w-full mx-auto space-y-12">
+    <section id={id} className="bg-background py-20 sm:py-24 md:py-36 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden font-serif">
+      <div className="max-w-2xl w-full mx-auto space-y-10 sm:space-y-12">
 
         {/* Section Header */}
         <div className="text-center space-y-3">
-          <p className="text-xs md:text-sm tracking-[0.2em] text-accent/80 uppercase">
+          <p className="text-xs md:text-sm tracking-wider md:tracking-[0.2em] text-accent/80 uppercase break-normal">
             Support The Film
           </p>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-[0.15em] text-foreground">
+          <h2 className="text-[clamp(1.35rem,4.5vw,2rem)] font-bold tracking-wide md:tracking-[0.15em] text-foreground text-balanced">
             この映画の完成を支える
           </h2>
         </div>
 
         {/* Explanation Text First */}
-        <div className="space-y-4 text-foreground/80 leading-relaxed text-sm md:text-base tracking-wide text-justify md:text-left">
+        <div className="space-y-4 text-foreground/80 leading-relaxed text-sm md:text-base tracking-normal sm:tracking-wide text-justify md:text-left text-auto-phrase">
           <p>
             『盈虚とパイプドリーム』は、現在も制作を続けています。
           </p>
@@ -58,22 +58,22 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="bg-zinc-900/30 border border-white/5 rounded-lg p-6 md:p-8 space-y-6"
+          className="bg-zinc-900/30 border border-white/5 rounded-lg p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6"
         >
           {/* 4 Fixed Amount Buttons */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
             {fixedOptions.map((opt) => (
               <a
                 key={opt.label}
                 href={opt.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-center justify-center py-4 px-3 bg-black/50 hover:bg-[#ffbf00]/10 border border-white/10 hover:border-[#ffbf00]/50 text-foreground hover:text-[#ffbf00] transition-all duration-200 rounded text-center active:scale-[0.98]"
+                className="group min-h-[58px] sm:min-h-[64px] flex flex-col items-center justify-center py-3 sm:py-4 px-2 sm:px-3 bg-black/50 hover:bg-[#ffbf00]/10 border border-white/10 hover:border-[#ffbf00]/50 text-foreground hover:text-[#ffbf00] transition-all duration-200 rounded text-center active:scale-[0.98]"
               >
-                <span className="text-base md:text-lg font-bold tracking-wider">
+                <span className="text-sm sm:text-base md:text-lg font-bold tracking-wider">
                   {opt.label}
                 </span>
-                <span className="text-[11px] text-foreground/60 group-hover:text-[#ffbf00]/90 tracking-widest mt-1">
+                <span className="text-[10px] sm:text-[11px] text-foreground/60 group-hover:text-[#ffbf00]/90 tracking-normal sm:tracking-wider mt-0.5 sm:mt-1 whitespace-nowrap">
                   この金額で支援する
                 </span>
               </a>
@@ -86,7 +86,7 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
               href={STRIPE_PAYMENT_LINKS.custom}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center py-4 px-4 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded text-xs md:text-sm tracking-[0.2em] text-center shadow-[0_0_15px_rgba(255,191,0,0.25)]"
+              className="w-full min-h-[48px] flex items-center justify-center py-3.5 sm:py-4 px-3 sm:px-4 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded text-xs sm:text-sm tracking-normal sm:tracking-wider md:tracking-[0.2em] text-center shadow-[0_0_15px_rgba(255,191,0,0.25)] whitespace-nowrap active:scale-[0.98]"
             >
               自由な金額で支援する
             </a>
@@ -94,9 +94,9 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
 
           {/* Small Discreet Footnotes */}
           <div className="pt-4 border-t border-white/5 space-y-1.5">
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[11px] text-foreground/50 tracking-wider">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-6 gap-y-1 text-[10px] sm:text-[11px] text-foreground/50 tracking-normal sm:tracking-wider text-auto-phrase">
               {footnotes.map((fn) => (
-                <span key={fn}>・{fn}</span>
+                <span key={fn} className="whitespace-nowrap">・{fn}</span>
               ))}
             </div>
           </div>

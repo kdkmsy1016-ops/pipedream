@@ -58,37 +58,37 @@ export default function HeroRenewed() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 1.2, ease: "easeOut" }}
-        className="relative md:absolute md:bottom-16 lg:bottom-20 left-1/2 -translate-x-1/2 z-20 w-full max-w-4xl px-6 text-center space-y-6 md:space-y-8 py-8 md:py-0"
+        className="relative md:absolute md:bottom-16 lg:bottom-20 left-1/2 -translate-x-1/2 z-20 w-full max-w-4xl px-4 sm:px-6 text-center space-y-6 md:space-y-8 py-8 md:py-0"
       >
         <div className="space-y-3">
-          <p className="text-xs md:text-sm tracking-[0.25em] text-accent/90 font-serif uppercase">
+          <p className="text-[11px] sm:text-xs md:text-sm tracking-wider md:tracking-[0.25em] text-accent/90 font-serif uppercase break-normal">
             Feature Film Project
           </p>
-          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-[0.2em] font-serif text-foreground drop-shadow-md">
+          <h1 className="text-[clamp(1.35rem,5.5vw,2.75rem)] font-bold tracking-tight sm:tracking-wide md:tracking-[0.2em] font-serif text-foreground drop-shadow-md text-balanced">
             映画『盈虚とパイプドリーム』
           </h1>
         </div>
 
         <div className="space-y-2">
-          <p className="text-lg md:text-2xl font-serif text-foreground/90 tracking-widest leading-relaxed">
+          <p className="text-[clamp(1.05rem,4vw,1.5rem)] font-serif text-foreground/90 tracking-wide md:tracking-widest leading-relaxed text-balanced">
             「一本の映画を、完成させるために。」
           </p>
-          <p className="text-xs md:text-sm text-foreground/60 font-serif tracking-widest">
+          <p className="text-xs md:text-sm text-foreground/60 font-serif tracking-normal sm:tracking-widest text-balanced text-auto-phrase">
             現在、映画完成と映画祭への出品を目指して制作中。
           </p>
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 pt-2">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 pt-2 w-full max-w-sm sm:max-w-none mx-auto">
           <a
             href="#about"
-            className="w-full sm:w-auto px-8 py-3.5 bg-zinc-900/90 hover:bg-zinc-800 text-foreground border border-white/20 hover:border-white/30 transition-all duration-300 text-xs md:text-sm font-serif tracking-[0.2em] rounded-sm text-center"
+            className="w-full sm:w-auto min-h-[48px] flex items-center justify-center px-6 sm:px-8 py-3.5 bg-zinc-900/90 hover:bg-zinc-800 text-foreground border border-white/20 hover:border-white/30 transition-all duration-300 text-xs sm:text-sm font-serif tracking-normal sm:tracking-wider md:tracking-[0.2em] rounded-sm text-center active:scale-[0.98]"
           >
             作品について
           </a>
           <a
             href="#support"
-            className="w-full sm:w-auto px-8 py-3.5 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 text-xs md:text-sm font-serif tracking-[0.2em] rounded-sm text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,191,0,0.4)]"
+            className="w-full sm:w-auto min-h-[48px] flex items-center justify-center px-6 sm:px-8 py-3.5 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 text-xs sm:text-sm font-serif tracking-normal sm:tracking-wider md:tracking-[0.2em] rounded-sm text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,191,0,0.4)] active:scale-[0.98]"
           >
             制作を支援する
           </a>

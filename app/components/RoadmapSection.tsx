@@ -59,25 +59,25 @@ const MILESTONES: MilestoneGroup[] = [
 
 export default function RoadmapSection() {
   return (
-    <section id="roadmap" className="bg-zinc-950 py-24 md:py-36 px-6 border-t border-white/5 relative overflow-hidden">
-      <div className="max-w-4xl w-full mx-auto space-y-16">
+    <section id="roadmap" className="bg-zinc-950 py-20 sm:py-24 md:py-36 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden">
+      <div className="max-w-4xl w-full mx-auto space-y-12 sm:space-y-16">
 
         {/* Section Header */}
         <div className="text-center space-y-3">
-          <p className="text-xs md:text-sm tracking-[0.2em] text-accent/80 font-serif uppercase">
+          <p className="text-xs md:text-sm tracking-wider md:tracking-[0.2em] text-accent/80 font-serif uppercase break-normal">
             Road To Completion
           </p>
-          <h2 className="text-2xl md:text-4xl font-bold tracking-[0.15em] font-serif text-foreground">
+          <h2 className="text-[clamp(1.35rem,4.5vw,2.25rem)] font-bold tracking-wide md:tracking-[0.15em] font-serif text-foreground text-balanced">
             映画完成までの工程
           </h2>
-          <p className="text-xs md:text-sm text-foreground/60 font-serif tracking-widest max-w-xl mx-auto pt-1 leading-relaxed">
+          <p className="text-xs md:text-sm text-foreground/60 font-serif tracking-normal sm:tracking-widest max-w-xl mx-auto pt-1 leading-relaxed text-balanced text-auto-phrase">
             現在地と、完成までに必要な工程の全体像です。<br className="hidden sm:block" />
             一つひとつの工程を静かに、確実に積み重ねていきます。
           </p>
         </div>
 
         {/* Quiet Chronological Roadmap Cards */}
-        <div className="space-y-6 font-serif">
+        <div className="space-y-4 sm:space-y-6 font-serif">
           {MILESTONES.map((mile, idx) => {
             const isCurrent = mile.status === "current";
             const isDone = mile.status === "done";
@@ -89,30 +89,30 @@ export default function RoadmapSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
-                className={`relative rounded-lg p-6 md:p-8 transition-all border ${
+                className={`relative rounded-lg p-4 sm:p-6 md:p-8 transition-all border ${
                   isCurrent
                     ? "bg-zinc-900/60 border-accent/40 shadow-[0_4px_20px_rgba(255,191,0,0.06)]"
                     : "bg-zinc-900/20 border-white/5"
                 }`}
               >
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-white/5 pb-4 mb-4">
-                  <div className="flex items-start gap-4">
-                    <span className="text-xs font-mono tracking-widest text-foreground/40 mt-1">
-                      PHASE {mile.phaseNumber}
-                    </span>
-                    <div>
-                      <span className="text-[10px] font-mono tracking-widest text-accent/70 uppercase block">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-white/5 pb-4 mb-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono tracking-wider text-foreground/40">
+                        PHASE {mile.phaseNumber}
+                      </span>
+                      <span className="text-[10px] font-mono tracking-wider text-accent/70 uppercase">
                         {mile.englishTitle}
                       </span>
-                      <h3 className="text-lg md:text-xl font-bold text-foreground tracking-widest">
-                        {mile.japaneseTitle}
-                      </h3>
                     </div>
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground tracking-wide sm:tracking-widest text-auto-phrase">
+                      {mile.japaneseTitle}
+                    </h3>
                   </div>
 
-                  <div>
+                  <div className="self-start sm:self-auto">
                     <span
-                      className={`text-xs px-3 py-1 rounded-sm border inline-flex items-center gap-1.5 tracking-widest ${
+                      className={`text-xs px-2.5 py-1 rounded-sm border inline-flex items-center gap-1.5 tracking-wider ${
                         isCurrent
                           ? "bg-accent/15 border-accent/50 text-accent font-bold"
                           : isDone
@@ -126,16 +126,16 @@ export default function RoadmapSection() {
                   </div>
                 </div>
 
-                <p className="text-xs md:text-sm text-foreground/75 leading-relaxed tracking-wide mb-4">
+                <p className="text-xs md:text-sm text-foreground/75 leading-relaxed tracking-normal sm:tracking-wide mb-4 text-auto-phrase">
                   {mile.description}
                 </p>
 
                 {/* Items tags */}
-                <div className="flex flex-wrap gap-2 pt-1">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
                   {mile.items.map((item) => (
                     <span
                       key={item}
-                      className="text-[11px] px-2.5 py-1 rounded bg-black/40 border border-white/5 text-foreground/70 tracking-wider"
+                      className="text-[11px] px-2.5 py-1 rounded bg-black/40 border border-white/5 text-foreground/70 tracking-normal sm:tracking-wider whitespace-nowrap"
                     >
                       {item}
                     </span>
@@ -147,7 +147,7 @@ export default function RoadmapSection() {
         </div>
 
         {/* Clear notice */}
-        <p className="text-center text-[11px] text-foreground/40 font-serif tracking-widest">
+        <p className="text-center text-[10px] sm:text-[11px] text-foreground/40 font-serif tracking-normal sm:tracking-widest text-auto-phrase">
           ※具体的な上映スケジュールや劇場公開は確定しておらず、当面は「作品の完成」および「国内外映画祭への出品」を目標としています。
         </p>
 

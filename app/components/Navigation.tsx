@@ -59,17 +59,17 @@ export default function Navigation() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="fixed inset-0 z-40 bg-black flex items-center justify-center overflow-y-auto py-12"
+                        className="fixed inset-0 z-40 bg-black/95 backdrop-blur-md flex items-center justify-center overflow-y-auto py-16 px-4"
                     >
-                        <nav className="flex flex-col items-center gap-6 font-serif text-white max-h-full my-auto">
+                        <nav className="flex flex-col items-center gap-4 sm:gap-6 font-serif text-white max-h-full my-auto py-4">
                             {menuItems.map((item, index) => (
                                 <motion.div
                                     key={item.label}
                                     initial={{ opacity: 0, y: 15 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{
-                                        delay: 0.1 + index * 0.05,
-                                        duration: 0.5,
+                                        delay: 0.1 + index * 0.04,
+                                        duration: 0.4,
                                         ease: "easeOut",
                                     }}
                                 >
@@ -77,7 +77,7 @@ export default function Navigation() {
                                         <Link
                                             href={item.href}
                                             onClick={closeMenu}
-                                            className="text-xl lg:text-3xl tracking-[0.2em] relative group overflow-hidden block"
+                                            className="text-lg sm:text-xl lg:text-3xl tracking-wider sm:tracking-[0.15em] lg:tracking-[0.2em] relative group overflow-hidden block py-1"
                                         >
                                             <span className="block transition-transform duration-500 group-hover:-translate-y-full">
                                                 {item.label}
@@ -90,7 +90,7 @@ export default function Navigation() {
                                         <a
                                             href={item.href}
                                             onClick={closeMenu}
-                                            className="text-xl lg:text-3xl tracking-[0.2em] relative group overflow-hidden block"
+                                            className="text-lg sm:text-xl lg:text-3xl tracking-wider sm:tracking-[0.15em] lg:tracking-[0.2em] relative group overflow-hidden block py-1"
                                         >
                                             <span className="block transition-transform duration-500 group-hover:-translate-y-full">
                                                 {item.label}

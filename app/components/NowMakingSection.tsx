@@ -51,18 +51,18 @@ const WORKFLOW_STEPS = [
 
 export default function NowMakingSection() {
   return (
-    <section id="now-making" className="bg-zinc-950 py-24 md:py-36 px-6 border-t border-white/5 relative overflow-hidden">
-      <div className="max-w-5xl w-full mx-auto space-y-16">
+    <section id="now-making" className="bg-zinc-950 py-20 sm:py-24 md:py-36 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden">
+      <div className="max-w-5xl w-full mx-auto space-y-12 sm:space-y-16">
 
         {/* Section Header */}
-        <div className="text-center space-y-4">
-          <p className="text-xs md:text-sm tracking-[0.2em] text-accent/80 font-serif uppercase">
-            Now Making / Production Status
+        <div className="text-center space-y-3 sm:space-y-4">
+          <p className="text-xs md:text-sm tracking-wider md:tracking-[0.2em] text-accent/80 font-serif uppercase break-normal">
+            NOW MAKING <span className="inline-block">/ PRODUCTION STATUS</span>
           </p>
-          <h2 className="text-2xl md:text-4xl font-bold tracking-[0.15em] font-serif text-foreground">
+          <h2 className="text-[clamp(1.35rem,4.5vw,2.25rem)] font-bold tracking-wide md:tracking-[0.15em] font-serif text-foreground text-balanced">
             「映画は、いまここにいます。」
           </h2>
-          <p className="text-xs md:text-sm text-foreground/60 font-serif tracking-widest max-w-2xl mx-auto pt-1 leading-relaxed">
+          <p className="text-xs md:text-sm text-foreground/60 font-serif tracking-normal sm:tracking-widest max-w-2xl mx-auto pt-1 leading-relaxed text-balanced text-auto-phrase">
             クランクインに向け、準備の一つひとつを現場と積み重ねています。<br className="hidden sm:block" />
             今まさに一本の映画が生まれる瞬間を、ここからお伝えします。
           </p>
@@ -74,33 +74,33 @@ export default function NowMakingSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="bg-black/60 border border-white/10 rounded-lg p-6 md:p-8 space-y-6 relative overflow-hidden"
+          className="bg-black/60 border border-white/10 rounded-lg p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 relative overflow-hidden"
         >
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-white/10 pb-4 sm:pb-5">
             <div className="space-y-1">
-              <span className="text-[11px] font-mono tracking-widest text-accent uppercase flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+              <span className="text-[10px] sm:text-[11px] font-mono tracking-wider sm:tracking-widest text-accent uppercase flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-accent animate-pulse flex-shrink-0" />
                 Current Production Phase
               </span>
-              <h3 className="text-xl md:text-2xl font-bold font-serif text-foreground tracking-widest">
-                PRE-PRODUCTION（撮影準備・プリプロダクション）
+              <h3 className="text-base sm:text-xl md:text-2xl font-bold font-serif text-foreground tracking-wide sm:tracking-widest text-auto-phrase">
+                PRE-PRODUCTION<span className="text-xs sm:text-sm md:text-base font-normal block sm:inline sm:ml-2 text-foreground/80">（撮影準備・プリプロダクション）</span>
               </h3>
             </div>
-            <div className="text-xs font-serif text-foreground/60 tracking-wider">
+            <div className="text-xs font-serif text-foreground/60 tracking-normal sm:tracking-wider text-auto-phrase">
               東京都稲城市 スナック「さくらみち」 / 呑処「こまち」実測中
             </div>
           </div>
 
           {/* Workflow Badges */}
-          <div className="space-y-3">
-            <span className="text-[10px] text-foreground/50 tracking-widest uppercase font-serif block">
+          <div className="space-y-2.5 sm:space-y-3">
+            <span className="text-[10px] text-foreground/50 tracking-wider sm:tracking-widest uppercase font-serif block">
               全体の工程の流れ
             </span>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {WORKFLOW_STEPS.map((step) => (
                 <span
                   key={step.name}
-                  className={`text-xs font-serif px-3 py-1.5 rounded-sm border tracking-wider transition-colors ${
+                  className={`text-[11px] sm:text-xs font-serif px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-sm border tracking-normal sm:tracking-wider transition-colors whitespace-nowrap ${
                     step.current
                       ? "bg-accent/15 border-accent text-accent font-bold"
                       : step.done
@@ -117,7 +117,7 @@ export default function NowMakingSection() {
         </motion.div>
 
         {/* Photobook / Production Log Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 md:gap-8 pt-2 sm:pt-4">
           {CURRENT_PRODUCTION_PHASES.map((item, idx) => (
             <motion.div
               key={item.category}
@@ -137,23 +137,23 @@ export default function NowMakingSection() {
                   className="object-cover filter brightness-90 group-hover:scale-105 group-hover:brightness-100 transition-all duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-                <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between">
-                  <span className="text-[10px] font-mono tracking-widest text-accent uppercase bg-black/70 px-2 py-0.5 rounded border border-white/10">
+                <div className="absolute bottom-2.5 sm:bottom-3 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between gap-2">
+                  <span className="text-[9px] sm:text-[10px] font-mono tracking-normal sm:tracking-widest text-accent uppercase bg-black/80 px-2 py-0.5 rounded border border-white/10 truncate">
                     {item.category}
                   </span>
-                  <span className="text-[11px] font-serif text-white/90 bg-black/60 px-2.5 py-0.5 rounded backdrop-blur-sm border border-white/10">
+                  <span className="text-[10px] sm:text-[11px] font-serif text-white/90 bg-black/75 px-2 sm:px-2.5 py-0.5 rounded backdrop-blur-sm border border-white/10 truncate">
                     {item.status}
                   </span>
                 </div>
               </div>
 
               {/* Text info */}
-              <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+              <div className="p-4 sm:p-6 space-y-2 sm:space-y-3 flex-1 flex flex-col justify-between">
                 <div>
-                  <h4 className="text-base md:text-lg font-bold font-serif text-foreground tracking-widest mb-2">
+                  <h4 className="text-base md:text-lg font-bold font-serif text-foreground tracking-wide sm:tracking-widest mb-1.5 sm:mb-2 text-auto-phrase">
                     {item.label}
                   </h4>
-                  <p className="text-xs md:text-sm font-serif text-foreground/75 leading-relaxed tracking-wide">
+                  <p className="text-xs md:text-sm font-serif text-foreground/75 leading-relaxed tracking-normal sm:tracking-wide text-auto-phrase">
                     {item.detail}
                   </p>
                 </div>

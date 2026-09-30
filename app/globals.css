@@ -32,7 +32,16 @@ body {
 }
 
 @layer utilities {
-    .text-shadow-glow {
-        text-shadow: 0 0 10px rgba(255, 191, 0, 0.5);
-    }
+  .text-shadow-glow {
+    text-shadow: 0 0 10px rgba(255, 191, 0, 0.5);
+  }
+  .text-auto-phrase {
+    word-break: auto-phrase;
+    overflow-wrap: break-word;
+    line-break: strict;
+  }
+  .text-balanced {
+    text-wrap: balance;
+  }
 }
+

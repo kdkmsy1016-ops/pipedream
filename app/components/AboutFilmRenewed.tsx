@@ -17,16 +17,16 @@ export default function AboutFilmRenewed() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
-    <section id="about" className="relative bg-background py-24 md:py-36 px-6 flex flex-col items-center overflow-hidden border-t border-white/5">
+    <section id="about" className="relative bg-background py-20 sm:py-24 md:py-36 px-4 sm:px-6 flex flex-col items-center overflow-hidden border-t border-white/5">
       
-      <div className="max-w-4xl w-full mx-auto space-y-20 relative z-10">
+      <div className="max-w-4xl w-full mx-auto space-y-16 sm:space-y-20 relative z-10">
 
         {/* Section Header */}
-        <div className="text-center space-y-4">
-          <p className="text-xs md:text-sm tracking-[0.2em] text-accent/80 font-serif uppercase">
+        <div className="text-center space-y-3 sm:space-y-4">
+          <p className="text-xs md:text-sm tracking-wider md:tracking-[0.2em] text-accent/80 font-serif uppercase break-normal">
             About The Film
           </p>
-          <h2 className="text-2xl md:text-4xl font-bold tracking-[0.15em] font-serif text-foreground">
+          <h2 className="text-[clamp(1.35rem,4.5vw,2.25rem)] font-bold tracking-wide md:tracking-[0.15em] font-serif text-foreground text-balanced">
             映画について
           </h2>
         </div>
@@ -37,12 +37,12 @@ export default function AboutFilmRenewed() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center font-serif py-6 px-4 bg-zinc-900/40 border-y border-white/5 rounded-sm"
+          className="text-center font-serif py-6 px-3 sm:px-4 bg-zinc-900/40 border-y border-white/5 rounded-sm"
         >
-          <h3 className="text-xl md:text-3xl leading-relaxed tracking-widest text-foreground">
-            私たちは<span className="font-bold text-accent mx-1">「不要不急」</span>の中で、夢を見た。
+          <h3 className="text-[clamp(1.05rem,4vw,1.875rem)] leading-relaxed tracking-wide md:tracking-widest text-foreground text-balanced text-auto-phrase">
+            私たちは<span className="font-bold text-accent mx-0.5 sm:mx-1">「不要不急」</span>の中で、夢を見た。
           </h3>
-          <p className="text-xs md:text-sm text-foreground/60 tracking-widest mt-4">
+          <p className="text-xs md:text-sm text-foreground/60 tracking-normal sm:tracking-widest mt-3 sm:mt-4 text-balanced text-auto-phrase">
             コロナ禍の実在スナックを舞台に描く、人生の再生の物語。
           </p>
         </motion.div>
@@ -53,36 +53,36 @@ export default function AboutFilmRenewed() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="space-y-6 text-foreground/80 leading-loose font-serif text-base md:text-lg px-2 md:px-8 text-center max-w-3xl mx-auto"
+          className="space-y-6 text-foreground/80 leading-relaxed md:leading-loose font-serif text-sm sm:text-base md:text-lg px-2 sm:px-4 md:px-8 text-justify sm:text-center max-w-3xl mx-auto"
         >
-          <h4 className="text-lg md:text-xl font-bold tracking-widest text-accent/90 border-b border-white/10 pb-3 inline-block">
+          <h4 className="text-base sm:text-lg md:text-xl font-bold tracking-wider sm:tracking-widest text-accent/90 border-b border-white/10 pb-2 sm:pb-3 inline-block">
             あらすじ
           </h4>
-          <p className="tracking-wide">
+          <p className="tracking-normal sm:tracking-wide text-auto-phrase">
             2021年、東京郊外。<br className="hidden md:block" />
             コロナ禍を言い訳に夢を諦め、実在するスナック「さくらみち」でバイトする俳優志望の桃華は、監督志望の恋人・修平と共依存の日々を送っていた。
           </p>
-          <p className="tracking-wide">
+          <p className="tracking-normal sm:tracking-wide text-auto-phrase">
             叔父であるマスター・絹山の協力も得て、甘い幻想（パイプドリーム）を断ち切るべくスナックでの演劇上演を決意するが、無常にも3回目の緊急事態宣言が出されてしまう……。
           </p>
         </motion.div>
 
         {/* Film Details */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 text-center font-serif border-t border-white/5 text-xs md:text-sm text-foreground/70">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-2 sm:pt-4 text-center font-serif text-xs md:text-sm text-foreground/70">
           <div className="p-4 bg-zinc-900/30 rounded border border-white/5 space-y-1">
-            <span className="text-accent/60 block text-[11px] tracking-widest">STAFF</span>
+            <span className="text-accent/60 block text-[11px] tracking-wider sm:tracking-widest">STAFF</span>
             <p className="text-foreground/90 font-medium">監督・脚本・編集</p>
             <p className="text-foreground/70">久高 将也</p>
           </div>
           <div className="p-4 bg-zinc-900/30 rounded border border-white/5 space-y-1">
-            <span className="text-accent/60 block text-[11px] tracking-widest">LOCATION</span>
+            <span className="text-accent/60 block text-[11px] tracking-wider sm:tracking-widest">LOCATION</span>
             <p className="text-foreground/90 font-medium">東京都稲城市</p>
-            <p className="text-foreground/70">スナック「さくらみち」 / 呑処「こまち」</p>
+            <p className="text-foreground/70 text-auto-phrase">スナック「さくらみち」 / 呑処「こまち」</p>
           </div>
           <div className="p-4 bg-zinc-900/30 rounded border border-white/5 space-y-1">
-            <span className="text-accent/60 block text-[11px] tracking-widest">FORMAT</span>
+            <span className="text-accent/60 block text-[11px] tracking-wider sm:tracking-widest">FORMAT</span>
             <p className="text-foreground/90 font-medium">自主制作長編映画</p>
-            <p className="text-foreground/70">劇場完成＆映画祭出品目標</p>
+            <p className="text-foreground/70 text-auto-phrase">劇場完成＆映画祭出品目標</p>
           </div>
         </div>
 
