@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Film, Award, ShieldCheck, FileText, Sparkles } from "lucide-react";
+import { Film, FileText, Sparkles } from "lucide-react";
 
 const USAGE_ITEMS = [
   "撮影・照明・録音",
@@ -29,7 +29,7 @@ export default function SupportDetailsSection() {
             ご支援について
           </h2>
           <p className="text-xs md:text-sm text-foreground/60 tracking-normal sm:tracking-widest max-w-xl mx-auto pt-1 text-auto-phrase">
-            制作支援に関する使い道、クレジット掲載、これまでの記録をまとめています。
+            制作支援に関する使い道と、これまでの記録をまとめています。
           </p>
         </div>
 
@@ -62,45 +62,7 @@ export default function SupportDetailsSection() {
           </div>
         </motion.div>
 
-        {/* Block B: Special Thanks */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="bg-zinc-900/40 border border-white/5 rounded-lg p-5 sm:p-7 md:p-8 space-y-5"
-        >
-          <div className="flex items-center gap-3 border-b border-white/10 pb-3 sm:pb-4">
-            <Award className="w-4 h-4 sm:w-5 sm:h-5 text-accent flex-shrink-0" />
-            <h3 className="text-sm sm:text-base md:text-lg font-bold text-foreground tracking-wide sm:tracking-widest">
-              B. Special Thanks（エンドクレジット掲載）
-            </h3>
-          </div>
-
-          <div className="space-y-3 text-xs sm:text-sm text-foreground/80 leading-relaxed text-auto-phrase">
-            <p>
-              本支援には、物品や鑑賞券などのリターンは設けていません。
-            </p>
-            <p>
-              ご支援いただいた方で掲載をご希望される方は、映画本編のエンドクレジットに「Special Thanks」としてお名前を掲載します。
-            </p>
-            <p>
-              掲載をご希望の場合は、ご支援時のメッセージ欄に掲載名をご記入ください。
-            </p>
-            <p className="text-foreground/60 text-[11px] sm:text-xs">
-              掲載を希望されない場合は、匿名でのご支援も可能です。
-            </p>
-          </div>
-
-          <div className="p-3 bg-black/40 rounded border border-white/5 flex items-start gap-2.5 text-xs text-foreground/70 text-auto-phrase">
-            <ShieldCheck className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-            <span>
-              ご支援いただいた金額にかかわらず、掲載希望のお名前はすべて同等に掲載します。
-            </span>
-          </div>
-        </motion.div>
-
-        {/* Block C: これまでのご支援 */}
+        {/* Block B: これまでのご支援 */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -109,7 +71,7 @@ export default function SupportDetailsSection() {
           className="bg-black/40 border border-white/5 rounded-lg p-5 sm:p-7 space-y-4 text-center max-w-2xl mx-auto"
         >
           <h3 className="text-sm sm:text-base font-bold text-foreground tracking-wide sm:tracking-widest">
-            C. これまでのご支援
+            B. これまでのご支援
           </h3>
           <p className="text-xs sm:text-sm text-foreground/75 leading-relaxed text-auto-phrase">
             本作では2026年にクラウドファンディングを実施し、多くの皆さまからご支援をいただきました。<br className="hidden sm:block" />
