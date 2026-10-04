@@ -82,13 +82,13 @@ export default function HeroRenewed() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 pt-2 sm:pt-3 w-full max-w-sm sm:max-w-none mx-auto">
           <a
             href="#about"
-            className="w-full sm:w-auto min-h-[46px] flex items-center justify-center px-6 sm:px-8 py-3 bg-zinc-900/90 hover:bg-zinc-800 text-foreground border border-white/20 hover:border-white/30 transition-all duration-300 text-xs sm:text-sm font-serif tracking-normal sm:tracking-wider md:tracking-[0.2em] rounded-sm text-center active:scale-[0.98]"
+            className="w-full sm:w-auto min-h-[48px] sm:min-h-[50px] flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 bg-zinc-900/90 hover:bg-zinc-800 text-foreground border border-white/20 hover:border-white/30 transition-all duration-300 text-xs sm:text-sm font-serif tracking-normal sm:tracking-wider md:tracking-[0.2em] rounded-sm text-center active:scale-[0.98]"
           >
             作品について
           </a>
           <a
             href="#support"
-            className="w-full sm:w-auto min-h-[46px] flex items-center justify-center px-6 sm:px-8 py-3 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 text-xs sm:text-sm font-serif tracking-normal sm:tracking-wider md:tracking-[0.2em] rounded-sm text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,191,0,0.4)] active:scale-[0.98]"
+            className="w-full sm:w-auto min-h-[48px] sm:min-h-[50px] flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 text-xs sm:text-sm font-serif tracking-normal sm:tracking-wider md:tracking-[0.2em] rounded-sm text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,191,0,0.4)] active:scale-[0.98]"
           >
             制作を支援する
           </a>

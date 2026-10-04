@@ -142,22 +142,22 @@ export default function CastStaffRenewedSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="bg-zinc-900/40 border border-white/5 p-5 sm:p-6 md:p-8 rounded-lg flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6"
+              className="bg-zinc-900/40 border border-white/5 p-4 sm:p-6 md:p-8 rounded-lg flex flex-row items-center sm:items-start gap-3.5 sm:gap-6 shadow-md"
             >
-              <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden border border-zinc-700 flex-shrink-0 shadow-md">
+              <div className="relative w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden border border-zinc-700 flex-shrink-0 shadow-md">
                 <Image
                   src={member.image}
                   alt={member.name}
                   fill
-                  sizes="112px"
+                  sizes="(max-width: 640px) 64px, 112px"
                   className="object-cover"
                 />
               </div>
-              <div className="text-center sm:text-left space-y-1.5 sm:space-y-2">
-                <span className="text-[11px] sm:text-xs text-accent font-bold tracking-wider sm:tracking-widest uppercase block">
+              <div className="text-left space-y-1 sm:space-y-2 min-w-0 flex-1">
+                <span className="text-[10px] sm:text-xs text-accent font-bold tracking-wider sm:tracking-widest uppercase block">
                   {member.role}
                 </span>
-                <h3 className="text-lg sm:text-xl font-bold text-foreground tracking-wide sm:tracking-widest">
+                <h3 className="text-base sm:text-xl font-bold text-foreground tracking-wide sm:tracking-widest">
                   {member.name}
                 </h3>
                 <p className="text-xs text-foreground/75 leading-relaxed tracking-normal sm:tracking-wider text-auto-phrase">
@@ -174,11 +174,11 @@ export default function CastStaffRenewedSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="space-y-8"
+          className="space-y-6 sm:space-y-8"
         >
           {/* Section Subtitle */}
-          <div className="text-center space-y-1.5 border-b border-white/10 pb-4">
-            <p className="text-[11px] sm:text-xs font-mono tracking-widest text-accent uppercase">
+          <div className="text-center space-y-1 border-b border-white/10 pb-3 sm:pb-4">
+            <p className="text-[10px] sm:text-xs font-mono tracking-widest text-accent uppercase">
               CHARACTERS
             </p>
             <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground tracking-wider md:tracking-widest">
@@ -187,24 +187,24 @@ export default function CastStaffRenewedSection() {
           </div>
 
           {/* Main Characters Grid (5名) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5">
             {MAIN_CHARACTERS.map((char) => (
               <div
                 key={char.name}
-                className="bg-zinc-900/50 border border-white/10 hover:border-accent/40 rounded-lg p-5 sm:p-6 transition-all duration-300 space-y-3.5 flex flex-col justify-between shadow-lg"
+                className="bg-zinc-900/50 border border-white/10 hover:border-accent/40 rounded-lg p-4 sm:p-5 md:p-6 transition-all duration-300 space-y-2.5 sm:space-y-3 flex flex-col justify-between shadow-lg"
               >
                 {/* Header: Name, Romaji, Age, Tagline */}
-                <div className="space-y-2 border-b border-white/5 pb-3">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <div className="flex items-baseline gap-2.5">
-                      <h4 className="text-lg sm:text-xl font-bold text-foreground tracking-wide">
+                <div className="space-y-1.5 border-b border-white/5 pb-2 sm:pb-2.5">
+                  <div className="flex flex-wrap items-baseline justify-between gap-1.5">
+                    <div className="flex items-baseline gap-2">
+                      <h4 className="text-base sm:text-lg md:text-xl font-bold text-foreground tracking-wide">
                         {char.name}
                       </h4>
                       <span className="text-[10px] font-mono tracking-widest text-foreground/50 uppercase">
                         {char.romaji}
                       </span>
                     </div>
-                    <span className="text-xs font-mono text-accent/90 font-bold bg-accent/10 border border-accent/20 px-2 py-0.5 rounded">
+                    <span className="text-[11px] sm:text-xs font-mono text-accent/90 font-bold bg-accent/10 border border-accent/20 px-1.5 sm:px-2 py-0.5 rounded">
                       {char.age}
                     </span>
                   </div>
@@ -216,7 +216,7 @@ export default function CastStaffRenewedSection() {
                 </div>
 
                 {/* Description */}
-                <div className="space-y-2 text-xs sm:text-[13px] text-foreground/80 leading-relaxed tracking-normal sm:tracking-wide text-auto-phrase">
+                <div className="space-y-1 sm:space-y-1.5 text-xs sm:text-[13px] text-foreground/80 leading-relaxed tracking-normal sm:tracking-wide text-auto-phrase">
                   {char.description.map((para, i) => (
                     <p key={i}>{para}</p>
                   ))}
@@ -226,20 +226,20 @@ export default function CastStaffRenewedSection() {
           </div>
 
           {/* Sub Characters Section (その他の登場人物: 3名) */}
-          <div className="pt-2">
+          <div className="pt-1 sm:pt-2">
             <div className="text-center">
               <button
                 type="button"
                 onClick={() => setShowSubCharacters((prev) => !prev)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-zinc-900/80 hover:bg-zinc-800 text-foreground/80 hover:text-white border border-white/10 hover:border-accent/40 rounded text-xs sm:text-sm tracking-wider transition-all cursor-pointer active:scale-98"
+                className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-zinc-900/80 hover:bg-zinc-800 text-foreground/80 hover:text-white border border-white/10 hover:border-accent/40 rounded text-xs sm:text-sm tracking-wider transition-all cursor-pointer active:scale-98"
                 aria-expanded={showSubCharacters}
               >
-                <Users className="w-4 h-4 text-accent/80" />
+                <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent/80" />
                 <span>
                   {showSubCharacters ? "その他の登場人物を閉じる" : "その他の登場人物を見る（三浦・寺田・谷川）"}
                 </span>
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-300 ${
+                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 ${
                     showSubCharacters ? "rotate-180" : ""
                   }`}
                 />
@@ -253,34 +253,34 @@ export default function CastStaffRenewedSection() {
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="overflow-hidden pt-6"
+                  className="overflow-hidden pt-4 sm:pt-6"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4">
                     {SUB_CHARACTERS.map((char) => (
                       <div
                         key={char.name}
-                        className="bg-zinc-900/40 border border-white/10 hover:border-accent/30 rounded-lg p-5 space-y-3 flex flex-col justify-between"
+                        className="bg-zinc-900/40 border border-white/10 hover:border-accent/30 rounded-lg p-3.5 sm:p-4 space-y-2 sm:space-y-2.5 flex flex-col justify-between"
                       >
-                        <div className="space-y-1.5 border-b border-white/5 pb-2.5">
-                          <div className="flex items-baseline justify-between gap-2">
-                            <div className="flex items-baseline gap-2">
-                              <h4 className="text-base sm:text-lg font-bold text-foreground tracking-wide">
+                        <div className="space-y-1 border-b border-white/5 pb-2">
+                          <div className="flex items-baseline justify-between gap-1.5">
+                            <div className="flex items-baseline gap-1.5">
+                              <h4 className="text-sm sm:text-base font-bold text-foreground tracking-wide">
                                 {char.name}
                               </h4>
-                              <span className="text-[10px] font-mono tracking-widest text-foreground/50 uppercase">
+                              <span className="text-[9px] sm:text-[10px] font-mono tracking-widest text-foreground/50 uppercase">
                                 {char.romaji}
                               </span>
                             </div>
-                            <span className="text-[11px] font-mono text-accent/80 font-bold bg-accent/10 px-1.5 py-0.5 rounded">
+                            <span className="text-[10px] sm:text-[11px] font-mono text-accent/80 font-bold bg-accent/10 px-1.5 py-0.5 rounded">
                               {char.age}
                             </span>
                           </div>
-                          <p className="text-xs font-bold text-accent/90 tracking-wide">
+                          <p className="text-[11px] sm:text-xs font-bold text-accent/90 tracking-wide">
                             {char.tagline}
                           </p>
                         </div>
 
-                        <div className="space-y-2 text-xs text-foreground/75 leading-relaxed tracking-normal sm:tracking-wide text-auto-phrase">
+                        <div className="space-y-1 text-xs text-foreground/75 leading-relaxed tracking-normal sm:tracking-wide text-auto-phrase">
                           {char.description.map((para, i) => (
                             <p key={i}>{para}</p>
                           ))}

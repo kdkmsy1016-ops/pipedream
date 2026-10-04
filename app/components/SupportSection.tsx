@@ -28,7 +28,7 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
           <p className="text-xs md:text-sm tracking-wider md:tracking-[0.2em] text-accent/80 uppercase break-normal">
             Support The Film
           </p>
-          <h2 className="text-[clamp(1.35rem,4.5vw,2rem)] font-bold tracking-wide md:tracking-[0.15em] text-foreground text-balanced">
+          <h2 className="text-[clamp(1.35rem,4.5vw,2.25rem)] font-bold tracking-wide md:tracking-[0.15em] text-foreground text-balanced">
             この映画を支援する
           </h2>
         </div>
@@ -53,7 +53,7 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
             <button
               type="button"
               onClick={handleOpenCodoc}
-              className="w-full min-h-[50px] sm:min-h-[54px] flex items-center justify-center py-3.5 px-6 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded text-sm sm:text-base tracking-wider md:tracking-[0.2em] text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] whitespace-nowrap active:scale-[0.98] cursor-pointer"
+              className="w-full min-h-[48px] sm:min-h-[52px] flex items-center justify-center py-3.5 px-6 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded-sm text-sm sm:text-base tracking-wider md:tracking-[0.2em] text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] whitespace-nowrap active:scale-[0.98] cursor-pointer"
             >
               制作を支援する
             </button>

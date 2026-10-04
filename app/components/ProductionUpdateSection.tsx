@@ -60,15 +60,15 @@ export default function ProductionUpdateSection({ initialNews = null }: Producti
     >
       <div className="max-w-4xl w-full mx-auto space-y-10 sm:space-y-14">
         {/* Section Header */}
-        <div className="text-center space-y-2.5 sm:space-y-3">
+        <div className="text-center space-y-3 sm:space-y-4">
           <p className="text-xs md:text-sm tracking-wider md:tracking-[0.2em] text-accent/80 font-serif uppercase break-normal">
             NEWS <span className="inline-block">/ PRODUCTION UPDATE</span>
           </p>
-          <h2 className="text-[clamp(1.35rem,4.5vw,2rem)] font-bold tracking-wide md:tracking-[0.15em] font-serif text-foreground text-balanced">
+          <h2 className="text-[clamp(1.35rem,4.5vw,2.25rem)] font-bold tracking-wide md:tracking-[0.15em] font-serif text-foreground text-balanced">
             制作ニュース
           </h2>
           <p className="text-xs md:text-sm text-foreground/60 font-serif tracking-normal sm:tracking-widest max-w-xl mx-auto pt-1 text-balanced text-auto-phrase">
-            映画制作の最新情報と進捗をお届けします。
+            映画『盈虚とパイプドリーム』の最新制作情報と撮影進捗をお届けします。
           </p>
         </div>
 
@@ -99,7 +99,7 @@ export default function ProductionUpdateSection({ initialNews = null }: Producti
             {articles.slice(0, 3).map((item, idx) => {
               const displayDate = formatDate(item.publishedAt || item.createdAt);
               const categoryName = item.category?.name || "お知らせ";
-              const excerpt = extractExcerpt(item.content, 90);
+              const excerpt = extractExcerpt(item.content, 65);
 
               return (
                 <motion.div
@@ -111,27 +111,27 @@ export default function ProductionUpdateSection({ initialNews = null }: Producti
                 >
                   <Link
                     href={`/news/${item.id}`}
-                    className="group bg-zinc-900/40 border border-white/5 p-3.5 sm:p-5 rounded hover:border-accent/40 hover:bg-zinc-900/70 transition-all duration-300 flex flex-col sm:flex-row gap-3.5 sm:gap-5 items-start sm:items-center block"
+                    className="group bg-zinc-900/40 border border-white/5 hover:border-accent/40 hover:bg-zinc-900/70 p-4 sm:p-5 rounded transition-all duration-300 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center block shadow-md"
                   >
-                    {/* Eyecatch Image - Enhanced presence */}
+                    {/* Eyecatch Image - Enhanced presence and balanced ratio */}
                     {item.eyecatch?.url ? (
-                      <div className="relative w-full sm:w-36 md:w-44 aspect-[16/9] sm:aspect-square rounded overflow-hidden flex-shrink-0 bg-black/60 border border-white/5">
+                      <div className="relative w-full sm:w-44 md:w-52 aspect-[16/9] sm:aspect-[16/10] rounded overflow-hidden flex-shrink-0 bg-black/60 border border-white/10">
                         <Image
                           src={item.eyecatch.url}
                           alt={item.title}
                           fill
-                          sizes="(max-width: 640px) 100vw, 176px"
+                          sizes="(max-width: 640px) 100vw, 208px"
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
                     ) : (
-                      <div className="relative w-full sm:w-36 md:w-44 aspect-[16/9] sm:aspect-square rounded overflow-hidden flex-shrink-0 bg-zinc-800/60 border border-white/5 flex items-center justify-center text-foreground/30 text-xs">
+                      <div className="relative w-full sm:w-44 md:w-52 aspect-[16/9] sm:aspect-[16/10] rounded overflow-hidden flex-shrink-0 bg-zinc-800/60 border border-white/10 flex items-center justify-center text-foreground/30 text-xs">
                         NO IMAGE
                       </div>
                     )}
 
                     {/* Meta & Excerpt */}
-                    <div className="flex-1 min-w-0 space-y-2 sm:space-y-2.5">
+                    <div className="flex-1 min-w-0 space-y-2">
                       <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
                         <span className="text-xs font-mono text-accent/90 font-bold">
                           {displayDate}
@@ -143,7 +143,7 @@ export default function ProductionUpdateSection({ initialNews = null }: Producti
                       <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground group-hover:text-accent transition-colors tracking-normal sm:tracking-wide text-auto-phrase line-clamp-2">
                         {item.title}
                       </h3>
-                      <p className="text-xs md:text-sm text-foreground/75 leading-relaxed tracking-normal sm:tracking-wide text-auto-phrase line-clamp-2 break-words">
+                      <p className="text-xs sm:text-[13px] text-foreground/70 leading-relaxed tracking-normal sm:tracking-wide text-auto-phrase line-clamp-2 break-words">
                         {excerpt}
                       </p>
                     </div>

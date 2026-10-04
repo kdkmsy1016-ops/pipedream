@@ -17,18 +17,18 @@ const USAGE_ITEMS = [
 
 export default function SupportDetailsSection() {
   return (
-    <section id="support-details" className="bg-zinc-950 py-16 sm:py-20 md:py-28 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden font-serif">
+    <section id="support-details" className="bg-zinc-950 py-20 sm:py-28 md:py-36 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden font-serif">
       <div className="max-w-4xl w-full mx-auto space-y-12 sm:space-y-16">
 
         {/* Section Header */}
-        <div className="text-center space-y-2.5 sm:space-y-3">
+        <div className="text-center space-y-3 sm:space-y-4">
           <p className="text-xs md:text-sm tracking-wider md:tracking-[0.2em] text-accent/80 uppercase break-normal">
             SUPPORT DETAILS
           </p>
-          <h2 className="text-[clamp(1.35rem,4.5vw,2rem)] font-bold tracking-wide md:tracking-[0.15em] text-foreground text-balanced">
+          <h2 className="text-[clamp(1.35rem,4.5vw,2.25rem)] font-bold tracking-wide md:tracking-[0.15em] text-foreground text-balanced">
             ご支援について
           </h2>
-          <p className="text-xs md:text-sm text-foreground/60 tracking-normal sm:tracking-widest max-w-xl mx-auto pt-1 text-auto-phrase">
+          <p className="text-xs md:text-sm text-foreground/60 tracking-normal sm:tracking-widest max-w-xl mx-auto pt-1 text-balanced text-auto-phrase">
             制作支援に関する使い道と、これまでの記録をまとめています。
           </p>
         </div>

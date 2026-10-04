@@ -16,7 +16,7 @@ export default function FinalCTASection() {
   }, []);
 
   return (
-    <section id="final-cta" className="relative py-20 sm:py-28 md:py-40 px-4 sm:px-6 bg-black border-t border-white/5 overflow-hidden flex flex-col items-center">
+    <section id="final-cta" className="relative py-24 sm:py-32 md:py-44 px-4 sm:px-6 bg-black border-t border-white/5 overflow-hidden flex flex-col items-center">
       
       {/* Background Image with Quiet Dark Vignette */}
       <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
@@ -73,7 +73,7 @@ export default function FinalCTASection() {
           <button
             type="button"
             onClick={handleOpenCodoc}
-            className="w-full min-h-[50px] sm:min-h-[54px] flex items-center justify-center px-8 py-3.5 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded text-sm sm:text-base tracking-wider md:tracking-[0.2em] text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] whitespace-nowrap active:scale-[0.98] cursor-pointer"
+            className="w-full min-h-[48px] sm:min-h-[52px] flex items-center justify-center px-8 py-3.5 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded-sm text-sm sm:text-base tracking-wider md:tracking-[0.2em] text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] whitespace-nowrap active:scale-[0.98] cursor-pointer"
           >
             制作を支援する
           </button>

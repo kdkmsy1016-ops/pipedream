@@ -5,11 +5,11 @@ import Image from "next/image";
 
 export default function DirectorsMessageSection() {
   return (
-    <section id="director-message" className="bg-background py-20 sm:py-24 md:py-36 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden">
+    <section id="director-message" className="bg-background py-20 sm:py-28 md:py-36 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden">
       <div className="max-w-3xl w-full mx-auto space-y-10 sm:space-y-12">
 
         {/* Section Header */}
-        <div className="text-center space-y-3">
+        <div className="text-center space-y-3 sm:space-y-4">
           <p className="text-xs md:text-sm tracking-wider md:tracking-[0.2em] text-accent/80 font-serif uppercase break-normal">
             Director's Message
           </p>

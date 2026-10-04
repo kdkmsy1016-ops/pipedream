@@ -19,14 +19,14 @@ export default function RoadmapSection() {
       <div className="max-w-2xl w-full mx-auto space-y-10 sm:space-y-12">
 
         {/* Section Header */}
-        <div className="text-center space-y-2.5 sm:space-y-3">
+        <div className="text-center space-y-3 sm:space-y-4">
           <p className="text-xs md:text-sm tracking-wider md:tracking-[0.2em] text-accent/80 font-serif uppercase break-normal">
             Road To Completion
           </p>
-          <h2 className="text-[clamp(1.35rem,4.5vw,2rem)] font-bold tracking-wide md:tracking-[0.15em] font-serif text-foreground text-balanced">
+          <h2 className="text-[clamp(1.35rem,4.5vw,2.25rem)] font-bold tracking-wide md:tracking-[0.15em] font-serif text-foreground text-balanced">
             映画完成までの工程
           </h2>
-          <p className="text-xs md:text-sm text-foreground/60 font-serif tracking-normal sm:tracking-widest max-w-lg mx-auto pt-1 leading-relaxed text-auto-phrase">
+          <p className="text-xs md:text-sm text-foreground/60 font-serif tracking-normal sm:tracking-widest max-w-lg mx-auto pt-1 leading-relaxed text-balanced text-auto-phrase">
             完成までに必要な全工程のロードマップです。
           </p>
         </div>
