@@ -42,14 +42,14 @@ const MAIN_CHARACTERS: Character[] = [
     tagline: "映画監督志望",
     description: [
       "桃華の恋人。",
-      "桃華とちはるを出演させた自主映画を一本完成させているが、その後は次作へ進めずにいる。",
+      "桃華を出演させた自主映画を一本完成させているが、その後は次作へ進めずにいる。",
       "フードデリバリーで生活をつなぎながら、映画を撮る機会を模索している。"
     ]
   },
   {
     name: "絹山 彰",
     romaji: "KINUYAMA AKIRA",
-    age: "55歳",
+    age: "59歳",
     tagline: "スナック「さくらみち」のマスター",
     description: [
       "桃華の叔父。",
@@ -104,7 +104,7 @@ const SUB_CHARACTERS: Character[] = [
   {
     name: "谷川",
     romaji: "TANIGAWA",
-    age: "39歳",
+    age: "38歳",
     tagline: "芝居好きの常連客",
     description: [
       "外回りの営業職。",
@@ -239,9 +239,8 @@ export default function CastStaffRenewedSection() {
                   {showSubCharacters ? "その他の登場人物を閉じる" : "その他の登場人物を見る（三浦・寺田・谷川）"}
                 </span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 ${
-                    showSubCharacters ? "rotate-180" : ""
-                  }`}
+                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 ${showSubCharacters ? "rotate-180" : ""
+                    }`}
                 />
               </button>
             </div>
