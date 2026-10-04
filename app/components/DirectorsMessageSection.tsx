@@ -62,7 +62,7 @@ export default function DirectorsMessageSection() {
               だからこそ、まずはこの一本を、何としても最後まで完成させる。
               完成した映画を携えて、映画祭への出品やその先の可能性へ歩みを進めていきたいと考えています。
             </p>
-            <p className="pt-2 sm:pt-3 text-foreground/70 text-xs md:text-sm">
+            <p className="pt-2 sm:pt-3 text-accent font-bold text-sm sm:text-base tracking-wide leading-relaxed">
               この映画がどこまで辿り着けるのか。完成までの過程を、見守っていただけましたら幸いです。
             </p>
           </div>
