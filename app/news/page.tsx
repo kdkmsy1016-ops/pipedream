@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Newspaper } from "lucide-react";
 import { getNewsList, extractExcerpt, formatDate } from "@/app/lib/microcms";
-import NewsSupportCTA from "@/app/components/NewsSupportCTA";
+import NewsCodocSection from "@/app/components/NewsCodocSection";
 
 export const revalidate = 60; // 60秒ISR
 
@@ -107,9 +107,7 @@ export default async function NewsListPage() {
         )}
 
         {/* Global Support CTA at bottom */}
-        <div className="pt-8 sm:pt-12">
-          <NewsSupportCTA />
-        </div>
+        <NewsCodocSection />
 
         {/* Footer info */}
         <div className="pt-8 text-center text-xs text-foreground/40 border-t border-white/5">

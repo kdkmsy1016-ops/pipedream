@@ -4,7 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import { getNewsDetail, getNewsList, formatDate } from "@/app/lib/microcms";
-import NewsSupportCTA from "@/app/components/NewsSupportCTA";
+import NewsCodocSection from "@/app/components/NewsCodocSection";
 
 export const revalidate = 60; // 60秒ISR
 
@@ -103,6 +103,9 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
 
+        {/* Common codoc chip & Support Section (Automatically appended right after article content) */}
+        <NewsCodocSection />
+
         {/* Back Link Button */}
         <div className="pt-6 border-t border-white/5 flex justify-between items-center text-xs sm:text-sm text-foreground/60">
           <Link
@@ -118,11 +121,6 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           >
             公式サイトトップへ
           </Link>
-        </div>
-
-        {/* Common Support CTA Section (Embedded at the end of every news article) */}
-        <div className="pt-8 sm:pt-12">
-          <NewsSupportCTA />
         </div>
 
         {/* Footer */}
