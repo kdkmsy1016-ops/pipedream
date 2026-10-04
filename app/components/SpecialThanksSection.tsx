@@ -41,14 +41,14 @@ export default function SpecialThanksSection() {
               ご支援いただいた方で掲載をご希望される方は、完成する映画『盈虚とパイプドリーム』本編のエンドクレジットに「Special Thanks」としてお名前を刻ませていただきます。
             </p>
             <p className="text-foreground/70">
-              ※ご支援時の決済フォームにて掲載ご希望のお名前をご入力いただけます。掲載を希望されない場合は、匿名でのご支援も可能です。
+              ※掲載をご希望の場合は、ご支援時のメッセージ欄に掲載名をご記入ください。掲載を希望されない場合は、無記名でのご支援も可能です。
             </p>
           </div>
 
           <div className="p-3.5 sm:p-4 bg-black/40 rounded border border-white/5 flex items-start gap-2.5 sm:gap-3 text-xs text-foreground/70 tracking-normal sm:tracking-wider text-auto-phrase">
             <ShieldCheck className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
             <span>
-              支援金額（1,000円〜10,000円等）にかかわらず、掲載希望のお名前はすべて同等に感謝を込めてエンドクレジットへ掲載させていただきます。
+              ご支援いただいた金額にかかわらず、掲載をご希望のお名前はすべて同等にSpecial Thanksとして掲載します。
             </span>
           </div>
         </motion.div>

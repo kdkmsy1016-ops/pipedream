@@ -47,7 +47,7 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
         {/* Single Support CTA */}
         <div className="w-full max-w-md mx-auto pt-2 space-y-3 text-center">
           <p className="text-xs sm:text-sm text-foreground/60 tracking-normal sm:tracking-wider">
-            金額は決済画面で自由にお選びいただけます。
+            任意の金額でご支援いただけます。
           </p>
           <div>
             <button

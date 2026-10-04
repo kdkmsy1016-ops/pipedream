@@ -82,7 +82,7 @@ export default function AboutFilmRenewed() {
           <div className="p-4 bg-zinc-900/30 rounded border border-white/5 space-y-1">
             <span className="text-accent/60 block text-[11px] tracking-wider sm:tracking-widest">FORMAT</span>
             <p className="text-foreground/90 font-medium">自主制作長編映画</p>
-            <p className="text-foreground/70 text-auto-phrase">劇場完成＆映画祭出品目標</p>
+            <p className="text-foreground/70 text-auto-phrase">映画完成・映画祭出品目標</p>
           </div>
         </div>
 

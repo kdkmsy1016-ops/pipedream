@@ -30,11 +30,11 @@ export default function Home() {
       {/* 04 / DIRECTOR'S MESSAGE */}
       <DirectorsMessageSection />
 
-      {/* 05 / ROAD TO COMPLETION */}
-      <RoadmapSection />
-
-      {/* 06 / SUPPORT */}
+      {/* 05 / SUPPORT */}
       <SupportSection />
+
+      {/* 06 / ROAD TO COMPLETION */}
+      <RoadmapSection />
 
       {/* 07 / YOUR SUPPORT */}
       <YourSupportSection />

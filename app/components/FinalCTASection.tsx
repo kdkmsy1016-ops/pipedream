@@ -1,9 +1,20 @@
 "use client";
 
+import { useCallback } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
 export default function FinalCTASection() {
+  const handleOpenCodoc = useCallback(() => {
+    const codocBtn = document.querySelector<HTMLElement>(".codoc-support .codoc-btn");
+    if (codocBtn) {
+      codocBtn.click();
+    } else {
+      const altBtn = document.querySelector<HTMLElement>("#codoc-entry-Iu1j01olgg a, .codoc-btn");
+      if (altBtn) altBtn.click();
+    }
+  }, []);
+
   return (
     <section id="final-cta" className="relative py-20 sm:py-28 md:py-40 px-4 sm:px-6 bg-black border-t border-white/5 overflow-hidden flex flex-col items-center">
       
@@ -30,7 +41,7 @@ export default function FinalCTASection() {
           className="space-y-4 sm:space-y-6"
         >
           <h2 className="text-[clamp(1.35rem,5vw,2.25rem)] font-bold tracking-wide md:tracking-[0.2em] text-foreground leading-snug text-balanced">
-            この映画が完成するまで。
+            この映画がどこまで辿り着けるのか。
           </h2>
 
           <div className="space-y-3.5 sm:space-y-4 text-foreground/80 leading-relaxed text-xs sm:text-sm md:text-base tracking-normal sm:tracking-wide text-justify sm:text-center max-w-xl mx-auto text-auto-phrase">
@@ -45,33 +56,30 @@ export default function FinalCTASection() {
               完成まで、見守っていただければ幸いです。
             </p>
             <p className="text-xs sm:text-sm text-foreground/60 pt-1 sm:pt-2">
-              そして、もしこの映画に何かを感じていただけたなら、<br className="hidden sm:block" />
+              もしこの映画に何かを感じていただけたなら、<br className="hidden sm:block" />
               制作を支えるという形で参加していただくこともできます。
             </p>
           </div>
         </motion.div>
 
-        {/* CTA Buttons: Primary is "制作の近況を見る", Secondary is "この映画を支援する" */}
+        {/* Single CTA: 制作を支援する triggering codoc */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2 w-full max-w-sm sm:max-w-none mx-auto"
+          className="flex flex-col items-center justify-center pt-2 w-full max-w-xs mx-auto space-y-3"
         >
-          <a
-            href="#now-making"
-            className="w-full sm:w-auto min-h-[48px] flex items-center justify-center px-6 sm:px-8 py-3.5 bg-zinc-800 hover:bg-zinc-700 text-foreground transition-all duration-200 rounded-sm text-xs sm:text-sm tracking-normal sm:tracking-wider md:tracking-[0.2em] text-center border border-white/10 font-bold active:scale-[0.98]"
+          <button
+            type="button"
+            onClick={handleOpenCodoc}
+            className="w-full min-h-[50px] sm:min-h-[54px] flex items-center justify-center px-8 py-3.5 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded text-sm sm:text-base tracking-wider md:tracking-[0.2em] text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] whitespace-nowrap active:scale-[0.98] cursor-pointer"
           >
-            制作の近況を見る
-          </a>
-
-          <a
-            href="#support"
-            className="w-full sm:w-auto min-h-[48px] flex items-center justify-center px-6 sm:px-8 py-3.5 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded-sm text-xs sm:text-sm tracking-normal sm:tracking-wider md:tracking-[0.2em] text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,191,0,0.4)] active:scale-[0.98]"
-          >
-            この映画を支援する
-          </a>
+            制作を支援する
+          </button>
+          <p className="text-[11px] sm:text-xs text-foreground/50 tracking-normal sm:tracking-wider">
+            任意の金額でご支援いただけます。
+          </p>
         </motion.div>
 
       </div>

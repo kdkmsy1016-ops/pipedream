@@ -32,7 +32,7 @@ const MILESTONES: MilestoneGroup[] = [
     japaneseTitle: "本撮影",
     status: "upcoming",
     statusText: "これから",
-    items: ["クランクイン", "スナック実景・劇中劇撮影", "同音録音", "クランクアップ"],
+    items: ["クランクイン", "スナック実景・劇中劇撮影", "同録", "クランクアップ"],
     description: "実在店舗の空気感をフィルムに収める撮影工程。照明とレンズワークを綿密に設計して臨みます。"
   },
   {
@@ -42,7 +42,7 @@ const MILESTONES: MilestoneGroup[] = [
     japaneseTitle: "ポストプロダクション",
     status: "upcoming",
     statusText: "これから",
-    items: ["オフライン・オンライン編集", "カラーグレーディング", "音響効果・整音（MA）", "劇伴劇中音楽", "英語字幕制作", "DCPマスタリング"],
+    items: ["編集（オフライン・オンライン）", "MA・カラーグレーディング", "劇伴・音響効果", "字幕・DCPマスタリング"],
     description: "撮影素材から一本の映画へと昇華させる仕上げの工程。劇場上映および海外出品を見据えたフォーマットを制作します。"
   },
   {

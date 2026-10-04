@@ -29,24 +29,19 @@ const CURRENT_PRODUCTION_PHASES = [
   {
     category: "CAMERA & SOUND",
     label: "撮影機材・録音プラン",
-    status: "テスト撮影・同音設計",
+    status: "テスト撮影・同録設計",
     image: "/gallery/gallery-5.png",
-    detail: "静謐かつ重層的なトーンを生み出すレンズ・ライティングの選定と、店内のリアルな環境音とセリフを捉え切る同音録音設計を進行中。"
+    detail: "静謐かつ重層的なトーンを生み出すレンズ・ライティングの選定と、店内のリアルな環境音とセリフを捉え切る同録設計を進行中。"
   }
 ];
 
 const WORKFLOW_STEPS = [
-  { name: "脚本・改稿", done: true },
+  { name: "企画・脚本", done: true },
   { name: "ロケハン・実測", done: true },
   { name: "キャスティング", current: true },
-  { name: "美術・小道具・衣装", current: true },
-  { name: "撮影準備・テスト", current: true },
-  { name: "本撮影", future: true },
-  { name: "編集・編集推敲", future: true },
-  { name: "カラーグレーディング", future: true },
-  { name: "整音・MA音響", future: true },
-  { name: "英語字幕・DCP", future: true },
-  { name: "完成・映画祭出品", future: true }
+  { name: "美術・小道具", current: true },
+  { name: "テスト撮影・同録設計", current: true },
+  { name: "本撮影準備", current: true },
 ];
 
 export default function NowMakingSection() {
