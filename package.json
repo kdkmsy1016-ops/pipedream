@@ -21,7 +21,8 @@
     "react-dom": "19.2.3",
     "react-pageflip": "^2.0.3",
     "react-zoom-pan-pinch": "^3.7.0",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "twitter-api-v2": "^1.29.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
