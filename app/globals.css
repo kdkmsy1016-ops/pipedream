@@ -45,3 +45,20 @@ body {
   }
 }
 
+/* codoc official widget customization:
+   Hide default UI elements while maintaining official modal functionality
+   and displaying the required powered-by credit. */
+.codoc-entry .codoc-support,
+.codoc-entry .codoc-buy-wrap,
+.codoc-entry .codoc-continue,
+.codoc-entry .codoc-subscription-articlelist {
+  display: none !important;
+}
+
+.codoc-entry .codoc-copyright {
+  margin-top: 1rem !important;
+  text-align: center !important;
+  opacity: 0.5 !important;
+  font-size: 11px !important;
+}
+
