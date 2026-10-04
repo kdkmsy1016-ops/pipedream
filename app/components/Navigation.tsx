@@ -20,10 +20,10 @@ export default function Navigation() {
         { label: "Trailer", href: "#trailer" },
         { label: "About Film", href: "#about" },
         { label: "Message", href: "#director-message" },
+        { label: "News", href: "#news" },
         { label: "Support", href: "#support" },
         { label: "Support Details", href: "#support-details" },
         { label: "Roadmap", href: "#roadmap" },
-        { label: "News", href: "#news" },
         { label: "Staff & Cast", href: "#cast-staff" },
         { label: "Contact", href: "/contact" },
     ];

@@ -20,7 +20,7 @@ export default function TrailerSection({ videoId = TRAILER_CONFIG.videoId }: Tra
   return (
     <section
       id="trailer"
-      className="relative w-full bg-background py-16 sm:py-20 md:py-28 px-4 sm:px-6 flex flex-col items-center overflow-hidden border-t border-white/5"
+      className="relative w-full bg-background py-20 sm:py-28 md:py-36 px-4 sm:px-6 flex flex-col items-center overflow-hidden border-t border-white/5"
     >
       <div className="max-w-4xl w-full mx-auto space-y-8 sm:space-y-12 relative z-10">
         {/* Section Header */}

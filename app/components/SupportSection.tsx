@@ -20,7 +20,7 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
   }, []);
 
   return (
-    <section id={id} className="bg-background py-20 sm:py-24 md:py-36 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden font-serif">
+    <section id={id} className="bg-background py-24 sm:py-32 md:py-44 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden font-serif">
       <div className="max-w-2xl w-full mx-auto space-y-10 sm:space-y-12">
 
         {/* Section Header */}
@@ -34,13 +34,13 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
         </div>
 
         {/* Explanation Text */}
-        <div className="space-y-4 text-foreground/80 leading-relaxed text-sm md:text-base tracking-normal sm:tracking-wide text-justify md:text-center max-w-xl mx-auto text-auto-phrase">
+        <div className="space-y-3 text-foreground/80 leading-relaxed text-xs sm:text-sm md:text-base tracking-normal sm:tracking-wide text-justify md:text-center max-w-xl mx-auto text-auto-phrase">
           <p>
             映画『盈虚とパイプドリーム』では、<br className="hidden sm:inline" />
-            作品完成までの制作支援を受け付けています。
+            作品完成までの制作を支えてくださる方からのご支援を受け付けています。
           </p>
-          <p>
-            いただいたご支援は、撮影、出演者・スタッフ、美術、編集、整音・MA、カラーグレーディング、字幕・DCP制作、映画祭出品など、映画完成までの制作費として活用します。
+          <p className="text-foreground/70 text-xs sm:text-sm">
+            いただいた支援は、撮影、出演者・スタッフ、美術、音響、映画祭出品など、映画完成までの制作費として大切に活用します。
           </p>
         </div>
 
@@ -73,7 +73,7 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
         {/* Supplementary Footnote */}
         <div className="pt-2 text-center text-[11px] sm:text-xs text-foreground/50 tracking-normal sm:tracking-wider text-auto-phrase">
           <p>
-            ※アカウント登録なしでもご支援いただけます。クレジット掲載等の詳細はページ下部「ご支援について」をご確認ください。
+            ※アカウント登録なしでもご支援いただけます。支援金の使い道などの詳細は下記「ご支援について」をご確認ください。
           </p>
         </div>
 

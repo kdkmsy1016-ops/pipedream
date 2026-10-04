@@ -15,7 +15,7 @@ const TIMELINE_STEPS = [
 
 export default function RoadmapSection() {
   return (
-    <section id="roadmap" className="bg-zinc-950 py-16 sm:py-20 md:py-28 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden">
+    <section id="roadmap" className="bg-zinc-950 py-20 sm:py-28 md:py-36 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden">
       <div className="max-w-2xl w-full mx-auto space-y-10 sm:space-y-12">
 
         {/* Section Header */}

@@ -11,7 +11,6 @@ import ProductionUpdateSection from "./components/ProductionUpdateSection";
 import CastStaffRenewedSection from "./components/CastStaffRenewedSection";
 import FinalCTASection from "./components/FinalCTASection";
 import ContactSection from "./components/ContactSection";
-import MobileSupportStickyBar from "./components/MobileSupportStickyBar";
 import TrailerModal from "./components/TrailerModal";
 
 export default function Home() {
@@ -32,17 +31,17 @@ export default function Home() {
       {/* 04 / DIRECTOR'S MESSAGE */}
       <DirectorsMessageSection />
 
-      {/* 05 / SUPPORT (この映画を支援する) */}
+      {/* 05 / NEWS / PRODUCTION UPDATE (現在進行形の最新情報を固定情報より前に配置) */}
+      <ProductionUpdateSection />
+
+      {/* 06 / SUPPORT (この映画を支援する) */}
       <SupportSection />
 
-      {/* 06 / SUPPORT DETAILS (ご支援について: 使い道 / Special Thanks / これまでのご支援) */}
+      {/* 07 / SUPPORT DETAILS (ご支援について: 使い道 / これまでのご支援) */}
       <SupportDetailsSection />
 
-      {/* 07 / ROAD TO COMPLETION */}
+      {/* 08 / ROAD TO COMPLETION */}
       <RoadmapSection />
-
-      {/* 08 / NEWS / PRODUCTION UPDATE */}
-      <ProductionUpdateSection />
 
       {/* 09 / CAST & STAFF */}
       <CastStaffRenewedSection />
@@ -52,9 +51,6 @@ export default function Home() {
 
       {/* Contact Section */}
       <ContactSection />
-
-      {/* Mobile Sticky Support UX */}
-      <MobileSupportStickyBar />
 
       {/* Footer */}
       <footer className="py-8 text-center text-xs text-foreground/40 font-serif border-t border-white/5 space-y-2">

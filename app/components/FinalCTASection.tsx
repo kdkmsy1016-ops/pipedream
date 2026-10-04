@@ -46,7 +46,7 @@ export default function FinalCTASection() {
 
           <div className="space-y-3.5 sm:space-y-4 text-foreground/80 leading-relaxed text-xs sm:text-sm md:text-base tracking-normal sm:tracking-wide text-justify sm:text-center max-w-xl mx-auto text-auto-phrase">
             <p>
-              『盈虚とパイプドリーム』は、現在も制作を続けています。
+              『盈虚とパイプドリーム』は、現在も作品完成に向けて制作を続けています。
             </p>
             <p>
               撮影、編集、音響、そして映画祭への出品まで。<br className="hidden sm:block" />

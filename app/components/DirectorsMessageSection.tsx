@@ -48,21 +48,20 @@ export default function DirectorsMessageSection() {
           </div>
 
           {/* Statement Essay */}
-          <div className="space-y-5 sm:space-y-6 md:space-y-7 text-foreground/85 leading-relaxed md:leading-loose text-sm md:text-base tracking-normal sm:tracking-wide text-justify sm:text-left text-auto-phrase">
+          <div className="space-y-4 sm:space-y-5 md:space-y-6 text-foreground/85 leading-relaxed md:leading-loose text-xs sm:text-sm md:text-base tracking-normal sm:tracking-wide text-justify sm:text-left text-auto-phrase">
             <p>
-              15年以上、映像の仕事に携わってきました。数々の現場で経験を重ね、信頼できる仲間や関係者の方々とのつながりにも恵まれてきました。
+              15年以上、映像制作の現場に携わってきました。数々の経験を重ね、多くの仲間に恵まれてきましたが、自分自身が監督として一本の長編映画を成立させることは、また別の覚悟を要する挑戦でした。
             </p>
-            <p className="text-foreground font-bold text-sm sm:text-base md:text-lg border-l-2 border-accent pl-3 sm:pl-4 py-1.5 my-3 sm:my-4 bg-accent/5">
-              それでも、自分自身が監督として一本の長編映画を成立させることは、また別の挑戦でした。
-            </p>
-            <p>
-              映画制作には様々な工程と費用が伴います。公的支援や助成だけでは十分な制作費を確保するのが難しく、クラウドファンディングでいただいたご支援以外は、自己資金を中心に制作を進めています。
+            <p className="text-foreground font-bold text-xs sm:text-sm md:text-base border-l-2 border-accent pl-3 sm:pl-4 py-1.5 my-2 sm:my-3 bg-accent/5">
+              まずはこの一本を、何としても最後まで完成させる。
             </p>
             <p>
-              だからこそ、まずはこの一本を、何としても最後まで完成させる。
-              完成した映画を携えて、映画祭への出品やその先の可能性へ歩みを進めていきたいと考えています。
+              映画制作には多くの工程と費用が伴います。公的支援だけでは十分な制作費の確保が難しく、クラウドファンディングでいただいた温かいご支援を力に、自己資金を中心に制作を進めています。
             </p>
-            <p className="pt-2 sm:pt-3 text-accent font-bold text-sm sm:text-base tracking-wide leading-relaxed">
+            <p>
+              完成した映画を携えて、国内外の映画祭出品やその先の劇場公開へ歩みを進めていきます。
+            </p>
+            <p className="pt-1 sm:pt-2 text-accent font-bold text-xs sm:text-sm md:text-base tracking-wide leading-relaxed">
               この映画がどこまで辿り着けるのか。完成までの過程を、見守っていただけましたら幸いです。
             </p>
           </div>

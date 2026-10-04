@@ -56,7 +56,7 @@ export default function ProductionUpdateSection({ initialNews = null }: Producti
   return (
     <section
       id="news"
-      className="bg-background py-16 sm:py-20 md:py-28 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden"
+      className="bg-background py-20 sm:py-28 md:py-36 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden"
     >
       <div className="max-w-4xl w-full mx-auto space-y-10 sm:space-y-14">
         {/* Section Header */}
@@ -113,34 +113,34 @@ export default function ProductionUpdateSection({ initialNews = null }: Producti
                     href={`/news/${item.id}`}
                     className="group bg-zinc-900/40 border border-white/5 p-3.5 sm:p-5 rounded hover:border-accent/40 hover:bg-zinc-900/70 transition-all duration-300 flex flex-col sm:flex-row gap-3.5 sm:gap-5 items-start sm:items-center block"
                   >
-                    {/* Eyecatch Image */}
+                    {/* Eyecatch Image - Enhanced presence */}
                     {item.eyecatch?.url ? (
-                      <div className="relative w-full sm:w-28 md:w-32 aspect-[16/9] sm:aspect-square rounded overflow-hidden flex-shrink-0 bg-black/60 border border-white/5">
+                      <div className="relative w-full sm:w-36 md:w-44 aspect-[16/9] sm:aspect-square rounded overflow-hidden flex-shrink-0 bg-black/60 border border-white/5">
                         <Image
                           src={item.eyecatch.url}
                           alt={item.title}
                           fill
-                          sizes="(max-width: 640px) 100vw, 128px"
+                          sizes="(max-width: 640px) 100vw, 176px"
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
                     ) : (
-                      <div className="relative w-full sm:w-28 md:w-32 aspect-[16/9] sm:aspect-square rounded overflow-hidden flex-shrink-0 bg-zinc-800/60 border border-white/5 flex items-center justify-center text-foreground/30 text-xs">
+                      <div className="relative w-full sm:w-36 md:w-44 aspect-[16/9] sm:aspect-square rounded overflow-hidden flex-shrink-0 bg-zinc-800/60 border border-white/5 flex items-center justify-center text-foreground/30 text-xs">
                         NO IMAGE
                       </div>
                     )}
 
                     {/* Meta & Excerpt */}
-                    <div className="flex-1 min-w-0 space-y-1.5 sm:space-y-2">
+                    <div className="flex-1 min-w-0 space-y-2 sm:space-y-2.5">
                       <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-                        <span className="text-xs font-mono text-accent/80 font-bold">
+                        <span className="text-xs font-mono text-accent/90 font-bold">
                           {displayDate}
                         </span>
-                        <span className="text-[10px] font-mono tracking-wider sm:tracking-widest uppercase bg-accent/10 border border-accent/20 px-2 py-0.5 rounded text-accent">
+                        <span className="text-[10px] font-mono tracking-wider sm:tracking-widest uppercase bg-accent/10 border border-accent/20 px-2.5 py-0.5 rounded text-accent">
                           {categoryName}
                         </span>
                       </div>
-                      <h3 className="text-sm sm:text-base md:text-lg font-bold text-foreground group-hover:text-accent transition-colors tracking-normal sm:tracking-wide text-auto-phrase line-clamp-2">
+                      <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground group-hover:text-accent transition-colors tracking-normal sm:tracking-wide text-auto-phrase line-clamp-2">
                         {item.title}
                       </h3>
                       <p className="text-xs md:text-sm text-foreground/75 leading-relaxed tracking-normal sm:tracking-wide text-auto-phrase line-clamp-2 break-words">

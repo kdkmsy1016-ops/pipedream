@@ -117,7 +117,7 @@ export default function CastStaffRenewedSection() {
   const [showSubCharacters, setShowSubCharacters] = useState(false);
 
   return (
-    <section id="cast-staff" className="bg-zinc-950 py-20 sm:py-24 md:py-36 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden font-serif">
+    <section id="cast-staff" className="bg-zinc-950 py-24 sm:py-32 md:py-44 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden font-serif">
       <div className="max-w-4xl w-full mx-auto space-y-12 sm:space-y-16">
 
         {/* Section Header */}

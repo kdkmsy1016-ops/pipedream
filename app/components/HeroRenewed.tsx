@@ -69,26 +69,26 @@ export default function HeroRenewed() {
           </h1>
         </div>
 
-        <div className="space-y-2 sm:space-y-2.5">
-          <p className="text-[clamp(1.05rem,4vw,1.5rem)] font-serif text-foreground/90 tracking-wide md:tracking-widest leading-relaxed text-balanced">
+        <div className="space-y-1.5 sm:space-y-2">
+          <p className="text-[clamp(1rem,3.8vw,1.35rem)] font-serif text-foreground/90 tracking-wide md:tracking-widest leading-relaxed text-balanced">
             「一本の映画を、完成させるために。」
           </p>
-          <p className="text-xs md:text-sm text-foreground/60 font-serif tracking-normal sm:tracking-widest text-balanced text-auto-phrase">
-            現在、映画完成と映画祭への出品を目指して制作中。
+          <p className="text-xs sm:text-sm text-foreground/60 font-serif tracking-normal sm:tracking-widest text-balanced text-auto-phrase">
+            映画完成と映画祭出品を目指し、現在制作中。
           </p>
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 md:gap-4 pt-3 sm:pt-4 md:pt-2 w-full max-w-sm sm:max-w-none mx-auto">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 pt-2 sm:pt-3 w-full max-w-sm sm:max-w-none mx-auto">
           <a
             href="#about"
-            className="w-full sm:w-auto min-h-[48px] flex items-center justify-center px-6 sm:px-8 py-3.5 bg-zinc-900/90 hover:bg-zinc-800 text-foreground border border-white/20 hover:border-white/30 transition-all duration-300 text-xs sm:text-sm font-serif tracking-normal sm:tracking-wider md:tracking-[0.2em] rounded-sm text-center active:scale-[0.98]"
+            className="w-full sm:w-auto min-h-[46px] flex items-center justify-center px-6 sm:px-8 py-3 bg-zinc-900/90 hover:bg-zinc-800 text-foreground border border-white/20 hover:border-white/30 transition-all duration-300 text-xs sm:text-sm font-serif tracking-normal sm:tracking-wider md:tracking-[0.2em] rounded-sm text-center active:scale-[0.98]"
           >
             作品について
           </a>
           <a
             href="#support"
-            className="w-full sm:w-auto min-h-[48px] flex items-center justify-center px-6 sm:px-8 py-3.5 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 text-xs sm:text-sm font-serif tracking-normal sm:tracking-wider md:tracking-[0.2em] rounded-sm text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,191,0,0.4)] active:scale-[0.98]"
+            className="w-full sm:w-auto min-h-[46px] flex items-center justify-center px-6 sm:px-8 py-3 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 text-xs sm:text-sm font-serif tracking-normal sm:tracking-wider md:tracking-[0.2em] rounded-sm text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,191,0,0.4)] active:scale-[0.98]"
           >
             制作を支援する
           </a>

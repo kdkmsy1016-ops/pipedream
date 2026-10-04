@@ -17,7 +17,7 @@ export default function AboutFilmRenewed() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
-    <section id="about" className="relative bg-background py-20 sm:py-24 md:py-36 px-4 sm:px-6 flex flex-col items-center overflow-hidden border-t border-white/5">
+    <section id="about" className="relative bg-background py-24 sm:py-32 md:py-44 px-4 sm:px-6 flex flex-col items-center overflow-hidden border-t border-white/5">
       
       <div className="max-w-4xl w-full mx-auto space-y-16 sm:space-y-20 relative z-10">
 
@@ -53,17 +53,16 @@ export default function AboutFilmRenewed() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="space-y-6 text-foreground/80 leading-relaxed md:leading-loose font-serif text-sm sm:text-base md:text-lg px-2 sm:px-4 md:px-8 text-justify sm:text-center max-w-3xl mx-auto"
+          className="space-y-4 sm:space-y-5 text-foreground/80 leading-relaxed md:leading-loose font-serif text-xs sm:text-sm md:text-base px-2 sm:px-4 md:px-8 text-justify sm:text-center max-w-2xl mx-auto"
         >
-          <h4 className="text-base sm:text-lg md:text-xl font-bold tracking-wider sm:tracking-widest text-accent/90 border-b border-white/10 pb-2 sm:pb-3 inline-block">
+          <h4 className="text-sm sm:text-base md:text-lg font-bold tracking-wider sm:tracking-widest text-accent/90 border-b border-white/10 pb-1.5 sm:pb-2 inline-block">
             あらすじ
           </h4>
           <p className="tracking-normal sm:tracking-wide text-auto-phrase">
-            2021年、東京郊外。<br className="hidden md:block" />
-            コロナ禍を言い訳に夢を諦め、実在するスナック「さくらみち」でバイトする俳優志望の桃華は、監督志望の恋人・修平と共依存の日々を送っていた。
+            2021年、東京郊外。コロナ禍を理由に夢から遠ざかり、実在するスナック「さくらみち」で働く俳優志望の桃華は、監督志望の恋人・修平と燻る日々を過ごしていた。
           </p>
           <p className="tracking-normal sm:tracking-wide text-auto-phrase">
-            叔父であるマスター・絹山の協力も得て、甘い幻想（パイプドリーム）を断ち切るべくスナックでの演劇上演を決意するが、無常にも3回目の緊急事態宣言が出されてしまう……。
+            マスター・絹山の後押しを受け、甘い幻想（パイプドリーム）を断ち切るべく店内での演劇上演を決意するが、無情にも3回目の緊急事態宣言が発令されてしまう――。
           </p>
         </motion.div>
 
