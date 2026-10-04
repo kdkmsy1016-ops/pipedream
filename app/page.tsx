@@ -3,13 +3,12 @@
 import HeroRenewed from "./components/HeroRenewed";
 import TrailerSection from "./components/TrailerSection";
 import AboutFilmRenewed from "./components/AboutFilmRenewed";
-import NowMakingSection from "./components/NowMakingSection";
 import DirectorsMessageSection from "./components/DirectorsMessageSection";
 import SupportSection from "./components/SupportSection";
+import SupportDetailsSection from "./components/SupportDetailsSection";
 import RoadmapSection from "./components/RoadmapSection";
 import ProductionUpdateSection from "./components/ProductionUpdateSection";
 import CastStaffRenewedSection from "./components/CastStaffRenewedSection";
-import SupportDetailsSection from "./components/SupportDetailsSection";
 import FinalCTASection from "./components/FinalCTASection";
 import ContactSection from "./components/ContactSection";
 import MobileSupportStickyBar from "./components/MobileSupportStickyBar";
@@ -30,28 +29,25 @@ export default function Home() {
       {/* 03 / ABOUT THE FILM */}
       <AboutFilmRenewed />
 
-      {/* 04 / NOW MAKING */}
-      <NowMakingSection />
-
-      {/* 05 / DIRECTOR'S MESSAGE */}
+      {/* 04 / DIRECTOR'S MESSAGE */}
       <DirectorsMessageSection />
 
-      {/* 06 / SUPPORT (この映画を支援する) */}
+      {/* 05 / SUPPORT (この映画を支援する) */}
       <SupportSection />
 
-      {/* 07 / SUPPORT DETAILS (ご支援について: 使い道 / Special Thanks / これまでのご支援) */}
+      {/* 06 / SUPPORT DETAILS (ご支援について: 使い道 / Special Thanks / これまでのご支援) */}
       <SupportDetailsSection />
 
-      {/* 08 / ROAD TO COMPLETION */}
+      {/* 07 / ROAD TO COMPLETION */}
       <RoadmapSection />
 
-      {/* 09 / NEWS / PRODUCTION UPDATE */}
+      {/* 08 / NEWS / PRODUCTION UPDATE */}
       <ProductionUpdateSection />
 
-      {/* 10 / CAST & STAFF */}
+      {/* 09 / CAST & STAFF */}
       <CastStaffRenewedSection />
 
-      {/* 11 / FINAL CTA */}
+      {/* 10 / FINAL CTA */}
       <FinalCTASection />
 
       {/* Contact Section */}
