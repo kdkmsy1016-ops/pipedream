@@ -22,10 +22,9 @@ export default function Navigation() {
         { label: "Message", href: "#director-message" },
         { label: "Support", href: "#support" },
         { label: "Roadmap", href: "#roadmap" },
-        { label: "Usage of Funds", href: "#your-support" },
-        { label: "Staff & Cast", href: "#cast-staff" },
         { label: "News", href: "#news" },
-        { label: "Archive", href: "#past-crowdfunding" },
+        { label: "Staff & Cast", href: "#cast-staff" },
+        { label: "Support Details", href: "#support-details" },
         { label: "Contact", href: "/contact" },
     ];
 

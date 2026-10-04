@@ -82,13 +82,26 @@ export default function CastStaffRenewedSection() {
           <h3 className="text-sm md:text-base font-bold text-foreground tracking-wide sm:tracking-widest text-center border-b border-white/10 pb-3 sm:pb-4">
             主要登場人物
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 text-center md:text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center sm:text-left">
             {CAST_MEMBERS.map((c) => (
               <div key={c.role} className="p-3 sm:p-4 bg-zinc-900/30 border border-white/5 rounded space-y-1">
                 <p className="text-sm font-bold text-accent text-auto-phrase">{c.role}</p>
                 <p className="text-xs text-foreground/60 tracking-normal sm:tracking-wider text-auto-phrase">{c.desc}</p>
               </div>
             ))}
+          </div>
+
+          <div className="text-center pt-2 border-t border-white/5">
+            <a
+              href="#cast-staff"
+              onClick={(e) => {
+                e.preventDefault();
+                alert("出演キャストおよび追加制作スタッフは、キャスティング進捗に合わせて随時発表いたします。");
+              }}
+              className="inline-flex min-h-[40px] items-center justify-center px-5 py-2 text-xs text-foreground/60 hover:text-accent font-serif tracking-widest border border-white/10 hover:border-accent/40 rounded transition-colors active:scale-95"
+            >
+              <span>CAST &amp; STAFFをすべて見る</span>
+            </a>
           </div>
         </motion.div>
 

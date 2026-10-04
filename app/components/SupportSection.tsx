@@ -70,13 +70,10 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
           />
         </div>
 
-        {/* Supplementary Footnotes */}
-        <div className="pt-2 text-center space-y-2 text-[11px] sm:text-xs text-foreground/50 tracking-normal sm:tracking-wider text-auto-phrase">
+        {/* Supplementary Footnote */}
+        <div className="pt-2 text-center text-[11px] sm:text-xs text-foreground/50 tracking-normal sm:tracking-wider text-auto-phrase">
           <p>
-            ※ご支援いただいた方で掲載をご希望される方は、本編エンドクレジットにSpecial Thanksとしてお名前を掲載させていただきます。
-          </p>
-          <p>
-            ※アカウント登録なしでもご支援いただけます。決済にはcodocのセキュアな決済システムを使用しています。
+            ※アカウント登録なしでもご支援いただけます。クレジット掲載等の詳細はページ下部「ご支援について」をご確認ください。
           </p>
         </div>
 

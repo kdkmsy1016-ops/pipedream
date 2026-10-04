@@ -58,9 +58,9 @@ export default function HeroRenewed() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 1.2, ease: "easeOut" }}
-        className="relative md:absolute md:bottom-16 lg:bottom-20 left-1/2 -translate-x-1/2 z-20 w-full max-w-4xl px-4 sm:px-6 text-center space-y-6 md:space-y-8 py-8 md:py-0"
+        className="relative md:absolute md:bottom-16 lg:bottom-20 left-1/2 -translate-x-1/2 z-20 w-full max-w-4xl px-4 sm:px-6 text-center space-y-7 sm:space-y-8 md:space-y-8 py-10 sm:py-12 md:py-0"
       >
-        <div className="space-y-3">
+        <div className="space-y-3 sm:space-y-3.5">
           <p className="text-[11px] sm:text-xs md:text-sm tracking-wider md:tracking-[0.25em] text-accent/90 font-serif uppercase break-normal">
             Feature Film Project
           </p>
@@ -69,7 +69,7 @@ export default function HeroRenewed() {
           </h1>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 sm:space-y-2.5">
           <p className="text-[clamp(1.05rem,4vw,1.5rem)] font-serif text-foreground/90 tracking-wide md:tracking-widest leading-relaxed text-balanced">
             「一本の映画を、完成させるために。」
           </p>
@@ -79,7 +79,7 @@ export default function HeroRenewed() {
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 pt-2 w-full max-w-sm sm:max-w-none mx-auto">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 md:gap-4 pt-3 sm:pt-4 md:pt-2 w-full max-w-sm sm:max-w-none mx-auto">
           <a
             href="#about"
             className="w-full sm:w-auto min-h-[48px] flex items-center justify-center px-6 sm:px-8 py-3.5 bg-zinc-900/90 hover:bg-zinc-800 text-foreground border border-white/20 hover:border-white/30 transition-all duration-300 text-xs sm:text-sm font-serif tracking-normal sm:tracking-wider md:tracking-[0.2em] rounded-sm text-center active:scale-[0.98]"

@@ -6,11 +6,9 @@ import NowMakingSection from "./components/NowMakingSection";
 import DirectorsMessageSection from "./components/DirectorsMessageSection";
 import SupportSection from "./components/SupportSection";
 import RoadmapSection from "./components/RoadmapSection";
-import YourSupportSection from "./components/YourSupportSection";
-import SpecialThanksSection from "./components/SpecialThanksSection";
-import CastStaffRenewedSection from "./components/CastStaffRenewedSection";
 import ProductionUpdateSection from "./components/ProductionUpdateSection";
-import PastCrowdfundingSection from "./components/PastCrowdfundingSection";
+import CastStaffRenewedSection from "./components/CastStaffRenewedSection";
+import SupportDetailsSection from "./components/SupportDetailsSection";
 import FinalCTASection from "./components/FinalCTASection";
 import ContactSection from "./components/ContactSection";
 import MobileSupportStickyBar from "./components/MobileSupportStickyBar";
@@ -36,22 +34,16 @@ export default function Home() {
       {/* 06 / ROAD TO COMPLETION */}
       <RoadmapSection />
 
-      {/* 07 / YOUR SUPPORT */}
-      <YourSupportSection />
-
-      {/* 08 / SPECIAL THANKS */}
-      <SpecialThanksSection />
-
-      {/* 09 / CAST & STAFF */}
-      <CastStaffRenewedSection />
-
-      {/* 10 / NEWS / PRODUCTION UPDATE */}
+      {/* 07 / NEWS / PRODUCTION UPDATE */}
       <ProductionUpdateSection />
 
-      {/* 11 / CROWDFUNDING */}
-      <PastCrowdfundingSection />
+      {/* 08 / CAST & STAFF */}
+      <CastStaffRenewedSection />
 
-      {/* 12 / FINAL CTA */}
+      {/* 09 / SUPPORT DETAILS (ご支援の使い道 / Special Thanks / これまでのご支援) */}
+      <SupportDetailsSection />
+
+      {/* 10 / FINAL CTA */}
       <FinalCTASection />
 
       {/* Contact Section */}

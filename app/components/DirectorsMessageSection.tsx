@@ -48,11 +48,11 @@ export default function DirectorsMessageSection() {
           </div>
 
           {/* Statement Essay */}
-          <div className="space-y-4 sm:space-y-5 text-foreground/85 leading-relaxed md:leading-loose text-sm md:text-base tracking-normal sm:tracking-wide text-justify sm:text-left text-auto-phrase">
+          <div className="space-y-5 sm:space-y-6 md:space-y-7 text-foreground/85 leading-relaxed md:leading-loose text-sm md:text-base tracking-normal sm:tracking-wide text-justify sm:text-left text-auto-phrase">
             <p>
               15年以上、映像の仕事に携わってきました。数々の現場で経験を重ね、信頼できる仲間や関係者の方々とのつながりにも恵まれてきました。
             </p>
-            <p className="text-foreground font-bold text-sm sm:text-base md:text-lg border-l-2 border-accent pl-3 sm:pl-4 py-1 my-3 sm:my-4 bg-accent/5">
+            <p className="text-foreground font-bold text-sm sm:text-base md:text-lg border-l-2 border-accent pl-3 sm:pl-4 py-1.5 my-3 sm:my-4 bg-accent/5">
               それでも、自分自身が監督として一本の長編映画を成立させることは、また別の挑戦でした。
             </p>
             <p>
@@ -62,7 +62,7 @@ export default function DirectorsMessageSection() {
               だからこそ、まずはこの一本を、何としても最後まで完成させる。
               完成した映画を携えて、映画祭への出品やその先の可能性へ歩みを進めていきたいと考えています。
             </p>
-            <p className="pt-2 text-foreground/70 text-xs md:text-sm">
+            <p className="pt-2 sm:pt-3 text-foreground/70 text-xs md:text-sm">
               この映画がどこまで辿り着けるのか。完成までの過程を、見守っていただけましたら幸いです。
             </p>
           </div>
