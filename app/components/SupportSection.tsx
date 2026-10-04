@@ -6,13 +6,6 @@ interface SupportSectionProps {
   id?: string;
 }
 
-const SUPPORT_TIERS = [
-  { label: "¥1,000", amount: 1000 },
-  { label: "¥3,000", amount: 3000 },
-  { label: "¥5,000", amount: 5000 },
-  { label: "¥10,000", amount: 10000 },
-];
-
 export default function SupportSection({ id = "support" }: SupportSectionProps) {
   const handleOpenCodoc = useCallback(() => {
     // codocの公式チップボタン要素（.codoc-support .codoc-btn）をクリックして公式モーダルを起動
@@ -51,50 +44,24 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
           </p>
         </div>
 
-        {/* Custom Support Amount Buttons */}
-        <div className="w-full max-w-xl mx-auto space-y-5 sm:space-y-6">
-          <div className="text-center space-y-1">
-            <p className="text-xs sm:text-sm tracking-wider md:tracking-[0.15em] text-foreground/70 font-medium">
-              ご支援金額の目安
-            </p>
-            <p className="text-[11px] sm:text-xs text-foreground/50 tracking-normal sm:tracking-wider">
-              ※金額は決済画面で自由にお選びいただけます
-            </p>
-          </div>
-
-          {/* 4 Amount Buttons: PC 4 columns, Mobile 2 columns */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
-            {SUPPORT_TIERS.map((tier) => (
-              <button
-                key={tier.label}
-                type="button"
-                onClick={handleOpenCodoc}
-                className="group min-h-[52px] sm:min-h-[58px] flex flex-col items-center justify-center py-3 px-2 bg-black/40 hover:bg-[#ffbf00]/10 border border-white/10 hover:border-[#ffbf00]/50 text-foreground hover:text-[#ffbf00] transition-all duration-200 rounded text-center active:scale-[0.98] cursor-pointer"
-              >
-                <span className="text-sm sm:text-base md:text-lg font-bold tracking-wider">
-                  {tier.label}
-                </span>
-                <span className="text-[10px] sm:text-[11px] text-foreground/50 group-hover:text-[#ffbf00]/80 tracking-normal mt-0.5">
-                  この金額を目安に支援
-                </span>
-              </button>
-            ))}
-          </div>
-
-          {/* Custom / Free Amount Button: Full width */}
+        {/* Single Support CTA */}
+        <div className="w-full max-w-md mx-auto pt-2 space-y-3 text-center">
+          <p className="text-xs sm:text-sm text-foreground/60 tracking-normal sm:tracking-wider">
+            金額は決済画面で自由にお選びいただけます。
+          </p>
           <div>
             <button
               type="button"
               onClick={handleOpenCodoc}
-              className="w-full min-h-[46px] sm:min-h-[48px] flex items-center justify-center py-3 px-4 bg-black/60 hover:bg-[#ffbf00] border border-[#ffbf00]/70 hover:border-[#ffbf00] text-[#ffbf00] hover:text-black font-bold transition-all duration-300 rounded text-xs sm:text-sm tracking-wider md:tracking-[0.18em] text-center shadow-[0_0_12px_rgba(255,191,0,0.15)] hover:shadow-[0_0_20px_rgba(255,191,0,0.4)] whitespace-nowrap active:scale-[0.98] cursor-pointer"
+              className="w-full min-h-[50px] sm:min-h-[54px] flex items-center justify-center py-3.5 px-6 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded text-sm sm:text-base tracking-wider md:tracking-[0.2em] text-center shadow-[0_0_20px_rgba(255,191,0,0.25)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] whitespace-nowrap active:scale-[0.98] cursor-pointer"
             >
-              金額を自由に決めて支援する
+              制作を支援する
             </button>
           </div>
         </div>
 
         {/* codoc チップ・ウィジェット（DOM上に保持し、公式モーダルおよびpowered-byを表示） */}
-        <div className="w-full max-w-xl mx-auto my-4">
+        <div className="w-full max-w-xl mx-auto my-2">
           <div
             id="codoc-entry-Iu1j01olgg"
             className="codoc-entries"
