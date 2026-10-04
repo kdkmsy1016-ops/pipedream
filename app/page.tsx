@@ -36,20 +36,20 @@ export default function Home() {
       {/* 05 / DIRECTOR'S MESSAGE */}
       <DirectorsMessageSection />
 
-      {/* 06 / SUPPORT */}
+      {/* 06 / SUPPORT (この映画を支援する) */}
       <SupportSection />
 
-      {/* 07 / ROAD TO COMPLETION */}
+      {/* 07 / SUPPORT DETAILS (ご支援について: 使い道 / Special Thanks / これまでのご支援) */}
+      <SupportDetailsSection />
+
+      {/* 08 / ROAD TO COMPLETION */}
       <RoadmapSection />
 
-      {/* 08 / NEWS / PRODUCTION UPDATE */}
+      {/* 09 / NEWS / PRODUCTION UPDATE */}
       <ProductionUpdateSection />
 
-      {/* 09 / CAST & STAFF */}
+      {/* 10 / CAST & STAFF */}
       <CastStaffRenewedSection />
-
-      {/* 10 / SUPPORT DETAILS (ご支援の使い道 / Special Thanks / これまでのご支援) */}
-      <SupportDetailsSection />
 
       {/* 11 / FINAL CTA */}
       <FinalCTASection />

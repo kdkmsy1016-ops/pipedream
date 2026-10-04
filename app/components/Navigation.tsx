@@ -22,10 +22,10 @@ export default function Navigation() {
         { label: "Now Making", href: "#now-making" },
         { label: "Message", href: "#director-message" },
         { label: "Support", href: "#support" },
+        { label: "Support Details", href: "#support-details" },
         { label: "Roadmap", href: "#roadmap" },
         { label: "News", href: "#news" },
         { label: "Staff & Cast", href: "#cast-staff" },
-        { label: "Support Details", href: "#support-details" },
         { label: "Contact", href: "/contact" },
     ];
 
