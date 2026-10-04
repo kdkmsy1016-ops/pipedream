@@ -1,27 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { STRIPE_PAYMENT_LINKS } from "../config/supportConfig";
-
 interface SupportSectionProps {
   id?: string;
 }
 
 export default function SupportSection({ id = "support" }: SupportSectionProps) {
-  const fixedOptions = [
-    { label: "¥1,000", url: STRIPE_PAYMENT_LINKS.yen1000 },
-    { label: "¥3,000", url: STRIPE_PAYMENT_LINKS.yen3000 },
-    { label: "¥5,000", url: STRIPE_PAYMENT_LINKS.yen5000 },
-    { label: "¥10,000", url: STRIPE_PAYMENT_LINKS.yen10000 },
-  ];
-
-  const footnotes = [
-    "一回限りの支援です",
-    "アカウント登録は不要です",
-    "匿名での支援も可能です",
-    "オンライン決済にはStripeを利用しています"
-  ];
-
   return (
     <section id={id} className="bg-background py-20 sm:py-24 md:py-36 px-4 sm:px-6 border-t border-white/5 relative overflow-hidden font-serif">
       <div className="max-w-2xl w-full mx-auto space-y-10 sm:space-y-12">
@@ -32,75 +15,40 @@ export default function SupportSection({ id = "support" }: SupportSectionProps) 
             Support The Film
           </p>
           <h2 className="text-[clamp(1.35rem,4.5vw,2rem)] font-bold tracking-wide md:tracking-[0.15em] text-foreground text-balanced">
-            この映画の完成を支える
+            この映画を支援する
           </h2>
         </div>
 
-        {/* Explanation Text First */}
-        <div className="space-y-4 text-foreground/80 leading-relaxed text-sm md:text-base tracking-normal sm:tracking-wide text-justify md:text-left text-auto-phrase">
+        {/* Explanation Text */}
+        <div className="space-y-4 text-foreground/80 leading-relaxed text-sm md:text-base tracking-normal sm:tracking-wide text-justify md:text-center max-w-xl mx-auto text-auto-phrase">
           <p>
-            『盈虚とパイプドリーム』は、現在も制作を続けています。
+            映画『盈虚とパイプドリーム』では、<br className="hidden sm:inline" />
+            作品完成までの制作支援を受け付けています。
           </p>
           <p>
-            制作は自己資金を中心に進めていますが、この映画に共感してくださった方が、制作に参加できる方法のひとつとして、常設の支援窓口を設けています。
-          </p>
-          <p>
-            ご支援は1,000円から、または自由な金額でお選びいただけます。金額によるリターンの違いはありません。
-          </p>
-          <p>
-            ご希望の方のお名前を、完成作品のエンドクレジットにSpecial Thanksとして掲載します。匿名でのご支援も可能です。
+            いただいたご支援は、撮影、出演者・スタッフ、美術、編集、整音・MA、カラーグレーディング、字幕・DCP制作、映画祭出品など、映画完成までの制作費として活用します。
           </p>
         </div>
 
-        {/* Minimal Amount Selection UI */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="bg-zinc-900/30 border border-white/5 rounded-lg p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6"
-        >
-          {/* 4 Fixed Amount Buttons */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
-            {fixedOptions.map((opt) => (
-              <a
-                key={opt.label}
-                href={opt.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group min-h-[58px] sm:min-h-[64px] flex flex-col items-center justify-center py-3 sm:py-4 px-2 sm:px-3 bg-black/50 hover:bg-[#ffbf00]/10 border border-white/10 hover:border-[#ffbf00]/50 text-foreground hover:text-[#ffbf00] transition-all duration-200 rounded text-center active:scale-[0.98]"
-              >
-                <span className="text-sm sm:text-base md:text-lg font-bold tracking-wider">
-                  {opt.label}
-                </span>
-                <span className="text-[10px] sm:text-[11px] text-foreground/60 group-hover:text-[#ffbf00]/90 tracking-normal sm:tracking-wider mt-0.5 sm:mt-1 whitespace-nowrap">
-                  この金額で支援する
-                </span>
-              </a>
-            ))}
-          </div>
+        {/* codoc チップ・ウィジェット */}
+        <div className="w-full max-w-xl mx-auto my-8 sm:my-12">
+          <div
+            id="codoc-entry-Iu1j01olgg"
+            className="codoc-entries"
+            data-without-body="1"
+            data-support-message=""
+          />
+        </div>
 
-          {/* Custom Amount Button */}
-          <div>
-            <a
-              href={STRIPE_PAYMENT_LINKS.custom}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full min-h-[48px] flex items-center justify-center py-3.5 sm:py-4 px-3 sm:px-4 bg-[#ffbf00] hover:bg-white text-zinc-950 font-bold transition-all duration-300 rounded text-xs sm:text-sm tracking-normal sm:tracking-wider md:tracking-[0.2em] text-center shadow-[0_0_15px_rgba(255,191,0,0.25)] whitespace-nowrap active:scale-[0.98]"
-            >
-              自由な金額で支援する
-            </a>
-          </div>
-
-          {/* Small Discreet Footnotes */}
-          <div className="pt-4 border-t border-white/5 space-y-1.5">
-            <div className="flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-6 gap-y-1 text-[10px] sm:text-[11px] text-foreground/50 tracking-normal sm:tracking-wider text-auto-phrase">
-              {footnotes.map((fn) => (
-                <span key={fn} className="whitespace-nowrap">・{fn}</span>
-              ))}
-            </div>
-          </div>
-        </motion.div>
+        {/* Supplementary Footnotes */}
+        <div className="pt-2 text-center space-y-2 text-[11px] sm:text-xs text-foreground/50 tracking-normal sm:tracking-wider text-auto-phrase">
+          <p>
+            ※ご支援いただいた方で掲載をご希望される方は、本編エンドクレジットにSpecial Thanksとしてお名前を掲載させていただきます。
+          </p>
+          <p>
+            ※アカウント登録なしでもご支援いただけます。決済にはcodocのセキュアな決済システムを使用しています。
+          </p>
+        </div>
 
       </div>
     </section>

@@ -2,6 +2,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Noto_Serif_JP } from "next/font/google";
+import Script from "next/script";
 import Navigation from "./components/Navigation";
 import "./globals.css";
 
@@ -104,6 +105,13 @@ export default function RootLayout({
         {children}
         <Analytics />
         <SpeedInsights />
+        <Script
+          src="https://codoc.jp/js/cms.js"
+          data-css="rainbow-square"
+          data-usercode="rZ1NB5HCuw"
+          charSet="UTF-8"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
