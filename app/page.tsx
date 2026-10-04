@@ -1,36 +1,64 @@
 "use client";
 
-import Hero from "./components/Hero";
-import StageSection from "./components/StageSection";
-import Introduction from "./components/Introduction";
-import AboutFilm from "./components/AboutFilm";
+import HeroRenewed from "./components/HeroRenewed";
 import TrailerSection from "./components/TrailerSection";
-import GallerySection from "./components/GallerySection";
-import StaffCastSection from "./components/StaffCastSection";
-import CrowdfundingSection from "./components/CrowdfundingSection";
-import NoSSR from "./components/NoSSR";
+import AboutFilmRenewed from "./components/AboutFilmRenewed";
+import DirectorsMessageSection from "./components/DirectorsMessageSection";
+import SupportSection from "./components/SupportSection";
+import SupportDetailsSection from "./components/SupportDetailsSection";
+import RoadmapSection from "./components/RoadmapSection";
+import ProductionUpdateSection from "./components/ProductionUpdateSection";
+import CastStaffRenewedSection from "./components/CastStaffRenewedSection";
+import FinalCTASection from "./components/FinalCTASection";
 import ContactSection from "./components/ContactSection";
-import FloatingStageLink from "./components/FloatingStageLink";
+import MobileSupportStickyBar from "./components/MobileSupportStickyBar";
+import TrailerModal from "./components/TrailerModal";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col bg-background text-foreground overflow-x-hidden">
-      <NoSSR>
-        <Hero />
-        <Introduction />
-        <AboutFilm />
-        <TrailerSection />
-        <GallerySection />
-        <StaffCastSection />
-        <CrowdfundingSection />
-        <StageSection />
-        <ContactSection />
-        <FloatingStageLink />
-      </NoSSR>
+      {/* Auto-display Trailer Modal (Single session popup, 800ms after load) */}
+      <TrailerModal delayMs={800} />
+
+      {/* 01 / HERO */}
+      <HeroRenewed />
+
+      {/* 02 / TRAILER */}
+      <TrailerSection />
+
+      {/* 03 / ABOUT THE FILM */}
+      <AboutFilmRenewed />
+
+      {/* 04 / DIRECTOR'S MESSAGE */}
+      <DirectorsMessageSection />
+
+      {/* 05 / NEWS / PRODUCTION UPDATE (現在進行形の最新情報を固定情報より前に配置) */}
+      <ProductionUpdateSection />
+
+      {/* 06 / SUPPORT (この映画を支援する) */}
+      <SupportSection />
+
+      {/* 07 / SUPPORT DETAILS (ご支援について: 使い道 / これまでのご支援) */}
+      <SupportDetailsSection />
+
+      {/* 08 / ROAD TO COMPLETION */}
+      <RoadmapSection />
+
+      {/* 09 / CAST & STAFF */}
+      <CastStaffRenewedSection />
+
+      {/* 10 / FINAL CTA */}
+      <FinalCTASection />
+
+      {/* Contact Section */}
+      <ContactSection />
+
+      {/* Floating Support Button */}
+      <MobileSupportStickyBar />
 
       {/* Footer */}
-      <footer className="py-6 text-center text-xs text-foreground/30 font-serif border-t border-white/5">
-        &copy; 2026 Eikyo to Pipe Dream Project
+      <footer className="py-8 text-center text-xs text-foreground/40 font-serif border-t border-white/5 space-y-2">
+        <p>&copy; 2026 映画『盈虚とパイプドリーム』製作プロジェクト</p>
       </footer>
     </main>
   );

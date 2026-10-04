@@ -168,7 +168,7 @@ export default function Hero() {
             <div className="sr-only">
                 <h1>盈虚とパイプドリーム Phases of a Pipe Dream</h1>
                 <p>私たちは『不要不急』の中で、夢を見た。</p>
-                <p>脚本: 福井 将真 / 監督: 久高 将也</p>
+                <p>監督・脚本・編集: 久高 将也</p>
                 <p>映画プロジェクト始動</p>
             </div>
 

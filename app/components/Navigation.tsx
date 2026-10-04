@@ -17,14 +17,15 @@ export default function Navigation() {
 
     const menuItems = [
         { label: "Top", href: "#hero" },
-        { label: "Introduction", href: "#introduction" },
-        { label: "About Film", href: "#about-film" },
         { label: "Trailer", href: "#trailer" },
-        { label: "Gallery", href: "#gallery" },
-        { label: "Staff & Cast", href: "#staff" },
-        { label: "Rewards", href: "#rewards" },
-        { label: "Stage Archive", href: "#stage-archive" },
-        { label: "Contact", href: "#contact" },
+        { label: "About Film", href: "#about" },
+        { label: "Message", href: "#director-message" },
+        { label: "News", href: "#news" },
+        { label: "Support", href: "#support" },
+        { label: "Support Details", href: "#support-details" },
+        { label: "Roadmap", href: "#roadmap" },
+        { label: "Staff & Cast", href: "#cast-staff" },
+        { label: "Contact", href: "/contact" },
     ];
 
     return (
@@ -57,32 +58,47 @@ export default function Navigation() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="fixed inset-0 z-40 bg-black flex items-center justify-center"
+                        className="fixed inset-0 z-40 bg-black/95 backdrop-blur-md flex items-center justify-center overflow-y-auto py-16 px-4"
                     >
-                        <nav className="flex flex-col items-center gap-8 font-serif text-white">
+                        <nav className="flex flex-col items-center gap-4 sm:gap-6 font-serif text-white max-h-full my-auto py-4">
                             {menuItems.map((item, index) => (
                                 <motion.div
                                     key={item.label}
-                                    initial={{ opacity: 0, y: 20 }}
+                                    initial={{ opacity: 0, y: 15 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{
-                                        delay: 0.2 + index * 0.1,
-                                        duration: 0.8,
+                                        delay: 0.1 + index * 0.04,
+                                        duration: 0.4,
                                         ease: "easeOut",
                                     }}
                                 >
-                                    <a
-                                        href={item.href}
-                                        onClick={closeMenu}
-                                        className="text-2xl lg:text-4xl tracking-[0.2em] relative group overflow-hidden block"
-                                    >
-                                        <span className="block transition-transform duration-500 group-hover:-translate-y-full">
-                                            {item.label}
-                                        </span>
-                                        <span className="absolute top-0 left-0 block translate-y-full transition-transform duration-500 group-hover:translate-y-0 text-gray-400">
-                                            {item.label}
-                                        </span>
-                                    </a>
+                                    {item.href.startsWith("/") ? (
+                                        <Link
+                                            href={item.href}
+                                            onClick={closeMenu}
+                                            className="text-lg sm:text-xl lg:text-3xl tracking-wider sm:tracking-[0.15em] lg:tracking-[0.2em] relative group overflow-hidden block py-1"
+                                        >
+                                            <span className="block transition-transform duration-500 group-hover:-translate-y-full">
+                                                {item.label}
+                                            </span>
+                                            <span className="absolute top-0 left-0 block translate-y-full transition-transform duration-500 group-hover:translate-y-0 text-accent">
+                                                {item.label}
+                                            </span>
+                                        </Link>
+                                    ) : (
+                                        <a
+                                            href={item.href}
+                                            onClick={closeMenu}
+                                            className="text-lg sm:text-xl lg:text-3xl tracking-wider sm:tracking-[0.15em] lg:tracking-[0.2em] relative group overflow-hidden block py-1"
+                                        >
+                                            <span className="block transition-transform duration-500 group-hover:-translate-y-full">
+                                                {item.label}
+                                            </span>
+                                            <span className="absolute top-0 left-0 block translate-y-full transition-transform duration-500 group-hover:translate-y-0 text-accent">
+                                                {item.label}
+                                            </span>
+                                        </a>
+                                    )}
                                 </motion.div>
                             ))}
                         </nav>
