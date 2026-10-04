@@ -35,13 +35,13 @@ const CURRENT_PRODUCTION_PHASES = [
   }
 ];
 
-const WORKFLOW_STEPS = [
-  { name: "企画・脚本", done: true },
-  { name: "ロケハン・実測", done: true },
-  { name: "キャスティング", current: true },
-  { name: "美術・小道具", current: true },
-  { name: "テスト撮影・同録設計", current: true },
-  { name: "本撮影準備", current: true },
+const ONGOING_ITEMS = [
+  { label: "SCRIPT", desc: "脚本・カット割り" },
+  { label: "LOCATION", desc: "ロケハン・実測" },
+  { label: "CASTING", desc: "キャスティング" },
+  { label: "ART / PROPS", desc: "美術・小道具" },
+  { label: "CAMERA / LIGHTING", desc: "撮影機材・照明" },
+  { label: "SOUND", desc: "同録設計" },
 ];
 
 export default function NowMakingSection() {
@@ -78,7 +78,7 @@ export default function NowMakingSection() {
                 Current Production Phase
               </span>
               <h3 className="text-base sm:text-xl md:text-2xl font-bold font-serif text-foreground tracking-wide sm:tracking-widest text-auto-phrase">
-                PRE-PRODUCTION<span className="text-xs sm:text-sm md:text-base font-normal block sm:inline sm:ml-2 text-foreground/80">（撮影準備・プリプロダクション）</span>
+                PRE-PRODUCTION<span className="text-xs sm:text-sm md:text-base font-normal block sm:inline sm:ml-2 text-foreground/80">（撮影準備・プリプロダクション進行中）</span>
               </h3>
             </div>
             <div className="text-xs font-serif text-foreground/60 tracking-normal sm:tracking-wider text-auto-phrase">
@@ -86,26 +86,24 @@ export default function NowMakingSection() {
             </div>
           </div>
 
-          {/* Workflow Badges */}
+          {/* Current Ongoing Items */}
           <div className="space-y-2.5 sm:space-y-3">
             <span className="text-[10px] text-foreground/50 tracking-wider sm:tracking-widest uppercase font-serif block">
-              全体の工程の流れ
+              現在進行中の準備項目
             </span>
-            <div className="flex flex-wrap gap-1.5 sm:gap-2">
-              {WORKFLOW_STEPS.map((step) => (
-                <span
-                  key={step.name}
-                  className={`text-[11px] sm:text-xs font-serif px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-sm border tracking-normal sm:tracking-wider transition-colors whitespace-nowrap ${
-                    step.current
-                      ? "bg-accent/15 border-accent text-accent font-bold"
-                      : step.done
-                      ? "bg-zinc-900 border-white/10 text-foreground/80"
-                      : "bg-black/30 border-white/5 text-foreground/40"
-                  }`}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+              {ONGOING_ITEMS.map((item) => (
+                <div
+                  key={item.label}
+                  className="bg-zinc-900/60 border border-accent/20 rounded p-2.5 text-center flex flex-col justify-center"
                 >
-                  {step.done ? "✓ " : step.current ? "● " : "○ "}
-                  {step.name}
-                </span>
+                  <span className="text-[10px] font-mono font-bold text-accent tracking-wider block">
+                    ● {item.label}
+                  </span>
+                  <span className="text-[11px] text-foreground/80 font-serif mt-0.5 whitespace-nowrap">
+                    {item.desc}
+                  </span>
+                </div>
               ))}
             </div>
           </div>

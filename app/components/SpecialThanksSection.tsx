@@ -35,20 +35,23 @@ export default function SpecialThanksSection() {
 
           <div className="space-y-3.5 sm:space-y-4 text-foreground/85 leading-relaxed md:leading-loose text-xs sm:text-sm tracking-normal sm:tracking-wide text-auto-phrase">
             <p>
-              本支援には、物品や劇場鑑賞券などのリターンは設けておりません。
+              本支援には、物品や鑑賞券などのリターンは設けていません。
             </p>
             <p>
-              ご支援いただいた方で掲載をご希望される方は、完成する映画『盈虚とパイプドリーム』本編のエンドクレジットに「Special Thanks」としてお名前を刻ませていただきます。
+              ご支援いただいた方で掲載をご希望される方は、映画『盈虚とパイプドリーム』本編のエンドクレジットに「Special Thanks」としてお名前を掲載します。
+            </p>
+            <p>
+              掲載をご希望の場合は、ご支援時のメッセージ欄に掲載名をご記入ください。
             </p>
             <p className="text-foreground/70">
-              ※掲載をご希望の場合は、ご支援時のメッセージ欄に掲載名をご記入ください。掲載を希望されない場合は、無記名でのご支援も可能です。
+              掲載を希望されない場合は、匿名でのご支援も可能です。
             </p>
           </div>
 
           <div className="p-3.5 sm:p-4 bg-black/40 rounded border border-white/5 flex items-start gap-2.5 sm:gap-3 text-xs text-foreground/70 tracking-normal sm:tracking-wider text-auto-phrase">
             <ShieldCheck className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
             <span>
-              ご支援いただいた金額にかかわらず、掲載をご希望のお名前はすべて同等にSpecial Thanksとして掲載します。
+              ご支援いただいた金額にかかわらず、掲載をご希望のお名前はすべて同等に掲載します。
             </span>
           </div>
         </motion.div>
