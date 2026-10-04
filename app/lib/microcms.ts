@@ -19,6 +19,7 @@ export interface NewsArticle {
   id: string;
   title: string;
   content: string;
+  socialText?: string | null;
   category?: NewsCategory | null;
   eyecatch?: MicroCMSImage | null;
   createdAt?: string;

@@ -3,10 +3,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
-import { getNewsDetail, getNewsList, formatDate } from "@/app/lib/microcms";
+import { getNewsDetail, formatDate, extractExcerpt } from "@/app/lib/microcms";
 import NewsCodocSection from "@/app/components/NewsCodocSection";
+import NewsShareSection from "@/app/components/NewsShareSection";
 
 export const revalidate = 60; // 60秒ISR
+
+const SITE_ORIGIN = "https://www.eikyo-to-pipedream.com";
+const DEFAULT_OG_IMAGE = "https://www.eikyo-to-pipedream.com/ogp-image.png";
 
 interface NewsDetailPageProps {
   params: Promise<{ id: string }>;
@@ -21,12 +25,38 @@ export async function generateMetadata({ params }: NewsDetailPageProps): Promise
     };
   }
 
+  const canonicalUrl = `${SITE_ORIGIN}/news/${article.id}`;
+  const description = extractExcerpt(article.content, 140) || article.title;
+  const imageUrl = article.eyecatch?.url || DEFAULT_OG_IMAGE;
+
   return {
     title: `${article.title} | 映画『盈虚とパイプドリーム』制作NEWS`,
-    description: article.title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
-      title: `${article.title} | 映画『盈虚とパイプドリーム』`,
-      images: article.eyecatch?.url ? [article.eyecatch.url] : undefined,
+      title: article.title,
+      description,
+      url: canonicalUrl,
+      type: "article",
+      siteName: "映画『盈虚とパイプドリーム』公式サイト",
+      images: [
+        {
+          url: imageUrl,
+          width: article.eyecatch?.width || 1200,
+          height: article.eyecatch?.height || 630,
+          alt: article.title,
+        },
+      ],
+      publishedTime: article.publishedAt || article.createdAt,
+      modifiedTime: article.updatedAt || article.revisedAt,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description,
+      images: [imageUrl],
     },
   };
 }
@@ -39,11 +69,49 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     notFound();
   }
 
+  const canonicalUrl = `${SITE_ORIGIN}/news/${article.id}`;
   const displayDate = formatDate(article.publishedAt || article.createdAt);
   const categoryName = article.category?.name || "お知らせ";
+  const articleImageUrl = article.eyecatch?.url || DEFAULT_OG_IMAGE;
+
+  // 構造化データ (NewsArticle / Article JSON-LD)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    description: extractExcerpt(article.content, 140),
+    url: canonicalUrl,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonicalUrl,
+    },
+    image: [articleImageUrl],
+    datePublished: article.publishedAt || article.createdAt,
+    dateModified: article.updatedAt || article.revisedAt || article.publishedAt || article.createdAt,
+    author: {
+      "@type": "Organization",
+      name: "映画『盈虚とパイプドリーム』製作プロジェクト",
+      url: SITE_ORIGIN,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "映画『盈虚とパイプドリーム』",
+      url: SITE_ORIGIN,
+      logo: {
+        "@type": "ImageObject",
+        url: DEFAULT_OG_IMAGE,
+      },
+    },
+  };
 
   return (
     <main className="min-h-screen bg-background text-foreground py-20 sm:py-28 md:py-36 px-4 sm:px-6 font-serif overflow-x-hidden">
+      {/* 構造化データ JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <article className="max-w-3xl w-full mx-auto space-y-10 sm:space-y-14">
         
         {/* Navigation Back Link */}
@@ -103,7 +171,14 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
 
-        {/* Common codoc chip & Support Section (Automatically appended right after article content) */}
+        {/* 1. SNS Share Section (Placed right after article content, before codoc) */}
+        <NewsShareSection
+          title={article.title}
+          url={canonicalUrl}
+          socialText={article.socialText}
+        />
+
+        {/* 2. Common codoc chip & Support Section (Placed after SNS share) */}
         <NewsCodocSection />
 
         {/* Back Link Button */}
