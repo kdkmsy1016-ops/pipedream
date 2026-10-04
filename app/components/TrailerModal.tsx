@@ -3,8 +3,8 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Play } from "lucide-react";
-import Image from "next/image";
 import { TRAILER_CONFIG } from "../config/trailerConfig";
+import TrailerThumbnail from "./TrailerThumbnail";
 
 const SESSION_STORAGE_KEY = "has_seen_trailer_modal_session";
 
@@ -192,14 +192,12 @@ export default function TrailerModal({ delayMs = 800 }: TrailerModalProps) {
                   className="relative w-full h-full cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-accent/50"
                   aria-label="予告編動画を再生する"
                 >
-                  {/* Custom Thumbnail */}
-                  <Image
-                    src={TRAILER_CONFIG.thumbnailUrl}
+                  {/* High-Resolution Thumbnail with Fallback */}
+                  <TrailerThumbnail
+                    videoId={TRAILER_CONFIG.videoId}
                     alt={TRAILER_CONFIG.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 896px, 896px"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 1024px, 1280px"
                     className="object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-90 group-hover:brightness-100"
-                    priority={false}
                   />
 
                   {/* Dark gradient overlay */}

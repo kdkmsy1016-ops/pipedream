@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
-import Image from "next/image";
 import { TRAILER_CONFIG } from "../config/trailerConfig";
+import TrailerThumbnail from "./TrailerThumbnail";
 
 interface TrailerSectionProps {
   videoId?: string;
@@ -63,14 +63,12 @@ export default function TrailerSection({ videoId = TRAILER_CONFIG.videoId }: Tra
                 className="relative w-full h-full cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-accent/50"
                 aria-label="予告編動画を再生する"
               >
-                {/* Custom Thumbnail */}
-                <Image
-                  src="/images/trailer-thumb.jpg"
+                {/* High-Resolution Thumbnail with Fallback */}
+                <TrailerThumbnail
+                  videoId={videoId}
                   alt="映画『盈虚とパイプドリーム』特報サムネイル"
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 896px, 896px"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 1024px, 1280px"
                   className="object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-90 group-hover:brightness-100"
-                  priority={false}
                 />
 
                 {/* Subtle dark gradient overlay to harmonize with film aesthetics */}
