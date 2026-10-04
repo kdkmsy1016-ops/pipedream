@@ -9,12 +9,28 @@ interface NewsCodocSectionProps {
 export default function NewsCodocSection({ className = "" }: NewsCodocSectionProps) {
   // 1. codoc公式モーダルを開くハンドラ
   const handleOpenCodoc = useCallback(() => {
-    // 公式チップボタンをクリック
+    // もしまだマウントされていなければdispatches.entriesを実行
+    const w = typeof window !== "undefined" ? (window as unknown as { codocCMS?: { dispatches?: { entries?: () => void } } }) : undefined;
     const codocBtn = document.querySelector<HTMLElement>(".codoc-support .codoc-btn");
     if (codocBtn) {
       codocBtn.click();
       return;
     }
+
+    if (w?.codocCMS?.dispatches?.entries) {
+      w.codocCMS.dispatches.entries();
+      setTimeout(() => {
+        const retryBtn = document.querySelector<HTMLElement>(".codoc-support .codoc-btn");
+        if (retryBtn) {
+          retryBtn.click();
+        } else {
+          const altBtn = document.querySelector<HTMLElement>("#codoc-entry-Iu1j01olgg a, .codoc-btn");
+          if (altBtn) altBtn.click();
+        }
+      }, 50);
+      return;
+    }
+
     // 未レンダリング時のフォールバック
     const altBtn = document.querySelector<HTMLElement>("#codoc-entry-Iu1j01olgg a, .codoc-btn");
     if (altBtn) {
@@ -22,16 +38,34 @@ export default function NewsCodocSection({ className = "" }: NewsCodocSectionPro
     }
   }, []);
 
-  // 2. Next.jsのSPA遷移時にもcodocが確実に初期化されるよう、グローバルcodocオブジェクトがあれば再評価
+  // 2. Next.jsのSPA遷移時にもcodocが確実に初期化されるよう、マウント時にcodocCMS.dispatches.entries()を実行
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const w = window as unknown as { codoc?: { init?: () => void; render?: () => void } };
-      if (w.codoc?.init) {
-        w.codoc.init();
-      } else if (w.codoc?.render) {
-        w.codoc.render();
+    if (typeof window === "undefined") return;
+
+    const initCodoc = () => {
+      const w = window as unknown as {
+        codocCMS?: {
+          dispatches?: { entries?: () => void };
+          ready?: number;
+        };
+      };
+
+      if (w.codocCMS?.dispatches?.entries) {
+        w.codocCMS.dispatches.entries();
       }
-    }
+    };
+
+    // 即座に実行
+    initCodoc();
+
+    // スクリプト遅延ロード時用（初回直接訪問時など）のタイマーチェック
+    const timer = setTimeout(initCodoc, 300);
+    const timer2 = setTimeout(initCodoc, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(timer2);
+    };
   }, []);
 
   return (
