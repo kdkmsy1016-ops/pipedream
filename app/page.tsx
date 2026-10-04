@@ -13,10 +13,14 @@ import SupportDetailsSection from "./components/SupportDetailsSection";
 import FinalCTASection from "./components/FinalCTASection";
 import ContactSection from "./components/ContactSection";
 import MobileSupportStickyBar from "./components/MobileSupportStickyBar";
+import TrailerModal from "./components/TrailerModal";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col bg-background text-foreground overflow-x-hidden">
+      {/* Auto-display Trailer Modal (Single session popup, 800ms after load) */}
+      <TrailerModal delayMs={800} />
+
       {/* 01 / HERO */}
       <HeroRenewed />
 

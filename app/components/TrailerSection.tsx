@@ -4,12 +4,13 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import Image from "next/image";
+import { TRAILER_CONFIG } from "../config/trailerConfig";
 
 interface TrailerSectionProps {
   videoId?: string;
 }
 
-export default function TrailerSection({ videoId = "nbCht1onqWU" }: TrailerSectionProps) {
+export default function TrailerSection({ videoId = TRAILER_CONFIG.videoId }: TrailerSectionProps) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const handlePlay = () => {
