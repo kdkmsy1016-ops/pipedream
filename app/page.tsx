@@ -11,6 +11,7 @@ import ProductionUpdateSection from "./components/ProductionUpdateSection";
 import CastStaffRenewedSection from "./components/CastStaffRenewedSection";
 import FinalCTASection from "./components/FinalCTASection";
 import ContactSection from "./components/ContactSection";
+import MobileSupportStickyBar from "./components/MobileSupportStickyBar";
 import TrailerModal from "./components/TrailerModal";
 
 export default function Home() {
@@ -51,6 +52,9 @@ export default function Home() {
 
       {/* Contact Section */}
       <ContactSection />
+
+      {/* Floating Support Button */}
+      <MobileSupportStickyBar />
 
       {/* Footer */}
       <footer className="py-8 text-center text-xs text-foreground/40 font-serif border-t border-white/5 space-y-2">
