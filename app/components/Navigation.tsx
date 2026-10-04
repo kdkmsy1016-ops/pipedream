@@ -17,6 +17,7 @@ export default function Navigation() {
 
     const menuItems = [
         { label: "Top", href: "#hero" },
+        { label: "Trailer", href: "#trailer" },
         { label: "About Film", href: "#about" },
         { label: "Now Making", href: "#now-making" },
         { label: "Message", href: "#director-message" },

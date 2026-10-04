@@ -1,6 +1,7 @@
 "use client";
 
 import HeroRenewed from "./components/HeroRenewed";
+import TrailerSection from "./components/TrailerSection";
 import AboutFilmRenewed from "./components/AboutFilmRenewed";
 import NowMakingSection from "./components/NowMakingSection";
 import DirectorsMessageSection from "./components/DirectorsMessageSection";
@@ -19,31 +20,34 @@ export default function Home() {
       {/* 01 / HERO */}
       <HeroRenewed />
 
-      {/* 02 / ABOUT THE FILM */}
+      {/* 02 / TRAILER */}
+      <TrailerSection />
+
+      {/* 03 / ABOUT THE FILM */}
       <AboutFilmRenewed />
 
-      {/* 03 / NOW MAKING */}
+      {/* 04 / NOW MAKING */}
       <NowMakingSection />
 
-      {/* 04 / DIRECTOR'S MESSAGE */}
+      {/* 05 / DIRECTOR'S MESSAGE */}
       <DirectorsMessageSection />
 
-      {/* 05 / SUPPORT */}
+      {/* 06 / SUPPORT */}
       <SupportSection />
 
-      {/* 06 / ROAD TO COMPLETION */}
+      {/* 07 / ROAD TO COMPLETION */}
       <RoadmapSection />
 
-      {/* 07 / NEWS / PRODUCTION UPDATE */}
+      {/* 08 / NEWS / PRODUCTION UPDATE */}
       <ProductionUpdateSection />
 
-      {/* 08 / CAST & STAFF */}
+      {/* 09 / CAST & STAFF */}
       <CastStaffRenewedSection />
 
-      {/* 09 / SUPPORT DETAILS (ご支援の使い道 / Special Thanks / これまでのご支援) */}
+      {/* 10 / SUPPORT DETAILS (ご支援の使い道 / Special Thanks / これまでのご支援) */}
       <SupportDetailsSection />
 
-      {/* 10 / FINAL CTA */}
+      {/* 11 / FINAL CTA */}
       <FinalCTASection />
 
       {/* Contact Section */}
