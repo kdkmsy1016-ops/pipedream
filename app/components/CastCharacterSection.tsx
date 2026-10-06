@@ -85,24 +85,26 @@ export default function CastCharacterSection() {
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
                 className="bg-zinc-900/45 border border-white/10 hover:border-accent/40 rounded-lg p-5 sm:p-6 transition-all duration-300 flex flex-col justify-between shadow-lg space-y-4 group"
               >
-                {/* 1. キャスト写真 */}
-                <div className="relative w-full aspect-[4/5] sm:aspect-[3/4] max-h-[360px] rounded overflow-hidden bg-black/60 border border-white/10 shadow-inner flex items-center justify-center">
-                  {item.image ? (
-                    <Image
-                      src={item.image}
-                      alt={`${item.actorName} (${item.role})`}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 420px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex flex-col items-center justify-center gap-2 p-6 text-center text-foreground/35 select-none">
-                      <User className="w-12 h-12 stroke-[1.2] text-accent/40" />
-                      <span className="text-[11px] font-mono tracking-widest uppercase">
-                        CAST PHOTO
-                      </span>
-                    </div>
-                  )}
+                {/* 1. キャスト写真 (丸囲い・監督より一回り大きめ) */}
+                <div className="flex justify-center sm:justify-start pt-1">
+                  <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-black/60 border-2 border-zinc-750 border-white/20 shadow-md flex items-center justify-center flex-shrink-0 group-hover:border-accent/50 transition-colors duration-300">
+                    {item.image ? (
+                      <Image
+                        src={item.image}
+                        alt={`${item.actorName} (${item.role})`}
+                        fill
+                        sizes="(max-width: 640px) 96px, 112px"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center gap-1 text-center text-foreground/35 select-none">
+                        <User className="w-8 h-8 sm:w-9 sm:h-9 stroke-[1.2] text-accent/40" />
+                        <span className="text-[9px] font-mono tracking-wider uppercase">
+                          PHOTO
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="space-y-4 flex-1 flex flex-col justify-between">
