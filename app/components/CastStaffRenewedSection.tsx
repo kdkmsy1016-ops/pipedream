@@ -295,7 +295,7 @@ export default function CastStaffRenewedSection() {
           {/* Cast notice */}
           <div className="text-center pt-4 border-t border-white/5">
             <p className="text-xs text-foreground/50 tracking-normal sm:tracking-wider">
-              ※ 出演キャストおよび追加制作スタッフは、キャスティング進捗に合わせて随時発表いたします。
+              ※ 出演キャスト本人の紹介は下記「出演者プロフィール（CAST PROFILE）」をご覧ください。
             </p>
           </div>
         </motion.div>

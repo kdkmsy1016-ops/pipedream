@@ -25,7 +25,8 @@ export default function Navigation() {
         { label: "Support", href: "#support" },
         { label: "Support Details", href: "#support-details" },
         { label: "Roadmap", href: "#roadmap" },
-        { label: "Staff & Cast", href: "#cast-staff" },
+        { label: "Characters", href: "#cast-staff" },
+        { label: "Cast Profile", href: "#cast-profile" },
         { label: "Contact", href: "/contact" },
     ];
 

@@ -9,6 +9,7 @@ import SupportDetailsSection from "./components/SupportDetailsSection";
 import RoadmapSection from "./components/RoadmapSection";
 import ProductionUpdateSection from "./components/ProductionUpdateSection";
 import CastStaffRenewedSection from "./components/CastStaffRenewedSection";
+import CastProfileSection from "./components/CastProfileSection";
 import FinalCTASection from "./components/FinalCTASection";
 import ContactSection from "./components/ContactSection";
 import MobileSupportStickyBar from "./components/MobileSupportStickyBar";
@@ -48,7 +49,10 @@ export default function Home() {
       {/* 09 / CAST & STAFF */}
       <CastStaffRenewedSection />
 
-      {/* 10 / FINAL CTA */}
+      {/* 10 / CAST PROFILE (出演者プロフィール) */}
+      <CastProfileSection />
+
+      {/* 11 / FINAL CTA */}
       <FinalCTASection />
 
       {/* Contact Section */}
