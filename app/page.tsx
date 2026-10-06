@@ -13,6 +13,7 @@ import FinalCTASection from "./components/FinalCTASection";
 import ContactSection from "./components/ContactSection";
 import MobileSupportStickyBar from "./components/MobileSupportStickyBar";
 import TrailerModal from "./components/TrailerModal";
+import Footer from "./components/Footer";
 
 export default function Home() {
   return (
@@ -57,9 +58,7 @@ export default function Home() {
       <MobileSupportStickyBar />
 
       {/* Footer */}
-      <footer className="py-8 text-center text-xs text-foreground/40 font-serif border-t border-white/5 space-y-2">
-        <p>&copy; 2026 映画『盈虚とパイプドリーム』製作プロジェクト</p>
-      </footer>
+      <Footer />
     </main>
   );
 }

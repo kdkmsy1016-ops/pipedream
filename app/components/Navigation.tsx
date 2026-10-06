@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { OFFICIAL_SOCIAL_LINKS } from "../config/socialConfig";
 
 export default function Navigation() {
     const [isOpen, setIsOpen] = useState(false);
@@ -101,6 +102,30 @@ export default function Navigation() {
                                     )}
                                 </motion.div>
                             ))}
+
+                            {/* Official Social Link */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{
+                                    delay: 0.1 + menuItems.length * 0.04,
+                                    duration: 0.4,
+                                    ease: "easeOut",
+                                }}
+                                className="pt-4 border-t border-white/10 w-full text-center"
+                            >
+                                <a
+                                    href={OFFICIAL_SOCIAL_LINKS.x.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 hover:border-accent/40 bg-zinc-900/40 hover:bg-zinc-800 text-xs sm:text-sm text-foreground/80 hover:text-white transition-all active:scale-95 font-sans"
+                                >
+                                    <svg className="w-3.5 h-3.5 fill-current text-accent" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                    </svg>
+                                    <span>公式X @eikyo_pipedream</span>
+                                </a>
+                            </motion.div>
                         </nav>
                     </motion.div>
                 )}

@@ -4,12 +4,20 @@ import Image from "next/image";
 import { ArrowLeft, Newspaper } from "lucide-react";
 import { getNewsList, extractExcerpt, formatDate } from "@/app/lib/microcms";
 import NewsCodocSection from "@/app/components/NewsCodocSection";
+import Footer from "@/app/components/Footer";
 
 export const revalidate = 60; // 60秒ISR
 
 export const metadata: Metadata = {
   title: "制作NEWS一覧",
   description: "映画『盈虚とパイプドリーム』の最新制作ニュース、撮影日誌、お知らせの一覧です。",
+  twitter: {
+    card: "summary_large_image",
+    title: "制作NEWS一覧 | 映画『盈虚とパイプドリーム』",
+    description: "映画『盈虚とパイプドリーム』の最新制作ニュース、撮影日誌、お知らせの一覧です。",
+    site: "@eikyo_pipedream",
+    creator: "@eikyo_pipedream",
+  },
 };
 
 export default async function NewsListPage() {
@@ -109,10 +117,8 @@ export default async function NewsListPage() {
         {/* Global Support CTA at bottom */}
         <NewsCodocSection />
 
-        {/* Footer info */}
-        <div className="pt-8 text-center text-xs text-foreground/40 border-t border-white/5">
-          <p>&copy; 2026 映画『盈虚とパイプドリーム』製作プロジェクト</p>
-        </div>
+        {/* Footer */}
+        <Footer className="pt-8" />
       </div>
     </main>
   );

@@ -6,6 +6,7 @@ import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import { getNewsDetail, formatDate, extractExcerpt } from "@/app/lib/microcms";
 import NewsCodocSection from "@/app/components/NewsCodocSection";
 import NewsShareSection from "@/app/components/NewsShareSection";
+import Footer from "@/app/components/Footer";
 
 export const revalidate = 60; // 60秒ISR
 
@@ -57,6 +58,8 @@ export async function generateMetadata({ params }: NewsDetailPageProps): Promise
       title: article.title,
       description,
       images: [imageUrl],
+      site: "@eikyo_pipedream",
+      creator: "@eikyo_pipedream",
     },
   };
 }
@@ -199,9 +202,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         </div>
 
         {/* Footer */}
-        <footer className="pt-8 text-center text-xs text-foreground/40 border-t border-white/5">
-          <p>&copy; 2026 映画『盈虚とパイプドリーム』製作プロジェクト</p>
-        </footer>
+        <Footer className="pt-8" />
       </article>
     </main>
   );

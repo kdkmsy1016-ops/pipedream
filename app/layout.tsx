@@ -68,6 +68,8 @@ export function generateMetadata(): Metadata {
       title: '映画『盈虚とパイプドリーム』公式サイト',
       description: '稲城市に実在するスナック『さくらみち』を舞台に製作される自主制作長編映画『盈虚とパイプドリーム』公式サイト。作品概要、現在の制作進行状況、制作記録、制作支援に関する最新情報をお届けします。',
       images: [ogImageUrl],
+      site: '@eikyo_pipedream',
+      creator: '@eikyo_pipedream',
     },
   };
 }

@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Newspaper } from "lucide-react";
 import { NewsArticle, extractExcerpt, formatDate } from "../lib/microcms";
+import { OFFICIAL_SOCIAL_LINKS } from "../config/socialConfig";
 
 interface ProductionUpdateSectionProps {
   initialNews?: NewsArticle[] | null;
@@ -154,15 +155,26 @@ export default function ProductionUpdateSection({ initialNews = null }: Producti
           </div>
         )}
 
-        {/* View All News CTA Button */}
-        <div className="text-center pt-2">
+        {/* View All News & Official X CTA Buttons */}
+        <div className="text-center pt-2 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-sm sm:max-w-none mx-auto">
           <Link
             href="/news"
-            className="inline-flex min-h-[44px] items-center justify-center gap-2 px-6 sm:px-8 py-3 bg-zinc-900 hover:bg-zinc-800 text-foreground/80 hover:text-white border border-white/10 transition-all text-xs sm:text-sm font-serif tracking-normal sm:tracking-widest rounded-sm active:scale-[0.98]"
+            className="inline-flex min-h-[44px] items-center justify-center gap-2 px-6 sm:px-8 py-3 bg-zinc-900 hover:bg-zinc-800 text-foreground/80 hover:text-white border border-white/10 transition-all text-xs sm:text-sm font-serif tracking-normal sm:tracking-widest rounded-sm active:scale-[0.98] w-full sm:w-auto"
           >
             <Newspaper className="w-3.5 h-3.5 text-accent/80 flex-shrink-0" />
             <span>制作NEWSをすべて見る</span>
           </Link>
+          <a
+            href={OFFICIAL_SOCIAL_LINKS.x.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-[44px] items-center justify-center gap-2 px-5 sm:px-7 py-3 bg-zinc-900/60 hover:bg-zinc-800 text-foreground/80 hover:text-white border border-white/10 hover:border-accent/40 transition-all text-xs sm:text-sm font-sans tracking-wide rounded-sm active:scale-[0.98] w-full sm:w-auto"
+          >
+            <svg className="w-3.5 h-3.5 fill-current text-accent" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            <span>公式X @eikyo_pipedream</span>
+          </a>
         </div>
       </div>
     </section>

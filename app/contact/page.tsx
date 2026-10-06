@@ -5,6 +5,7 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useForm, ValidationError } from "@formspree/react";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
+import { OFFICIAL_SOCIAL_LINKS } from "../config/socialConfig";
 
 // === Formspree Configuration ===
 const FORMSPREE_FORM_ID = "myznwbdy";
@@ -77,7 +78,8 @@ export default function ContactPage() {
                 >
                     <h1 className="text-3xl md:text-4xl tracking-[0.2em] text-[#ffbf00]">CONTACT</h1>
                     <p className="text-gray-400 text-sm md:text-base leading-loose tracking-wide">
-                        公演に関するお問い合わせ、<br className="md:hidden" />取材依頼などはこちらからお願いいたします。
+                        映画に関するお問い合わせ、取材依頼などはこちらからお願いいたします。<br />
+                        公式X（<a href={OFFICIAL_SOCIAL_LINKS.x.url} target="_blank" rel="noopener noreferrer" className="text-[#ffbf00] hover:underline underline-offset-4">{OFFICIAL_SOCIAL_LINKS.x.handle}</a>）のDMでも受け付けています。
                     </p>
                 </motion.header>
 

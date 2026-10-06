@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Share2, Check } from "lucide-react";
+import { OFFICIAL_SOCIAL_LINKS } from "../config/socialConfig";
 
 interface NewsShareSectionProps {
   title: string;
@@ -28,10 +29,10 @@ export default function NewsShareSection({
   // 1. socialText があればそれを優先、なければタイトルを使用
   const baseText = (socialText && socialText.trim().length > 0) ? socialText.trim() : title;
 
-  // X (旧Twitter) シェアURL: テキスト + ハッシュタグ(#盈虚とパイプドリーム) + URL
+  // X (旧Twitter) シェアURL: テキスト + ハッシュタグ(#盈虚とパイプドリーム) + via + URL
   const xShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
     baseText
-  )}&url=${encodeURIComponent(url)}&hashtags=${encodeURIComponent("盈虚とパイプドリーム")}`;
+  )}&url=${encodeURIComponent(url)}&hashtags=${encodeURIComponent("盈虚とパイプドリーム")}&via=${encodeURIComponent(OFFICIAL_SOCIAL_LINKS.x.username)}`;
 
   // Facebook シェアURL: OGPを取得させるためURLを渡す
   const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
@@ -168,6 +169,23 @@ export default function NewsShareSection({
               <span>URLコピー</span>
             )}
           </button>
+        </div>
+
+        {/* 公式X案内 */}
+        <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-foreground/50 border-t border-white/5 font-sans">
+          <span>最新の制作情報は公式Xでも発信中</span>
+          <a
+            href={OFFICIAL_SOCIAL_LINKS.x.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`公式X ${OFFICIAL_SOCIAL_LINKS.x.handle}`}
+            className="inline-flex items-center gap-1.5 text-accent hover:underline active:scale-95 transition-transform"
+          >
+            <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            <span>{OFFICIAL_SOCIAL_LINKS.x.displayLabel}</span>
+          </a>
         </div>
       </div>
     </section>
