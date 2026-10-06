@@ -90,7 +90,7 @@ export default function CastCharacterSection() {
                   {item.image ? (
                     <Image
                       src={item.image}
-                      alt={`${item.actorName} (${item.role} 役)`}
+                      alt={`${item.actorName} (${item.role})`}
                       fill
                       sizes="(max-width: 768px) 100vw, 420px"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -109,10 +109,7 @@ export default function CastCharacterSection() {
                   {/* 2. 役名 / 3. 俳優名 / 4. 英字表記 */}
                   <div className="space-y-1.5 border-b border-white/5 pb-3">
                     <span className="text-xs font-mono tracking-wider text-accent font-bold uppercase block">
-                      {item.role} 役{" "}
-                      <span className="text-foreground/50 font-normal">
-                        （{item.age}）
-                      </span>
+                      {item.role}
                     </span>
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <h3 className="text-xl sm:text-2xl font-bold text-foreground tracking-wide">
