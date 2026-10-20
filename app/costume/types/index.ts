@@ -103,10 +103,39 @@ export interface PropItem {
   notes?: string | null;
 }
 
+// 画像メタデータ (Excel抽出 & 手動アップロード)
+export interface CostumePhoto {
+  id: string;
+  hash: string; // SHA-256 (重複防止用)
+  url: string; // Vercel Blob またはローカルURL
+  characterId?: string | null;
+  costumeLookId?: string | null;
+  costumeDayId?: string | null;
+  sceneId?: string | null;
+  sceneAssignmentId?: string | null;
+  category:
+    | "full_body"
+    | "upper_body"
+    | "shoes"
+    | "bag"
+    | "accessory"
+    | "prop"
+    | "makeup"
+    | "hair"
+    | "unclassified";
+  caption?: string | null;
+  isMainForLook?: boolean;
+  sourceType: "manual_upload" | "excel_embedded_image";
+  sourceFile?: string | null;
+  sourceSheet?: string | null;
+  sourceAnchor?: string | null;
+  createdAt: string;
+}
+
 export interface ImportHistory {
   id: string;
   fileName: string;
-  importType: "scene_costume" | "overall_continuity" | "daily_schedule";
+  importType: "scene_costume" | "overall_continuity" | "daily_schedule" | "excel_images";
   importedAt: string;
   totalRows: number;
   successCount: number;

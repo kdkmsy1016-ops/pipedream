@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
+import Image from "next/image";
 import {
   Character,
   CostumeDay,
@@ -10,8 +11,10 @@ import {
   SceneAppearance,
   ShootingDay,
   ScheduleEntry,
+  CostumePhoto,
 } from "../types";
 import { normalizeSceneNumber, matchCharacter, matchLook } from "../lib/excel-matcher";
+import { ExtractedExcelImage } from "../lib/excel-image-extractor";
 import {
   FileSpreadsheet,
   UploadCloud,
@@ -23,9 +26,14 @@ import {
   ShieldCheck,
   RefreshCw,
   Info,
+  Camera,
+  Shirt,
+  Maximize2,
+  Trash2,
+  Filter,
 } from "lucide-react";
 
-type ImportType = "scene_costume" | "overall_continuity" | "daily_schedule";
+type ImportType = "scene_costume" | "excel_images" | "overall_continuity" | "daily_schedule";
 
 interface ParsedSceneCostumeRow {
   sheetName: string;
@@ -44,7 +52,6 @@ interface ParsedSceneCostumeRow {
   propsText?: string;
   makeup?: string;
   remarks?: string;
-  // 既存データとの差分検知
   existingAssignment: SceneAppearance | null;
   hasManualOverride: boolean;
   diffStatus: "new" | "exact_match" | "has_diff" | "warning_unmatched";
@@ -60,9 +67,10 @@ export default function ImportPage() {
     assignments: SceneAppearance[];
     shootingDays: ShootingDay[];
     scheduleEntries: ScheduleEntry[];
+    photos?: CostumePhoto[];
   } | null>(null);
 
-  const [importType, setImportType] = useState<ImportType>("scene_costume");
+  const [importType, setImportType] = useState<ImportType>("excel_images");
   const [file, setFile] = useState<File | null>(null);
   const [workbook, setWorkbook] = useState<XLSX.WorkBook | null>(null);
   const [sheetNames, setSheetNames] = useState<string[]>([]);
@@ -71,9 +79,17 @@ export default function ImportPage() {
 
   // シーン別衣装香盤の解析結果リスト
   const [parsedRows, setParsedRows] = useState<ParsedSceneCostumeRow[]>([]);
+
+  // Excel埋め込み画像の抽出結果リスト
+  const [extractedImages, setExtractedImages] = useState<ExtractedExcelImage[]>([]);
+  const [selectedImageCategoryFilter, setSelectedImageCategoryFilter] = useState<string>("ALL");
+
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+
   const [statusResult, setStatusResult] = useState<{
+    title: string;
     success: number;
     updated: number;
     skipped: number;
@@ -95,13 +111,40 @@ export default function ImportPage() {
   }, []);
 
   // 2. ファイル選択ハンドラ
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (!selected) return;
     setFile(selected);
     setStatusResult(null);
     setParsedRows([]);
+    setExtractedImages([]);
 
+    // A) Excel埋め込み画像の抽出処理 (Server API)
+    if (selected.name.endsWith(".xlsx")) {
+      setIsAnalyzing(true);
+      const formData = new FormData();
+      formData.append("file", selected);
+
+      try {
+        const imgRes = await fetch("/costume/api/extract-images", {
+          method: "POST",
+          body: formData,
+        });
+        const imgData = await imgRes.json();
+        if (imgData.images) {
+          setExtractedImages(imgData.images);
+          if (imgData.images.length > 0 && importType !== "scene_costume") {
+            setImportType("excel_images");
+          }
+        }
+      } catch (err) {
+        console.error("Failed to extract images:", err);
+      } finally {
+        setIsAnalyzing(false);
+      }
+    }
+
+    // B) 通常のワークブック読み込み（SheetJS）
     const reader = new FileReader();
     reader.onload = (evt) => {
       try {
@@ -112,47 +155,24 @@ export default function ImportPage() {
         if (wb.SheetNames.length > 0) {
           setSelectedSingleSheet(wb.SheetNames[0]);
         }
-        // 解析実行
-        analyzeWorkbook(wb, importType, "all", wb.SheetNames[0]);
+        if (importType === "scene_costume") {
+          analyzeSceneCostumeExcel(wb, "all", wb.SheetNames[0]);
+        }
       } catch (err) {
         console.error("Excel parse error:", err);
-        alert("Excelファイルの読み込みに失敗しました。");
       }
     };
     reader.readAsBinaryString(selected);
   };
 
-  // 3. ワークブックの解析（通し香盤 / シーン別衣装香盤 / 日々スケ）
-  const analyzeWorkbook = (
-    wb: XLSX.WorkBook,
-    type: ImportType,
-    sheetMode: "all" | "single",
-    singleSheet: string
-  ) => {
-    if (!data) return;
-    setIsAnalyzing(true);
-
-    try {
-      if (type === "scene_costume") {
-        analyzeSceneCostumeExcel(wb, sheetMode, singleSheet);
-      } else {
-        // 通し香盤・日々スケ用
-        setParsedRows([]);
-      }
-    } catch (err) {
-      console.error("Analysis error:", err);
-    } finally {
-      setIsAnalyzing(false);
-    }
-  };
-
-  // 【シーン別衣装香盤】の高度解析（横持ち・縦持ち両対応、照合、差分検知）
+  // 【シーン別衣装香盤】の解析
   const analyzeSceneCostumeExcel = (
     wb: XLSX.WorkBook,
     sheetMode: "all" | "single",
     singleSheet: string
   ) => {
     if (!data) return;
+    setIsAnalyzing(true);
 
     const targetSheets =
       sheetMode === "single"
@@ -168,11 +188,9 @@ export default function ImportPage() {
       const rawGrid: any[][] = XLSX.utils.sheet_to_json(ws, { header: 1 });
       if (rawGrid.length === 0) return;
 
-      // シーン番号の特定（シート名が "S1", "S14、14A" の場合、またはセル内の「S1 衣装香盤」から特定）
       let detectedSceneRaw = sheetName;
       let sceneClean = normalizeSceneNumber(sheetName);
 
-      // セル内からより正確なシーンタイトルを探す
       for (let r = 0; r < Math.min(rawGrid.length, 5); r++) {
         const firstCell = String(rawGrid[r]?.[0] || "");
         if (/S\s*\d+/i.test(firstCell)) {
@@ -184,7 +202,6 @@ export default function ImportPage() {
         }
       }
 
-      // 共通メタデータ探索（日替わり番号、劇中日など）
       let sheetDayNum: any = null;
       rawGrid.forEach((r) => {
         const label = String(r?.[0] || "").trim();
@@ -193,7 +210,6 @@ export default function ImportPage() {
         }
       });
 
-      // 行ラベルをマッピング（横持ち形式: 列方向にキャラクターが並ぶパターン）
       let charRowIdx = -1;
       let costumeRowIdx = -1;
       let propsRowIdx = -1;
@@ -211,25 +227,21 @@ export default function ImportPage() {
         if (/引継ぎ元|元衣装|第9稿/i.test(header)) sourceRowIdx = idx;
       });
 
-      // パターンA: 横持ち（7行目にキャラクターが横に並ぶ形式）
       if (charRowIdx !== -1) {
         const charRow = rawGrid[charRowIdx];
         for (let col = 1; col < charRow.length; col++) {
           const charNameRaw = String(charRow[col] || "").trim();
           if (!charNameRaw || /写真貼付|未設定|なし/i.test(charNameRaw)) continue;
 
-          // 項目抽出
           const costumeCandidateText = costumeRowIdx !== -1 ? String(rawGrid[costumeRowIdx]?.[col] || "").trim() : "";
           const propsText = propsRowIdx !== -1 ? String(rawGrid[propsRowIdx]?.[col] || "").trim() : "";
           const makeupText = makeupRowIdx !== -1 ? String(rawGrid[makeupRowIdx]?.[col] || "").trim() : "";
           const remarksText = remarksRowIdx !== -1 ? String(rawGrid[remarksRowIdx]?.[col] || "").trim() : "";
           const sourceText = sourceRowIdx !== -1 ? String(rawGrid[sourceRowIdx]?.[col] || "").trim() : "";
 
-          // 1. キャラクター照合
           const { matchedChar, candidates } = matchCharacter(charNameRaw, data.characters);
           const charId = matchedChar?.id || null;
 
-          // 2. 該当キャラクターの日替わり照合
           let dayMatchedId: string | null = null;
           if (charId && sheetDayNum) {
             const num = parseInt(String(sheetDayNum), 10);
@@ -239,13 +251,10 @@ export default function ImportPage() {
             if (foundDay) dayMatchedId = foundDay.id;
           }
 
-          // 3. LOOK照合
           const charLooks = data.costumeLooks.filter((l) => l.characterId === charId);
           const lookSearchText = sourceText || costumeCandidateText;
           const { matchedLook, candidates: lookCandidates } = matchLook(lookSearchText, charLooks);
 
-          // 4. 既存 SceneCharacterAssignment との照合・差分検知
-          // シーン特定
           const matchedScene = data.scenes.find(
             (s) => s.sceneNumber === sceneClean || s.id === `S${sceneClean}`
           );
@@ -260,7 +269,6 @@ export default function ImportPage() {
 
           const hasManual = Boolean(existingAsg?.manualOverride);
 
-          // 差分ステータス判定
           let diffStatus: "new" | "exact_match" | "has_diff" | "warning_unmatched" = "new";
           let defaultAction: "overwrite" | "keep_existing" | "create_new" | "ignore" = "create_new";
 
@@ -268,7 +276,6 @@ export default function ImportPage() {
             diffStatus = "warning_unmatched";
             defaultAction = "ignore";
           } else if (existingAsg) {
-            // 既存データが存在する場合
             const isSameProps = (existingAsg.propsText || "") === (propsText || "");
             const isSameRemarks = (existingAsg.notes || "") === (remarksText || "");
             if (isSameProps && isSameRemarks) {
@@ -276,7 +283,6 @@ export default function ImportPage() {
               defaultAction = "keep_existing";
             } else {
               diffStatus = "has_diff";
-              // 手動編集済みの場合は維持をデフォルト推奨
               defaultAction = hasManual ? "keep_existing" : "overwrite";
             }
           }
@@ -307,62 +313,75 @@ export default function ImportPage() {
     });
 
     setParsedRows(rows);
+    setIsAnalyzing(false);
   };
 
-  // 4. キャラクター手動再紐付け
-  const handleUpdateCharMapping = (rowIdx: number, newCharId: string) => {
-    if (!data) return;
-    const next = [...parsedRows];
-    const target = next[rowIdx];
-    target.characterMatchedId = newCharId;
+  // 3. 画像のインポート保存処理
+  const handleExecuteImageImport = async () => {
+    if (extractedImages.length === 0) return;
+    setIsImporting(true);
 
-    // 日替わり・LOOKも再計算
-    const matched = data.characters.find((c) => c.id === newCharId);
-    if (matched) {
-      if (target.dayNumberRaw) {
-        const num = parseInt(String(target.dayNumberRaw), 10);
-        const day = data.costumeDays.find(
-          (d) => d.characterId === newCharId && d.dayNumber === num
-        );
-        target.dayMatchedId = day ? day.id : null;
+    try {
+      const targetImages = extractedImages.filter(
+        (img) => img.selectedAction !== "ignore"
+      );
+
+      const payload = {
+        images: targetImages.map((img) => ({
+          dataBase64: img.dataBase64,
+          fileName: img.fileName,
+          mimeType: img.mimeType,
+          hash: img.hash,
+          characterId: img.selectedCharacterId || null,
+          costumeLookId: img.selectedLookId || null,
+          costumeDayId: img.selectedCostumeDayId || null,
+          category: img.selectedCategory,
+          makeMainForLook: Boolean(img.makeMainForLook),
+          sourceFile: file?.name || "Excel",
+          sourceSheet: img.sheetName,
+          sourceAnchor: img.anchor.anchorStr,
+        })),
+      };
+
+      const res = await fetch("/costume/api/save-excel-images", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const resData = await res.json();
+      if (resData.success) {
+        setStatusResult({
+          title: "Excel画像のインポートが正常に完了しました！",
+          success: resData.savedCount,
+          updated: 0,
+          skipped: resData.skippedCount,
+          warnings: 0,
+        });
+        loadDatabase();
+      } else {
+        alert("画像保存に失敗しました: " + resData.error);
       }
-      const charLooks = data.costumeLooks.filter((l) => l.characterId === newCharId);
-      const { matchedLook } = matchLook(target.lookRaw || "", charLooks);
-      target.lookMatchedId = matchedLook ? matchedLook.id : null;
-      target.diffStatus = "has_diff";
-      target.selectedAction = "overwrite";
+    } catch (e: any) {
+      console.error("Save image error:", e);
+      alert("画像のインポートに失敗しました。");
+    } finally {
+      setIsImporting(false);
     }
-    setParsedRows(next);
   };
 
-  // 5. アクション一括変更（差分のみ上書き / 全て既存維持 / 新規のみ追加など）
-  const handleBulkAction = (action: "overwrite" | "keep_existing") => {
-    const next = parsedRows.map((r) => {
-      if (r.hasManualOverride && action === "overwrite") {
-        return r; // 手動編集済みは保護
-      }
-      return { ...r, selectedAction: action };
-    });
-    setParsedRows(next);
-  };
-
-  // 6. インポート実行・保存
-  const handleExecuteImport = async () => {
+  // 4. シーン別衣装香盤テキストのインポート保存
+  const handleExecuteSceneCostumeImport = async () => {
     if (!data || parsedRows.length === 0) return;
     setIsImporting(true);
 
     try {
       let scenes = [...data.scenes];
       let assignments = [...data.assignments];
-      let costumeDays = [...data.costumeDays];
-      let costumeLooks = [...data.costumeLooks];
-
+      const nowIso = new Date().toISOString();
       let successCount = 0;
       let updatedCount = 0;
       let skippedCount = 0;
-      let warningCount = 0;
-
-      const nowIso = new Date().toISOString();
 
       parsedRows.forEach((row) => {
         if (row.selectedAction === "ignore" || !row.characterMatchedId) {
@@ -370,7 +389,6 @@ export default function ImportPage() {
           return;
         }
 
-        // シーン取得または作成
         let targetScene = scenes.find(
           (s) => s.sceneNumber === row.sceneClean || s.id === `S${row.sceneClean}`
         );
@@ -388,7 +406,6 @@ export default function ImportPage() {
         const char = data.characters.find((c) => c.id === row.characterMatchedId);
         const charName = char ? char.name : row.characterRaw;
 
-        // 既存アサインメントの確認
         const existingIdx = assignments.findIndex(
           (a) =>
             a.sceneId === targetScene!.id && a.characterId === row.characterMatchedId
@@ -399,8 +416,6 @@ export default function ImportPage() {
             skippedCount++;
             return;
           }
-
-          // 上書き
           const old = assignments[existingIdx];
           assignments[existingIdx] = {
             ...old,
@@ -415,7 +430,6 @@ export default function ImportPage() {
           };
           updatedCount++;
         } else {
-          // 新規追加
           const newAsg: SceneAppearance = {
             id: `ASG_${targetScene.id}_${row.characterMatchedId}_${Date.now()}_${Math.random()
               .toString(36)
@@ -439,43 +453,23 @@ export default function ImportPage() {
         }
       });
 
-      // サーバーへ永続保存
-      const payload = {
-        ...data,
-        scenes,
-        assignments,
-        costumeDays,
-        costumeLooks,
-        importHistories: [
-          ...(data.importHistories || []),
-          {
-            id: `IMP_${Date.now()}`,
-            fileName: file?.name || "シーン別衣装香盤.xlsx",
-            importType,
-            importedAt: nowIso,
-            totalRows: parsedRows.length,
-            successCount,
-            updatedCount,
-            skippedCount,
-            warningCount,
-          },
-        ],
-      };
-
       await fetch("/costume/api/data", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...data,
+          scenes,
+          assignments,
+        }),
       });
 
       setStatusResult({
+        title: "シーン別衣装香盤のインポートが完了しました！",
         success: successCount,
         updated: updatedCount,
         skipped: skippedCount,
-        warnings: warningCount,
+        warnings: 0,
       });
-
-      // 最新状態を再読込
       loadDatabase();
     } catch (e) {
       console.error("Save error:", e);
@@ -485,6 +479,12 @@ export default function ImportPage() {
     }
   };
 
+  // フィルタリング（抽出画像カテゴリ）
+  const filteredExtractedImages = extractedImages.filter((img) => {
+    if (selectedImageCategoryFilter === "ALL") return true;
+    return img.selectedCategory === selectedImageCategoryFilter;
+  });
+
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       {/* 画面トップバー */}
@@ -492,16 +492,27 @@ export default function ImportPage() {
         <div className="flex items-center gap-2">
           <FileSpreadsheet className="w-5 h-5 text-amber-400" />
           <h1 className="font-bold text-base tracking-wide">
-            IMPORT（Excelファイル取り込み）
+            IMPORT（Excelファイル・埋め込み画像取り込み）
           </h1>
         </div>
 
-        {/* 3種類のインポート種別タブ */}
+        {/* 4種類のインポート種別タブ */}
         <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-zinc-800">
+          <button
+            onClick={() => setImportType("excel_images")}
+            className={`px-3 py-1.5 rounded text-xs font-mono font-bold transition-all flex items-center gap-1.5 ${
+              importType === "excel_images"
+                ? "bg-amber-400 text-black shadow-sm"
+                : "bg-zinc-800 text-zinc-400 hover:text-white"
+            }`}
+          >
+            <Camera className="w-3.5 h-3.5" />
+            <span>Excel埋め込み画像抽出 ({extractedImages.length} 枚検出)</span>
+          </button>
           <button
             onClick={() => {
               setImportType("scene_costume");
-              setParsedRows([]);
+              if (workbook) analyzeSceneCostumeExcel(workbook, "all", selectedSingleSheet);
             }}
             className={`px-3 py-1.5 rounded text-xs font-mono font-bold transition-all ${
               importType === "scene_costume"
@@ -509,47 +520,38 @@ export default function ImportPage() {
                 : "bg-zinc-800 text-zinc-400 hover:text-white"
             }`}
           >
-            1. シーン別衣装香盤 (各シーン×各人物の衣装・持道具・小道具・備考)
+            シーン別衣装香盤 (各シーン×各人物のテキスト・小道具)
           </button>
           <button
-            onClick={() => {
-              setImportType("overall_continuity");
-              setParsedRows([]);
-            }}
+            onClick={() => setImportType("overall_continuity")}
             className={`px-3 py-1.5 rounded text-xs font-mono font-bold transition-all ${
               importType === "overall_continuity"
                 ? "bg-amber-400 text-black shadow-sm"
                 : "bg-zinc-800 text-zinc-400 hover:text-white"
             }`}
           >
-            2. 通し香盤 (シーン番号・場所・劇中日・場面内容)
+            通し香盤 (シーン番号・場所・劇中日)
           </button>
           <button
-            onClick={() => {
-              setImportType("daily_schedule");
-              setParsedRows([]);
-            }}
+            onClick={() => setImportType("daily_schedule")}
             className={`px-3 py-1.5 rounded text-xs font-mono font-bold transition-all ${
               importType === "daily_schedule"
                 ? "bg-amber-400 text-black shadow-sm"
                 : "bg-zinc-800 text-zinc-400 hover:text-white"
             }`}
           >
-            3. 日々スケ (撮影日・撮影順・時刻・シーン番号)
+            日々スケ (撮影日・撮影順・時刻)
           </button>
         </div>
 
         <p className="text-xs text-zinc-400 leading-relaxed">
-          {importType === "scene_costume" && (
+          {importType === "excel_images" && (
             <span>
-              各シーンシート（S1, S2, S3...）から、登場人物・衣装・小道具・持道具・メイク・備考を抽出し、既存のSceneおよびCharacterと自動照合します。手動編集済みのデータは上書きから保護されます。
+              .xlsx内部のZIP構造（xl/media, xl/drawings）を直接解析し、貼り付けられた衣装写真・小道具写真をセル配置アンカーとシート名から自動推定します。重複画像はSHA-256ハッシュで自動検知され、安全に取り込めます。
             </span>
           )}
-          {importType === "overall_continuity" && (
-            <span>通し香盤からシーン一覧と基本情報（劇中日、場所、内容）を取り込みます。</span>
-          )}
-          {importType === "daily_schedule" && (
-            <span>日々スケExcelから撮影日・撮影順を取り込み、衣装をシーン番号で自動連携します。</span>
+          {importType === "scene_costume" && (
+            <span>各シーンシート（S1, S2, S3...）から、登場人物・衣装・小道具・持道具・メイク・備考を抽出します。</span>
           )}
         </p>
       </div>
@@ -559,10 +561,10 @@ export default function ImportPage() {
         <label className="block cursor-pointer border-2 border-dashed border-zinc-700 hover:border-amber-400 p-8 rounded-md transition-colors bg-zinc-950">
           <UploadCloud className="w-10 h-10 text-amber-400 mx-auto mb-2" />
           <span className="text-sm font-bold text-zinc-200 block">
-            {file ? file.name : "Excelファイルを選択またはドラッグ＆ドロップ (.xlsx / .xls / .csv)"}
+            {file ? file.name : "Excelファイルを選択またはドラッグ＆ドロップ (.xlsx 優先)"}
           </span>
           <span className="text-xs text-zinc-500 mt-1 block">
-            即時上書きは行われません。解析とプレビュー・照合を経て確定します。
+            即時上書きは行われません。画像・テキストともにプレビューで確認・修正してから反映します。
           </span>
           <input
             type="file"
@@ -571,93 +573,276 @@ export default function ImportPage() {
             className="hidden"
           />
         </label>
-
-        {sheetNames.length > 0 && (
-          <div className="flex flex-wrap items-center justify-center gap-3 text-xs bg-zinc-950 p-3 rounded border border-zinc-800">
-            <span className="text-zinc-400 font-mono">対象シート:</span>
-            <label className="flex items-center gap-1 cursor-pointer">
-              <input
-                type="radio"
-                name="sheetMode"
-                checked={selectedSheetMode === "all"}
-                onChange={() => {
-                  setSelectedSheetMode("all");
-                  if (workbook) analyzeWorkbook(workbook, importType, "all", selectedSingleSheet);
-                }}
-              />
-              <span>全シート一括 ({sheetNames.length} シート)</span>
-            </label>
-            <label className="flex items-center gap-1 cursor-pointer ml-3">
-              <input
-                type="radio"
-                name="sheetMode"
-                checked={selectedSheetMode === "single"}
-                onChange={() => {
-                  setSelectedSheetMode("single");
-                  if (workbook) analyzeWorkbook(workbook, importType, "single", selectedSingleSheet);
-                }}
-              />
-              <span>単一シートのみ指定:</span>
-            </label>
-            {selectedSheetMode === "single" && (
-              <select
-                value={selectedSingleSheet}
-                onChange={(e) => {
-                  setSelectedSingleSheet(e.target.value);
-                  if (workbook) analyzeWorkbook(workbook, importType, "single", e.target.value);
-                }}
-                className="bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-amber-400 font-bold"
-              >
-                {sheetNames.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-        )}
       </div>
 
       {/* 解析中インジケータ */}
       {isAnalyzing && (
         <div className="p-8 text-center bg-zinc-900 border border-zinc-800 rounded-md text-amber-400 text-xs font-mono animate-pulse flex items-center justify-center gap-2">
           <RefreshCw className="w-4 h-4 animate-spin" />
-          <span>Excelを解析し、既存SCENE・CHARACTERと照合しています...</span>
+          <span>Excel内の画像バイナリとDrawingアンカーを解析しています...</span>
         </div>
       )}
 
-      {/* 解析結果 & プレビュー & 差分対照テーブル */}
-      {!isAnalyzing && parsedRows.length > 0 && (
+      {/* 【モード1】Excel埋め込み画像プレビュー & 紐付けエディタ */}
+      {importType === "excel_images" && !isAnalyzing && extractedImages.length > 0 && (
+        <div className="bg-zinc-900 border border-zinc-800 p-4 rounded-md space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-3">
+            <div>
+              <h2 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
+                <Camera className="w-4 h-4 text-amber-400" />
+                <span>抽出された埋め込み写真プレビュー</span>
+                <span className="text-xs font-mono bg-zinc-800 px-2 py-0.5 rounded text-amber-400">
+                  全 {extractedImages.length} 枚
+                </span>
+              </h2>
+              <p className="text-[11px] text-zinc-400 mt-1">
+                シート名とセル配置（アンカー位置）から紐付け先を初期推定しています。必要に応じてキャラクターやLOOKを変更してください。
+              </p>
+            </div>
+
+            {/* 一括操作 & カテゴリ絞り込み */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs text-zinc-400 font-mono">絞り込み:</span>
+              <select
+                value={selectedImageCategoryFilter}
+                onChange={(e) => setSelectedImageCategoryFilter(e.target.value)}
+                className="bg-zinc-950 border border-zinc-700 rounded text-xs px-2 py-1 text-zinc-200"
+              >
+                <option value="ALL">全カテゴリ</option>
+                <option value="full_body">全身</option>
+                <option value="upper_body">上半身</option>
+                <option value="shoes">靴</option>
+                <option value="accessory">持道具/アクセ</option>
+                <option value="prop">小道具</option>
+                <option value="makeup">メイク</option>
+                <option value="unclassified">未分類</option>
+              </select>
+
+              <button
+                onClick={() => {
+                  const next = extractedImages.map((img) => ({
+                    ...img,
+                    selectedAction: "import_to_look" as const,
+                  }));
+                  setExtractedImages(next);
+                }}
+                className="text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-2.5 py-1 rounded"
+              >
+                すべてLOOKへ紐付け
+              </button>
+            </div>
+          </div>
+
+          {/* 画像カードグリッド */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[600px] overflow-y-auto pr-1">
+            {filteredExtractedImages.map((img, idx) => {
+              const charLooks = data?.costumeLooks.filter(
+                (l) => l.characterId === img.selectedCharacterId
+              ) || [];
+
+              return (
+                <div
+                  key={img.id}
+                  className={`bg-zinc-950 border rounded-md p-3 space-y-2.5 flex flex-col justify-between transition-colors ${
+                    img.isDuplicateOfId
+                      ? "border-zinc-800 opacity-60"
+                      : img.selectedAction === "ignore"
+                      ? "border-zinc-800 opacity-40"
+                      : "border-zinc-700 hover:border-amber-400/50"
+                  }`}
+                >
+                  {/* サムネイル (2:3 縦長サムネイル contain) */}
+                  <div className="costume-thumb-container border border-zinc-800 relative group">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={img.dataBase64}
+                      alt={img.fileName}
+                      className="costume-thumb-img"
+                    />
+                    <button
+                      onClick={() => setLightboxUrl(img.dataBase64)}
+                      className="absolute top-1.5 right-1.5 p-1 bg-black/70 hover:bg-black rounded text-zinc-300 opacity-0 group-hover:opacity-100 transition-opacity"
+                      title="拡大表示"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
+                    </button>
+
+                    {/* 重複バッジ */}
+                    {img.isDuplicateOfId && (
+                      <span className="absolute bottom-1.5 left-1.5 bg-black/80 text-zinc-400 text-[10px] px-1.5 py-0.5 rounded font-mono border border-zinc-700">
+                        既存重複 (登録済)
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Excel由来情報 (シート / セルアンカー) */}
+                  <div className="space-y-1 text-xs">
+                    <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-zinc-800 pb-1 font-mono">
+                      <span className="truncate text-amber-400 font-bold">
+                        {img.sheetName}
+                      </span>
+                      <span>セル: {img.anchor.anchorStr}</span>
+                    </div>
+
+                    {/* キャラクター選択 */}
+                    <div className="space-y-0.5">
+                      <label className="text-[10px] text-zinc-500 font-mono block">
+                        対象人物:
+                      </label>
+                      <select
+                        value={img.selectedCharacterId || ""}
+                        onChange={(e) => {
+                          const next = [...extractedImages];
+                          next[idx].selectedCharacterId = e.target.value || null;
+                          // LOOKも再設定
+                          const firstLook = data?.costumeLooks.find(
+                            (l) => l.characterId === e.target.value
+                          );
+                          next[idx].selectedLookId = firstLook ? firstLook.id : null;
+                          setExtractedImages(next);
+                        }}
+                        className="w-full bg-zinc-900 border border-zinc-700 rounded px-1.5 py-1 text-xs text-zinc-200 focus:outline-none focus:border-amber-400"
+                      >
+                        <option value="">(未分類 / 指定なし)</option>
+                        {data?.characters.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* LOOK選択 */}
+                    {img.selectedCharacterId && (
+                      <div className="space-y-0.5">
+                        <label className="text-[10px] text-zinc-500 font-mono block">
+                          紐付け先LOOK:
+                        </label>
+                        <select
+                          value={img.selectedLookId || ""}
+                          onChange={(e) => {
+                            const next = [...extractedImages];
+                            next[idx].selectedLookId = e.target.value || null;
+                            setExtractedImages(next);
+                          }}
+                          className="w-full bg-zinc-900 border border-zinc-700 rounded px-1.5 py-1 text-xs text-amber-400 font-mono font-bold focus:outline-none focus:border-amber-400"
+                        >
+                          <option value="">(未設定 - LOOKなし)</option>
+                          {charLooks.map((l) => (
+                            <option key={l.id} value={l.id}>
+                              {l.lookCode} : {l.title || "名称未定"}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {/* 写真カテゴリ */}
+                    <div className="space-y-0.5">
+                      <label className="text-[10px] text-zinc-500 font-mono block">
+                        カテゴリ:
+                      </label>
+                      <select
+                        value={img.selectedCategory}
+                        onChange={(e) => {
+                          const next = [...extractedImages];
+                          next[idx].selectedCategory = e.target.value as any;
+                          setExtractedImages(next);
+                        }}
+                        className="w-full bg-zinc-900 border border-zinc-700 rounded px-1.5 py-1 text-xs text-zinc-300"
+                      >
+                        <option value="full_body">全身</option>
+                        <option value="upper_body">上半身</option>
+                        <option value="shoes">靴・履物</option>
+                        <option value="accessory">持道具 / アクセ</option>
+                        <option value="prop">小道具</option>
+                        <option value="makeup">メイク / 髪型</option>
+                        <option value="unclassified">未分類</option>
+                      </select>
+                    </div>
+
+                    {/* 代表写真フラグ */}
+                    {img.selectedLookId && (
+                      <label className="flex items-center gap-1.5 pt-1 text-[11px] text-zinc-300 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(img.makeMainForLook)}
+                          onChange={(e) => {
+                            const next = [...extractedImages];
+                            next[idx].makeMainForLook = e.target.checked;
+                            setExtractedImages(next);
+                          }}
+                        />
+                        <span>LOOKの代表写真に設定</span>
+                      </label>
+                    )}
+
+                    {/* 取り込みアクション */}
+                    <div className="pt-1">
+                      <select
+                        value={img.selectedAction}
+                        onChange={(e) => {
+                          const next = [...extractedImages];
+                          next[idx].selectedAction = e.target.value as any;
+                          setExtractedImages(next);
+                        }}
+                        className={`w-full text-xs font-bold rounded px-2 py-1 border ${
+                          img.selectedAction === "import_to_look"
+                            ? "bg-amber-400 text-black border-amber-300"
+                            : img.selectedAction === "import_unclassified"
+                            ? "bg-zinc-800 text-zinc-300 border-zinc-700"
+                            : "bg-zinc-900 text-zinc-500 border-zinc-800"
+                        }`}
+                      >
+                        <option value="import_to_look">LOOK写真として取込</option>
+                        <option value="import_unclassified">未分類写真として取込</option>
+                        <option value="ignore">除外（取り込まない）</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 取り込み確定ボタン */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-zinc-800">
+            <div className="text-xs text-zinc-400 space-x-3 font-mono">
+              <span>
+                取込予定:{" "}
+                {extractedImages.filter((i) => i.selectedAction !== "ignore").length}{" "}
+                枚
+              </span>
+              <span>
+                除外:{" "}
+                {extractedImages.filter((i) => i.selectedAction === "ignore").length}{" "}
+                枚
+              </span>
+            </div>
+
+            <button
+              disabled={isImporting || extractedImages.length === 0}
+              onClick={handleExecuteImageImport}
+              className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs px-5 py-2.5 rounded transition-all active:scale-95 disabled:opacity-40 shadow-lg"
+            >
+              <Camera className="w-4 h-4" />
+              <span>{isImporting ? "アップロード・保存中..." : "抽出画像をVercel Blobへ取り込む"}</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 【モード2】シーン別衣装香盤のプレビュー */}
+      {importType === "scene_costume" && !isAnalyzing && parsedRows.length > 0 && (
         <div className="bg-zinc-900 border border-zinc-800 p-4 rounded-md space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-800 pb-3">
             <div>
               <h2 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
                 <span>解析・照合結果プレビュー</span>
                 <span className="text-xs font-mono bg-zinc-800 px-2 py-0.5 rounded text-amber-400">
-                  全 {parsedRows.length} 件のシーン×人物衣装割当
+                  全 {parsedRows.length} 件
                 </span>
               </h2>
-              <p className="text-[11px] text-zinc-400 mt-1">
-                緑: 新規追加 / 黄: 差分あり（手動保護判定あり） / 灰: 既存と完全一致 / 赤: 未照合キャラクター
-              </p>
-            </div>
-
-            {/* 一括操作ボタン */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => handleBulkAction("overwrite")}
-                className="text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-200 px-2.5 py-1 rounded transition-colors"
-                title="手動保護済みの項目を除き、差分をすべて上書き"
-              >
-                差分を一括上書き
-              </button>
-              <button
-                onClick={() => handleBulkAction("keep_existing")}
-                className="text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-200 px-2.5 py-1 rounded transition-colors"
-              >
-                既存データをすべて維持
-              </button>
             </div>
           </div>
 
@@ -667,183 +852,65 @@ export default function ImportPage() {
               <thead className="sticky top-0 bg-zinc-900 border-b border-zinc-800 text-zinc-400 font-mono z-10">
                 <tr>
                   <th className="p-2 w-16">シーン</th>
-                  <th className="p-2 w-32">Excel上の人物</th>
-                  <th className="p-2 w-36">照合Character</th>
-                  <th className="p-2 w-28">日替わり/LOOK</th>
-                  <th className="p-2 w-44">衣装候補 / 差分</th>
+                  <th className="p-2 w-32">Excel人物</th>
+                  <th className="p-2 w-36">照合人物</th>
+                  <th className="p-2 w-28">日替わり</th>
+                  <th className="p-2 w-44">衣装候補</th>
                   <th className="p-2">持道具 / 小道具</th>
                   <th className="p-2 w-28">備考</th>
-                  <th className="p-2 w-24">状態</th>
-                  <th className="p-2 w-28">取込アクション</th>
+                  <th className="p-2 w-28">アクション</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800 text-zinc-300">
-                {parsedRows.map((row, idx) => {
-                  return (
-                    <tr
-                      key={idx}
-                      className={`hover:bg-zinc-900/60 transition-colors ${
-                        row.diffStatus === "warning_unmatched"
-                          ? "bg-red-950/20"
-                          : row.diffStatus === "has_diff"
-                          ? "bg-amber-950/15"
-                          : ""
-                      }`}
-                    >
-                      {/* シーン番号 */}
-                      <td className="p-2 font-mono font-bold text-amber-400">
-                        S{row.sceneClean}
-                      </td>
-
-                      {/* Excel表記 */}
-                      <td className="p-2 font-mono text-zinc-300">
-                        {row.characterRaw}
-                      </td>
-
-                      {/* 照合されたCharacter */}
-                      <td className="p-2">
-                        {row.characterMatchedId ? (
-                          <div className="flex items-center gap-1.5">
-                            <span className="font-bold text-zinc-100">
-                              {
-                                data?.characters.find(
-                                  (c) => c.id === row.characterMatchedId
-                                )?.name
-                              }
-                            </span>
-                            {row.characterCandidates.length > 1 && (
-                              <span
-                                title="類似候補あり"
-                                className="text-[10px] text-amber-400 font-mono"
-                              >
-                                ⚠
-                              </span>
-                            )}
-                          </div>
-                        ) : (
-                          <select
-                            value=""
-                            onChange={(e) =>
-                              handleUpdateCharMapping(idx, e.target.value)
-                            }
-                            className="bg-red-950/80 border border-red-700 text-red-200 text-[11px] rounded px-1.5 py-0.5"
-                          >
-                            <option value="">(未照合: 紐付け先を選択)</option>
-                            {data?.characters.map((c) => (
-                              <option key={c.id} value={c.id}>
-                                {c.name}
-                              </option>
-                            ))}
-                          </select>
-                        )}
-                      </td>
-
-                      {/* 日替わり & LOOK */}
-                      <td className="p-2 font-mono text-[11px]">
-                        <div>
-                          {row.dayNumberRaw ? `日替わり${row.dayNumberRaw}` : "-"}
-                        </div>
-                        {row.lookRaw && (
-                          <div className="text-zinc-500 text-[10px] truncate max-w-[120px]">
-                            {row.lookRaw}
-                          </div>
-                        )}
-                      </td>
-
-                      {/* 衣装候補 / 差分 */}
-                      <td className="p-2 text-[11px]">
-                        <span className="line-clamp-2">
-                          {row.costumeCandidateText || "-"}
-                        </span>
-                      </td>
-
-                      {/* 持道具 / 小道具 */}
-                      <td className="p-2 text-[11px]">
-                        <span className="line-clamp-2">
-                          {row.propsText || "-"}
-                        </span>
-                      </td>
-
-                      {/* 備考 */}
-                      <td className="p-2 text-[11px] text-zinc-400 truncate max-w-[100px]">
-                        {row.remarks || "-"}
-                      </td>
-
-                      {/* 状態ラベル */}
-                      <td className="p-2 text-[11px] font-mono">
-                        {row.hasManualOverride ? (
-                          <span className="inline-flex items-center gap-1 text-purple-400 font-bold bg-purple-950/50 px-1.5 py-0.5 rounded border border-purple-800">
-                            <ShieldCheck className="w-3 h-3" />
-                            保護
-                          </span>
-                        ) : row.diffStatus === "new" ? (
-                          <span className="text-emerald-400 font-bold">
-                            新規
-                          </span>
-                        ) : row.diffStatus === "has_diff" ? (
-                          <span className="text-amber-400 font-bold">
-                            差分あり
-                          </span>
-                        ) : row.diffStatus === "exact_match" ? (
-                          <span className="text-zinc-500">一致</span>
-                        ) : (
-                          <span className="text-red-400 font-bold">
-                            要確認
-                          </span>
-                        )}
-                      </td>
-
-                      {/* アクション選択 */}
-                      <td className="p-2">
-                        <select
-                          value={row.selectedAction}
-                          onChange={(e) => {
-                            const next = [...parsedRows];
-                            next[idx].selectedAction = e.target.value as any;
-                            setParsedRows(next);
-                          }}
-                          className={`text-[11px] font-bold rounded px-1.5 py-0.5 border ${
-                            row.selectedAction === "overwrite"
-                              ? "bg-amber-400 text-black border-amber-300"
-                              : row.selectedAction === "keep_existing"
-                              ? "bg-zinc-800 text-zinc-300 border-zinc-700"
-                              : "bg-zinc-950 text-zinc-400 border-zinc-800"
-                          }`}
-                        >
-                          <option value="create_new">新規作成</option>
-                          <option value="overwrite">上書き</option>
-                          <option value="keep_existing">既存維持</option>
-                          <option value="ignore">除外</option>
-                        </select>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {parsedRows.map((row, idx) => (
+                  <tr key={idx} className="hover:bg-zinc-900/60">
+                    <td className="p-2 font-mono font-bold text-amber-400">
+                      S{row.sceneClean}
+                    </td>
+                    <td className="p-2 font-mono">{row.characterRaw}</td>
+                    <td className="p-2 font-bold">
+                      {
+                        data?.characters.find((c) => c.id === row.characterMatchedId)
+                          ?.name || "-"
+                      }
+                    </td>
+                    <td className="p-2 font-mono">
+                      {row.dayNumberRaw ? `日替わり${row.dayNumberRaw}` : "-"}
+                    </td>
+                    <td className="p-2 truncate max-w-xs">
+                      {row.costumeCandidateText || "-"}
+                    </td>
+                    <td className="p-2 truncate max-w-xs">{row.propsText || "-"}</td>
+                    <td className="p-2 text-zinc-400">{row.remarks || "-"}</td>
+                    <td className="p-2">
+                      <select
+                        value={row.selectedAction}
+                        onChange={(e) => {
+                          const next = [...parsedRows];
+                          next[idx].selectedAction = e.target.value as any;
+                          setParsedRows(next);
+                        }}
+                        className="bg-zinc-900 border border-zinc-700 text-xs rounded px-1.5 py-0.5"
+                      >
+                        <option value="create_new">新規作成</option>
+                        <option value="overwrite">上書き</option>
+                        <option value="keep_existing">既存維持</option>
+                        <option value="ignore">除外</option>
+                      </select>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
 
-          {/* インポート確定ボタン */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-            <div className="text-xs text-zinc-400 space-x-3 font-mono">
-              <span>
-                取込予定:{" "}
-                {parsedRows.filter((r) => r.selectedAction !== "ignore").length}{" "}
-                件
-              </span>
-              <span>
-                除外:{" "}
-                {parsedRows.filter((r) => r.selectedAction === "ignore").length}{" "}
-                件
-              </span>
-            </div>
-
+          <div className="flex justify-end pt-2">
             <button
-              disabled={isImporting || parsedRows.length === 0}
-              onClick={handleExecuteImport}
-              className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs px-5 py-2.5 rounded transition-all active:scale-95 disabled:opacity-40 shadow-lg"
+              disabled={isImporting}
+              onClick={handleExecuteSceneCostumeImport}
+              className="inline-flex items-center gap-1.5 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs px-5 py-2.5 rounded transition-all active:scale-95 shadow-lg"
             >
-              <span>{isImporting ? "インポート中..." : "インポートを確定して反映"}</span>
+              <span>{isImporting ? "インポート中..." : "テキスト情報を確定して反映"}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -855,16 +922,32 @@ export default function ImportPage() {
         <div className="p-4 rounded-md bg-zinc-900 border border-emerald-500/40 text-zinc-200 text-xs space-y-1">
           <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-sm">
             <CheckCircle className="w-4 h-4" />
-            <span>インポートが正常に完了しました！</span>
+            <span>{statusResult.title}</span>
           </div>
           <p className="font-mono text-zinc-400">
-            新規追加: {statusResult.success} 件 / 更新（上書き）:{" "}
-            {statusResult.updated} 件 / スキップ（既存維持）:{" "}
+            保存成功: {statusResult.success} 件 / スキップ（重複または除外）:{" "}
             {statusResult.skipped} 件
           </p>
           <p className="text-[11px] text-zinc-500 pt-1">
-            CHARACTER、SCENE、SCHEDULE、および印刷用PDFに即時反映されています。上部メニューからご確認ください。
+            CHARACTER、SCENE、SCHEDULE、および印刷用PDFに即時反映されています。
           </p>
+        </div>
+      )}
+
+      {/* 拡大写真モーダル (LightBox) */}
+      {lightboxUrl && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-pointer"
+          onClick={() => setLightboxUrl(null)}
+        >
+          <div className="relative max-w-2xl max-h-[90vh] w-full h-full flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={lightboxUrl}
+              alt="拡大写真"
+              className="max-w-full max-h-[90vh] object-contain rounded shadow-2xl"
+            />
+          </div>
         </div>
       )}
     </div>

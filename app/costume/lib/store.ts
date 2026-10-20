@@ -9,6 +9,7 @@ import type {
   ShootingDay,
   ScheduleEntry,
   ImportHistory,
+  CostumePhoto,
 } from "../types";
 
 export interface CostumeDatabase {
@@ -19,6 +20,7 @@ export interface CostumeDatabase {
   assignments: SceneAppearance[];
   shootingDays: ShootingDay[];
   scheduleEntries: ScheduleEntry[];
+  photos?: CostumePhoto[];
   importHistories?: ImportHistory[];
   updatedAt: string;
 }
@@ -156,6 +158,7 @@ export function loadCostumeDatabase(): CostumeDatabase {
         remarks: se.remarks || null,
       }));
 
+      const photos: CostumePhoto[] = json.photos || [];
       const importHistories: ImportHistory[] = json.importHistories || [];
 
       cache = {
@@ -166,6 +169,7 @@ export function loadCostumeDatabase(): CostumeDatabase {
         assignments,
         shootingDays,
         scheduleEntries,
+        photos,
         importHistories,
         updatedAt: json.meta?.updatedAt || new Date().toISOString(),
       };
@@ -184,6 +188,7 @@ export function loadCostumeDatabase(): CostumeDatabase {
     assignments: [],
     shootingDays: [],
     scheduleEntries: [],
+    photos: [],
     importHistories: [],
     updatedAt: new Date().toISOString(),
   };
@@ -194,7 +199,7 @@ export function saveCostumeDatabase(db: CostumeDatabase) {
   try {
     const jsonOutput = {
       meta: {
-        version: "9.3.0",
+        version: "9.4.0",
         title: "映画『盈虚とパイプドリーム』決定稿衣装香盤",
         updatedAt: new Date().toISOString(),
       },
@@ -205,6 +210,7 @@ export function saveCostumeDatabase(db: CostumeDatabase) {
       sceneCharacterAssignments: db.assignments,
       shootingDays: db.shootingDays,
       scheduleEntries: db.scheduleEntries,
+      photos: db.photos || [],
       importHistories: db.importHistories || [],
     };
     fs.writeFileSync(DATA_FILE, JSON.stringify(jsonOutput, null, 2), "utf-8");
