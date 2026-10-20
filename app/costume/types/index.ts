@@ -9,14 +9,19 @@ export interface Character {
 }
 
 export interface CostumeLook {
-  id: string;
-  characterId: string;
-  lookCode: string;
-  title?: string | null;
-  description?: string | null;
-  mainPhotoUrl?: string | null;
-  photos?: string[];
-  sortOrder: number;
+  id: string; // 内部一意ID (例: LOOK_9F2A1C)
+  characterId: string; // キャラクターID ("UNCLASSIFIED" の場合は未分類)
+  characterTag?: string; // 画面表示用タグ (例: "桃華", "修平", "未分類")
+  lookNumber: number; // キャラクターごとの連番 (1, 2, 3...)
+  lookCode: string; // 表示用コード (例: "LOOK 01", "LOOK 02")
+  title?: string | null; // LOOK名称 (例: "白ブラウス＋黒スカート")
+  description?: string | null; // 衣装構成・詳細
+  mainPhotoId?: string | null; // 代表写真ID
+  mainPhotoUrl?: string | null; // 代表写真URL
+  photos?: string[]; // 追加写真URL一覧
+  sortOrder: number; // 並び順
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface CostumeDay {

@@ -26,13 +26,16 @@ export interface ExtractedExcelImage {
   estimatedCostumeDayId?: string | null;
   estimatedLookId?: string | null;
   estimatedCategory: CostumePhoto["category"];
-  // 既存差し替え判定
+  // 既存差し替え判定・重複判定
   isDuplicateOfId?: string | null;
+  duplicateLookCode?: string | null;
   // ユーザー選択
-  selectedAction: "import_to_look" | "import_unclassified" | "replace_existing" | "ignore";
+  selectedAction: "create_new_look" | "add_to_existing_look" | "import_unclassified" | "ignore";
   selectedCharacterId?: string | null;
+  selectedCharacterTag?: string | null;
   selectedCostumeDayId?: string | null;
   selectedLookId?: string | null;
+  targetLookTitle?: string | null;
   selectedCategory: CostumePhoto["category"];
   makeMainForLook?: boolean;
 }
@@ -203,6 +206,9 @@ export async function extractImagesFromXlsx(
       const duplicatePhoto = (existingData.photos || []).find(
         (p) => p.hash === media.hash
       );
+      const duplicateLook = duplicatePhoto?.costumeLookId
+        ? existingData.costumeLooks.find((l) => l.id === duplicatePhoto.costumeLookId)
+        : null;
 
       // D) カテゴリ初期推定（アンカー位置や名称から判定）
       let estCategory: CostumePhoto["category"] = "unclassified";
@@ -232,6 +238,10 @@ export async function extractImagesFromXlsx(
         }
       }
 
+      // 「画像インポート = LOOK即時作成」
+      // 重複画像でなければデフォルトで create_new_look
+      const initialAction = duplicatePhoto ? "ignore" : "create_new_look";
+
       results.push({
         id: `EXCEL_IMG_${Date.now()}_${Math.random()
           .toString(36)
@@ -250,22 +260,21 @@ export async function extractImagesFromXlsx(
           anchorStr,
         },
         estimatedSceneNumber: estSceneNum,
-        estimatedCharacterId: estChar?.id || null,
-        estimatedCharacterName: estChar?.name || null,
+        estimatedCharacterId: estChar?.id || "UNCLASSIFIED",
+        estimatedCharacterName: estChar?.name || "未分類",
         estimatedCostumeDayId: estDay?.id || null,
         estimatedLookId: estLook?.id || null,
         estimatedCategory: estCategory,
         isDuplicateOfId: duplicatePhoto?.id || null,
-        selectedAction: duplicatePhoto
-          ? "ignore"
-          : estLook
-          ? "import_to_look"
-          : "import_unclassified",
-        selectedCharacterId: estChar?.id || null,
+        duplicateLookCode: duplicateLook?.lookCode || null,
+        selectedAction: initialAction,
+        selectedCharacterId: estChar?.id || "UNCLASSIFIED",
+        selectedCharacterTag: estChar?.name || "未分類",
         selectedCostumeDayId: estDay?.id || null,
-        selectedLookId: estLook?.id || null,
+        selectedLookId: null, // 新規作成時は新規LOOKが生成される
+        targetLookTitle: "",
         selectedCategory: estCategory,
-        makeMainForLook: !estLook?.mainPhotoUrl,
+        makeMainForLook: true,
       });
     }
   }

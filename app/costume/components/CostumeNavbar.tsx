@@ -8,6 +8,7 @@ export default function CostumeNavbar() {
 
   const navItems = [
     { label: "CHARACTER", href: "/costume/characters", desc: "人物別" },
+    { label: "LOOK", href: "/costume/looks", desc: "衣装LOOK" },
     { label: "SCENE", href: "/costume/scenes", desc: "シーン別" },
     { label: "SCHEDULE", href: "/costume/schedule", desc: "撮影日別" },
     { label: "IMPORT", href: "/costume/import", desc: "Excel取込" },

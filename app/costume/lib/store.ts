@@ -57,16 +57,23 @@ export function loadCostumeDatabase(): CostumeDatabase {
       );
 
       const costumeLooks: CostumeLook[] = (json.costumeLooks || []).map(
-        (l: any, idx: number) => ({
-          id: l.lookId || l.id || `look_${idx}`,
-          characterId: l.characterId,
-          lookCode: l.lookCode || `LOOK ${idx + 1}`,
-          title: l.title || null,
-          description: l.description || null,
-          mainPhotoUrl: l.mainPhotoUrl || null,
-          photos: l.photos || [],
-          sortOrder: l.sortOrder ?? idx + 1,
-        })
+        (l: any, idx: number) => {
+          const char = characters.find((c) => c.id === l.characterId);
+          return {
+            id: l.lookId || l.id || `look_${idx}`,
+            characterId: l.characterId || "UNCLASSIFIED",
+            characterTag: l.characterTag || (char ? char.name : "未分類"),
+            lookNumber: l.lookNumber ?? idx + 1,
+            lookCode: l.lookCode || `LOOK ${String(idx + 1).padStart(2, "0")}`,
+            title: l.title || null,
+            description: l.description || null,
+            mainPhotoId: l.mainPhotoId || null,
+            mainPhotoUrl: l.mainPhotoUrl || null,
+            photos: l.photos || [],
+            sortOrder: l.sortOrder ?? idx + 1,
+            createdAt: l.createdAt || new Date().toISOString(),
+          };
+        }
       );
 
       const costumeDays: CostumeDay[] = (json.costumeDays || []).map(

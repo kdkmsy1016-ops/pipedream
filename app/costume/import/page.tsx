@@ -332,9 +332,11 @@ export default function ImportPage() {
           fileName: img.fileName,
           mimeType: img.mimeType,
           hash: img.hash,
-          characterId: img.selectedCharacterId || null,
+          action: img.selectedAction,
+          characterId: img.selectedCharacterId || "UNCLASSIFIED",
+          characterTag: img.selectedCharacterTag || "未分類",
           costumeLookId: img.selectedLookId || null,
-          costumeDayId: img.selectedCostumeDayId || null,
+          lookTitle: img.targetLookTitle || null,
           category: img.selectedCategory,
           makeMainForLook: Boolean(img.makeMainForLook),
           sourceFile: file?.name || "Excel",
@@ -352,9 +354,9 @@ export default function ImportPage() {
       const resData = await res.json();
       if (resData.success) {
         setStatusResult({
-          title: "Excel画像のインポートが正常に完了しました！",
+          title: `Excel画像のインポートが完了しました！（${resData.createdLookCount}着の衣装LOOKを新規作成）`,
           success: resData.savedCount,
-          updated: 0,
+          updated: resData.createdLookCount,
           skipped: resData.skippedCount,
           warnings: 0,
         });
@@ -684,26 +686,24 @@ export default function ImportPage() {
                       <span>セル: {img.anchor.anchorStr}</span>
                     </div>
 
-                    {/* キャラクター選択 */}
+                    {/* キャラクタータグ選択 */}
                     <div className="space-y-0.5">
                       <label className="text-[10px] text-zinc-500 font-mono block">
-                        対象人物:
+                        キャラクタータグ:
                       </label>
                       <select
-                        value={img.selectedCharacterId || ""}
+                        value={img.selectedCharacterId || "UNCLASSIFIED"}
                         onChange={(e) => {
                           const next = [...extractedImages];
-                          next[idx].selectedCharacterId = e.target.value || null;
-                          // LOOKも再設定
-                          const firstLook = data?.costumeLooks.find(
-                            (l) => l.characterId === e.target.value
-                          );
-                          next[idx].selectedLookId = firstLook ? firstLook.id : null;
+                          const newCharId = e.target.value;
+                          const foundChar = data?.characters.find((c) => c.id === newCharId);
+                          next[idx].selectedCharacterId = newCharId;
+                          next[idx].selectedCharacterTag = foundChar ? foundChar.name : "未分類";
                           setExtractedImages(next);
                         }}
-                        className="w-full bg-zinc-900 border border-zinc-700 rounded px-1.5 py-1 text-xs text-zinc-200 focus:outline-none focus:border-amber-400"
+                        className="w-full bg-zinc-900 border border-zinc-700 rounded px-1.5 py-1 text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-400"
                       >
-                        <option value="">(未分類 / 指定なし)</option>
+                        <option value="UNCLASSIFIED">未分類</option>
                         {data?.characters.map((c) => (
                           <option key={c.id} value={c.id}>
                             {c.name}
@@ -712,11 +712,54 @@ export default function ImportPage() {
                       </select>
                     </div>
 
-                    {/* LOOK選択 */}
-                    {img.selectedCharacterId && (
+                    {/* LOOK取り込み方式 */}
+                    <div className="space-y-0.5">
+                      <label className="text-[10px] text-zinc-500 font-mono block">
+                        LOOK作成方式:
+                      </label>
+                      <select
+                        value={img.selectedAction}
+                        onChange={(e) => {
+                          const next = [...extractedImages];
+                          next[idx].selectedAction = e.target.value as any;
+                          setExtractedImages(next);
+                        }}
+                        className={`w-full text-xs font-bold rounded px-2 py-1 border ${
+                          img.selectedAction === "create_new_look"
+                            ? "bg-amber-400 text-black border-amber-300"
+                            : img.selectedAction === "add_to_existing_look"
+                            ? "bg-zinc-800 text-zinc-200 border-zinc-700"
+                            : "bg-zinc-900 text-zinc-500 border-zinc-800"
+                        }`}
+                      >
+                        <option value="create_new_look">★ 新規LOOKとして作成 (代表写真)</option>
+                        <option value="add_to_existing_look">既存LOOKへ追加写真として登録</option>
+                        <option value="ignore">除外（取り込まない）</option>
+                      </select>
+                    </div>
+
+                    {/* 新規LOOK名または既存LOOK選択 */}
+                    {img.selectedAction === "create_new_look" ? (
                       <div className="space-y-0.5">
                         <label className="text-[10px] text-zinc-500 font-mono block">
-                          紐付け先LOOK:
+                          LOOK名称 (任意):
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="例: 白ブラウス＋黒スカート"
+                          value={img.targetLookTitle || ""}
+                          onChange={(e) => {
+                            const next = [...extractedImages];
+                            next[idx].targetLookTitle = e.target.value;
+                            setExtractedImages(next);
+                          }}
+                          className="w-full bg-zinc-900 border border-zinc-800 rounded px-1.5 py-1 text-xs text-zinc-200 focus:outline-none focus:border-amber-400"
+                        />
+                      </div>
+                    ) : img.selectedAction === "add_to_existing_look" ? (
+                      <div className="space-y-0.5">
+                        <label className="text-[10px] text-zinc-500 font-mono block">
+                          追加先LOOK:
                         </label>
                         <select
                           value={img.selectedLookId || ""}
@@ -727,7 +770,7 @@ export default function ImportPage() {
                           }}
                           className="w-full bg-zinc-900 border border-zinc-700 rounded px-1.5 py-1 text-xs text-amber-400 font-mono font-bold focus:outline-none focus:border-amber-400"
                         >
-                          <option value="">(未設定 - LOOKなし)</option>
+                          <option value="">(LOOKを選択)</option>
                           {charLooks.map((l) => (
                             <option key={l.id} value={l.id}>
                               {l.lookCode} : {l.title || "名称未定"}
@@ -735,7 +778,7 @@ export default function ImportPage() {
                           ))}
                         </select>
                       </div>
-                    )}
+                    ) : null}
 
                     {/* 写真カテゴリ */}
                     <div className="space-y-0.5">
@@ -758,45 +801,6 @@ export default function ImportPage() {
                         <option value="prop">小道具</option>
                         <option value="makeup">メイク / 髪型</option>
                         <option value="unclassified">未分類</option>
-                      </select>
-                    </div>
-
-                    {/* 代表写真フラグ */}
-                    {img.selectedLookId && (
-                      <label className="flex items-center gap-1.5 pt-1 text-[11px] text-zinc-300 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={Boolean(img.makeMainForLook)}
-                          onChange={(e) => {
-                            const next = [...extractedImages];
-                            next[idx].makeMainForLook = e.target.checked;
-                            setExtractedImages(next);
-                          }}
-                        />
-                        <span>LOOKの代表写真に設定</span>
-                      </label>
-                    )}
-
-                    {/* 取り込みアクション */}
-                    <div className="pt-1">
-                      <select
-                        value={img.selectedAction}
-                        onChange={(e) => {
-                          const next = [...extractedImages];
-                          next[idx].selectedAction = e.target.value as any;
-                          setExtractedImages(next);
-                        }}
-                        className={`w-full text-xs font-bold rounded px-2 py-1 border ${
-                          img.selectedAction === "import_to_look"
-                            ? "bg-amber-400 text-black border-amber-300"
-                            : img.selectedAction === "import_unclassified"
-                            ? "bg-zinc-800 text-zinc-300 border-zinc-700"
-                            : "bg-zinc-900 text-zinc-500 border-zinc-800"
-                        }`}
-                      >
-                        <option value="import_to_look">LOOK写真として取込</option>
-                        <option value="import_unclassified">未分類写真として取込</option>
-                        <option value="ignore">除外（取り込まない）</option>
                       </select>
                     </div>
                   </div>
