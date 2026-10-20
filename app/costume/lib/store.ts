@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import { prisma } from "./prisma";
 import type {
   Character,
   CostumeDay,
@@ -9,6 +8,7 @@ import type {
   SceneAppearance,
   ShootingDay,
   ScheduleEntry,
+  ImportHistory,
 } from "../types";
 
 export interface CostumeDatabase {
@@ -19,6 +19,7 @@ export interface CostumeDatabase {
   assignments: SceneAppearance[];
   shootingDays: ShootingDay[];
   scheduleEntries: ScheduleEntry[];
+  importHistories?: ImportHistory[];
   updatedAt: string;
 }
 
@@ -43,8 +44,8 @@ export function loadCostumeDatabase(): CostumeDatabase {
 
       const characters: Character[] = (json.characters || []).map(
         (c: any, idx: number) => ({
-          id: c.characterId || `char_${idx}`,
-          characterCode: c.characterId || `char_${idx}`,
+          id: c.characterId || c.id || `char_${idx}`,
+          characterCode: c.characterId || c.characterCode || `char_${idx}`,
           name: c.name || c.displayName || "名称未定",
           displayName: c.displayName || c.name || null,
           actorName: c.actorName || null,
@@ -55,7 +56,7 @@ export function loadCostumeDatabase(): CostumeDatabase {
 
       const costumeLooks: CostumeLook[] = (json.costumeLooks || []).map(
         (l: any, idx: number) => ({
-          id: l.lookId || `look_${idx}`,
+          id: l.lookId || l.id || `look_${idx}`,
           characterId: l.characterId,
           lookCode: l.lookCode || `LOOK ${idx + 1}`,
           title: l.title || null,
@@ -68,12 +69,12 @@ export function loadCostumeDatabase(): CostumeDatabase {
 
       const costumeDays: CostumeDay[] = (json.costumeDays || []).map(
         (d: any, idx: number) => ({
-          id: d.costumeDayId || `cday_${idx}`,
+          id: d.costumeDayId || d.id || `cday_${idx}`,
           characterId: d.characterId,
           dayNumber: d.dayNumber ?? idx + 1,
           displayLabel: d.displayLabel || `日替わり${d.dayNumber ?? idx + 1}`,
           storyDate: d.storyDate || null,
-          costumeLookId: d.lookId || null,
+          costumeLookId: d.lookId || d.costumeLookId || null,
           lookDiff: d.lookDiff || null,
           makeup: d.makeup || null,
           propsText: d.propsText || null,
@@ -86,7 +87,7 @@ export function loadCostumeDatabase(): CostumeDatabase {
       );
 
       const scenes: Scene[] = (json.scenes || []).map((s: any, idx: number) => ({
-        id: s.sceneId || `s_${idx}`,
+        id: s.sceneId || s.id || `s_${idx}`,
         sceneNumber: String(s.sceneNumber || s.sceneId || idx + 1).replace(
           /^S/i,
           ""
@@ -94,7 +95,7 @@ export function loadCostumeDatabase(): CostumeDatabase {
         sortOrder: s.sortOrder ?? (idx + 1) * 10,
         dayNight: s.dayNight || null,
         storyDate: s.storyDate || null,
-        timeOfDay: s.storyTime || null,
+        timeOfDay: s.storyTime || s.timeOfDay || null,
         location: Array.isArray(s.locations)
           ? s.locations.join("、")
           : s.location || null,
@@ -103,7 +104,7 @@ export function loadCostumeDatabase(): CostumeDatabase {
       }));
 
       const assignments: SceneAppearance[] = (
-        json.sceneCharacterAssignments || []
+        json.sceneCharacterAssignments || json.assignments || []
       ).map((a: any, idx: number) => ({
         id: a.id || a.assignmentId || `asg_${idx}`,
         sceneId: a.sceneId,
@@ -113,13 +114,18 @@ export function loadCostumeDatabase(): CostumeDatabase {
           characters.find((c) => c.id === a.characterId)?.name ||
           a.characterId,
         costumeDayId: a.costumeDayId || null,
-        costumeLookId: a.lookId || a.overrideLookId || null,
+        costumeLookId: a.lookId || a.costumeLookId || a.overrideLookId || null,
         dayNumber: a.dayNumber || null,
         displayLabel: a.displayLabel || null,
         appearanceType: a.appearanceType || "実登場",
+        costumeCandidate: a.costumeCandidate || null,
         variation: a.variation || a.lookDiff || null,
         propsText: a.sceneProps || a.propsText || null,
-        notes: a.note || a.remarks || null,
+        makeup: a.makeup || null,
+        notes: a.note || a.notes || a.remarks || null,
+        manualOverride: Boolean(a.manualOverride),
+        importSource: a.importSource || null,
+        importedAt: a.importedAt || null,
         sortOrder: a.sortOrder ?? idx + 1,
       }));
 
@@ -150,6 +156,8 @@ export function loadCostumeDatabase(): CostumeDatabase {
         remarks: se.remarks || null,
       }));
 
+      const importHistories: ImportHistory[] = json.importHistories || [];
+
       cache = {
         characters,
         costumeLooks,
@@ -158,6 +166,7 @@ export function loadCostumeDatabase(): CostumeDatabase {
         assignments,
         shootingDays,
         scheduleEntries,
+        importHistories,
         updatedAt: json.meta?.updatedAt || new Date().toISOString(),
       };
       return cache;
@@ -175,6 +184,7 @@ export function loadCostumeDatabase(): CostumeDatabase {
     assignments: [],
     shootingDays: [],
     scheduleEntries: [],
+    importHistories: [],
     updatedAt: new Date().toISOString(),
   };
 }
@@ -184,7 +194,7 @@ export function saveCostumeDatabase(db: CostumeDatabase) {
   try {
     const jsonOutput = {
       meta: {
-        version: "9.2.0",
+        version: "9.3.0",
         title: "映画『盈虚とパイプドリーム』決定稿衣装香盤",
         updatedAt: new Date().toISOString(),
       },
@@ -195,6 +205,7 @@ export function saveCostumeDatabase(db: CostumeDatabase) {
       sceneCharacterAssignments: db.assignments,
       shootingDays: db.shootingDays,
       scheduleEntries: db.scheduleEntries,
+      importHistories: db.importHistories || [],
     };
     fs.writeFileSync(DATA_FILE, JSON.stringify(jsonOutput, null, 2), "utf-8");
   } catch (err) {

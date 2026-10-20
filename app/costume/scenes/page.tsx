@@ -420,15 +420,42 @@ export default function ScenesPage() {
                                   )}
                                 </div>
 
-                                {/* 日替わりの差分・持道具メモ */}
-                                {matchedDay?.lookDiff && (
-                                  <div className="text-[11px] text-amber-300/80 bg-amber-400/5 px-1.5 py-0.5 rounded border border-amber-400/20">
-                                    差分: {matchedDay.lookDiff}
+                                {/* シーン別衣装香盤からの候補・衣装・装身具 */}
+                                {asg.costumeCandidate && (
+                                  <div className="text-[11px] text-zinc-300 bg-zinc-950 p-1.5 rounded border border-zinc-800">
+                                    <span className="text-zinc-500 font-mono">衣装/装身具: </span>
+                                    {asg.costumeCandidate}
                                   </div>
                                 )}
-                                {matchedDay?.propsText && (
+
+                                {/* 日替わりの差分・シーン固有差分 */}
+                                {(asg.variation || matchedDay?.lookDiff) && (
+                                  <div className="text-[11px] text-amber-300/80 bg-amber-400/5 px-1.5 py-0.5 rounded border border-amber-400/20">
+                                    差分: {asg.variation || matchedDay?.lookDiff}
+                                  </div>
+                                )}
+
+                                {/* 持道具・小道具 */}
+                                {(asg.propsText || matchedDay?.propsText) && (
                                   <div className="text-[11px] text-zinc-400">
-                                    持道具: {matchedDay.propsText}
+                                    <span className="text-zinc-500 font-mono">小道具/持具: </span>
+                                    {asg.propsText || matchedDay?.propsText}
+                                  </div>
+                                )}
+
+                                {/* メイク */}
+                                {asg.makeup && (
+                                  <div className="text-[11px] text-zinc-400">
+                                    <span className="text-zinc-500 font-mono">メイク: </span>
+                                    {asg.makeup}
+                                  </div>
+                                )}
+
+                                {/* 備考 */}
+                                {(asg.notes || matchedDay?.remarks) && (
+                                  <div className="text-[10px] text-zinc-500 italic">
+                                    <span className="font-mono">備考: </span>
+                                    {asg.notes || matchedDay?.remarks}
                                   </div>
                                 )}
                               </div>

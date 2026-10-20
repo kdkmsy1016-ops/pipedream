@@ -59,9 +59,14 @@ export interface SceneAppearance {
   dayNumber?: number | null;
   displayLabel?: string | null;
   appearanceType?: string | null;
-  variation?: string | null;
-  propsText?: string | null;
-  notes?: string | null;
+  costumeCandidate?: string | null; // 衣装候補 / 衣装・装身具
+  variation?: string | null; // シーン固有差分 (ジャケット脱ぎ、汚れ等)
+  propsText?: string | null; // 持道具 / 小道具
+  makeup?: string | null; // メイク / 髪型
+  notes?: string | null; // 備考
+  manualOverride?: boolean; // 手動編集保護フラグ
+  importSource?: string | null; // インポート元ファイル・シート
+  importedAt?: string | null; // インポート日時
   sortOrder: number;
 }
 
@@ -96,4 +101,15 @@ export interface PropItem {
   sceneId?: string | null;
   photoUrl?: string | null;
   notes?: string | null;
+}
+
+export interface ImportHistory {
+  id: string;
+  fileName: string;
+  importType: "scene_costume" | "overall_continuity" | "daily_schedule";
+  importedAt: string;
+  totalRows: number;
+  successCount: number;
+  warningCount: number;
+  errorCount: number;
 }

@@ -435,9 +435,11 @@ export default function PrintPage() {
                                           {asg.characterName}
                                         </span>
                                         : {cDay?.displayLabel || "未定"}
-                                        {cDay?.lookDiff
-                                          ? ` (${cDay.lookDiff})`
+                                        {asg.costumeCandidate ? ` [${asg.costumeCandidate}]` : ""}
+                                        {(asg.variation || cDay?.lookDiff)
+                                          ? ` (${asg.variation || cDay?.lookDiff})`
                                           : ""}
+                                        {asg.propsText ? ` / 持:${asg.propsText}` : ""}
                                       </span>
                                     );
                                   })}

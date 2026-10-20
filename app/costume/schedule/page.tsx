@@ -373,14 +373,24 @@ export default function SchedulePage() {
                             <p className="text-[11px] font-mono font-bold text-amber-400 truncate">
                               {matchedDay?.displayLabel || "未定"}
                             </p>
+                            {asg.costumeCandidate && (
+                              <p className="text-[9px] text-zinc-300 truncate bg-zinc-900 rounded px-1" title={asg.costumeCandidate}>
+                                {asg.costumeCandidate}
+                              </p>
+                            )}
                             {matchedLook?.lookCode && (
                               <p className="text-[10px] font-mono text-zinc-400 truncate">
                                 {matchedLook.lookCode}
                               </p>
                             )}
-                            {matchedDay?.lookDiff && (
+                            {(asg.variation || matchedDay?.lookDiff) && (
                               <p className="text-[9px] text-amber-200/90 truncate bg-amber-400/10 rounded px-1">
-                                {matchedDay.lookDiff}
+                                {asg.variation || matchedDay?.lookDiff}
+                              </p>
+                            )}
+                            {asg.propsText && (
+                              <p className="text-[9px] text-zinc-400 truncate" title={asg.propsText}>
+                                持: {asg.propsText}
                               </p>
                             )}
                           </div>
