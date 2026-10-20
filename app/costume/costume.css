@@ -1,0 +1,65 @@
+/* 現場用 2:3 縦長サムネイル (object-fit: contain で全身を完全表示) */
+.costume-thumb-container {
+  aspect-ratio: 2 / 3;
+  width: 100%;
+  position: relative;
+  background-color: #09090b;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.costume-thumb-img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+/* A4 印刷用 CSS */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 印刷時に隠す要素 */
+  .no-print,
+  nav,
+  header,
+  footer,
+  button:not(.print-keep) {
+    display: none !important;
+  }
+
+  /* カードやテーブル行の途中分割を防ぐ */
+  .print-break-avoid,
+  article,
+  tr,
+  .costume-card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .print-page-break {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  .print-border {
+    border-color: #cbd5e1 !important;
+  }
+
+  .print-text-dark {
+    color: #0f172a !important;
+  }
+
+  .print-bg-light {
+    background-color: #f8fafc !important;
+  }
+}

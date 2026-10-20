@@ -1,0 +1,220 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. キャラクター (Character)
+model Character {
+  id            String    @id @default(uuid())
+  characterCode String    @unique // 例: "MOMOKA", "SHUHEI"
+  name          String // 例: "桃華"
+  displayName   String? // 敬称・別名
+  actorName     String? // 出演キャスト名 (例: "コトハ")
+  description   String? // 人物説明
+  sortOrder     Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime? // Soft Delete
+
+  costumeDays  CostumeDay[]
+  costumeLooks CostumeLook[]
+  photos       Photo[]
+  assignments  SceneCharacterAssignment[]
+
+  @@index([sortOrder])
+}
+
+// 2. 衣装LOOK (CostumeLook - 服そのものの独立体)
+model CostumeLook {
+  id          String    @id @default(uuid())
+  characterId String
+  lookCode    String // 例: "LOOK 01", "LOOK 02"
+  title       String? // 例: "スナック勤務着", "白ブラウス"
+  description String? // 構成アイテム・色・特徴
+  mainPhotoId String?
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  character   Character                  @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  costumeDays CostumeDay[]
+  assignments SceneCharacterAssignment[]
+  photos      LookPhoto[]
+
+  @@index([characterId])
+}
+
+// 3. 日替わり (CostumeDay)
+model CostumeDay {
+  id            String    @id @default(uuid())
+  characterId   String
+  dayNumber     Int // 表示用日替わり番号 (1, 2, 3...)
+  displayLabel  String? // 例: "日替わり1"
+  storyDate     String? // 劇中日 (例: "2021-03-19", "D1")
+  costumeLookId String? // 紐づくLOOK (再利用可能)
+  lookDiff      String? // LOOKとの差分メモ (例: "エプロン着用", "上着脱ぎ")
+  makeup        String? // ヘアメイク備考
+  propsText     String? // 小道具・持道具テキスト
+  remarks       String? // 備考
+  sortOrder     Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  character   Character                  @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  costumeLook CostumeLook?               @relation(fields: [costumeLookId], references: [id], onDelete: SetNull)
+  assignments SceneCharacterAssignment[]
+  props       Prop[]
+
+  @@index([characterId, dayNumber])
+  @@index([sortOrder])
+}
+
+// 4. シーン (Scene)
+model Scene {
+  id          String    @id @default(uuid())
+  sceneNumber String    @unique // 例: "1", "12A", "45-2"
+  sortOrder   Int       @default(0) // シーン並び順数値
+  dayNight    String? // "D" or "N"
+  storyDate   String? // 劇中日
+  timeOfDay   String? // 朝/昼/夕/夜 or 17:00
+  location    String? // 場所・柱 (例: "さくらみち・店内")
+  summary     String? // シーン内容
+  remarks     String? // 備考
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  assignments     SceneCharacterAssignment[]
+  scheduleEntries ScheduleEntry[]
+  props           Prop[]
+
+  @@index([sortOrder])
+}
+
+// 5. シーン×登場人物の中間データ (SceneCharacterAssignment)
+model SceneCharacterAssignment {
+  id             String    @id @default(uuid())
+  sceneId        String
+  characterId    String
+  costumeDayId   String? // 該当シーンでの日替わり
+  costumeLookId  String? // 該当シーンでのLOOK (通常はCostumeDayのLOOK、シーン単体でオーバーライドも可能)
+  appearanceType String?   @default("実登場") // "実登場", "回想", "声のみ" 等
+  variation      String? // シーン特有の着こなし
+  propsText      String? // このシーン固有の持道具
+  notes          String? // 備考
+  sortOrder      Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+
+  scene       Scene        @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  character   Character    @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  costumeDay  CostumeDay?  @relation(fields: [costumeDayId], references: [id], onDelete: SetNull)
+  costumeLook CostumeLook? @relation(fields: [costumeLookId], references: [id], onDelete: SetNull)
+
+  @@index([sceneId])
+  @@index([characterId])
+}
+
+// 6. 写真 (Photo)
+model Photo {
+  id          String    @id @default(uuid())
+  characterId String?
+  url         String // Vercel Blob / 外部URL
+  caption     String?
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  character  Character?  @relation(fields: [characterId], references: [id], onDelete: SetNull)
+  lookPhotos LookPhoto[]
+  props      Prop[]
+
+  @@index([characterId])
+}
+
+// 7. LOOKと写真の中間テーブル (LookPhoto)
+model LookPhoto {
+  id            String   @id @default(uuid())
+  costumeLookId String
+  photoId       String
+  sortOrder     Int      @default(0)
+  isMain        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  costumeLook CostumeLook @relation(fields: [costumeLookId], references: [id], onDelete: Cascade)
+  photo       Photo       @relation(fields: [photoId], references: [id], onDelete: Cascade)
+
+  @@index([costumeLookId])
+}
+
+// 8. 小道具・持道具 (Prop)
+model Prop {
+  id           String    @id @default(uuid())
+  name         String
+  category     String    @default("prop") // "prop" (小道具) or "accessory" (持道具)
+  costumeDayId String?
+  sceneId      String?
+  photoId      String?
+  notes        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  costumeDay CostumeDay? @relation(fields: [costumeDayId], references: [id], onDelete: SetNull)
+  scene      Scene?      @relation(fields: [sceneId], references: [id], onDelete: SetNull)
+  photo      Photo?      @relation(fields: [photoId], references: [id], onDelete: SetNull)
+
+  @@index([costumeDayId])
+  @@index([sceneId])
+}
+
+// 9. 撮影日 (ShootingDay)
+model ShootingDay {
+  id           String    @id @default(uuid())
+  shootDate    String // YYYY-MM-DD
+  dayCode      String // 例: "DAY1", "DAY2"
+  dayLabel     String // 例: "撮影Day 1（さくらみち・表／店内／キッチン）"
+  locationNote String? // ロケ地概要
+  remarks      String? // 備考
+  sortOrder    Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  entries ScheduleEntry[]
+
+  @@index([shootDate])
+  @@index([sortOrder])
+}
+
+// 10. 日々スケ撮影エントリ (ScheduleEntry)
+model ScheduleEntry {
+  id            String    @id @default(uuid())
+  shootingDayId String
+  sceneId       String // 紐づくシーン番号 (キー)
+  sortOrder     Int       @default(0) // 撮影順
+  timeNote      String? // 開始時刻 / 撮影予定時間
+  sceneAction   String? // 撮影内容・ト書き
+  location      String? // 撮影場所
+  remarks       String? // 備考
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  shootingDay ShootingDay @relation(fields: [shootingDayId], references: [id], onDelete: Cascade)
+  scene       Scene       @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+
+  @@index([shootingDayId, sortOrder])
+  @@index([sceneId])
+}
